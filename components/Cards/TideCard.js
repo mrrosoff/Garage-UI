@@ -30,11 +30,7 @@ const useStyles = makeStyles((theme) => ({
 const TideCard = (props) => {
 	const classes = useStyles();
 
-	if (
-		!props.tidePredictionData.predictions ||
-		!props.tidePredictionData.predictions.length ||
-		props.tidePredictionData.predictions.length < 2
-	) {
+	if (!props.tidePredictionData.predictions) {
 		return null;
 	}
 
@@ -183,7 +179,12 @@ const getTideTimes = (predictionData, actualData) => {
 	let graphStartsDown = predictionData[i].prediction > predictionData[i + 1].prediction;
 	let firstInflectionPoint = predictionData[i + 1];
 
-	for (i += 2; i < predictionData.length; i++) {
+	i += 2;
+	if (i >= predictionData.length) {
+		return { highTide: null, lowTide: null, nextTideIsLow: null };
+	}
+
+	for (; i < predictionData.length; i++) {
 		const nextDataPointIsBelow = firstInflectionPoint.prediction > predictionData[i].prediction;
 		if (graphStartsDown !== nextDataPointIsBelow) break;
 		firstInflectionPoint = predictionData[i];
