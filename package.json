@@ -1,6 +1,6 @@
 {
-  "name": "garage-pi",
-  "version": "2.1.0",
+  "name": "garage-ui",
+  "version": "2.1.2",
   "description": "A Custom UI For A Garage Door Opener",
   "main": "main.js",
   "scripts": {
@@ -29,24 +29,24 @@
     "recharts": "^2.0.9"
   },
   "devDependencies": {
-    "@babel/core": "7.14.3",
-    "@babel/preset-react": "^7.13.13",
+    "@babel/core": "7.14.6",
+    "@babel/preset-react": "^7.14.5",
     "babel-loader": "^8.2.2",
     "clean-webpack-plugin": "^3.0.0",
     "concurrently": "^6.2.0",
     "css-loader": "5.2.6",
-    "electron": "13.1.1",
+    "electron": "13.1.5",
     "electron-rebuild": "^2.3.5",
     "file-loader": "6.2.0",
-    "html-webpack-plugin": "5.3.1",
+    "html-webpack-plugin": "5.3.2",
     "node-abi": "^2.30.0",
-    "node-sass": "^6.0.0",
-    "postcss": "^8.3.0",
-    "postcss-loader": "^5.3.0",
-    "sass-loader": "^12.0.0",
-    "style-loader": "2.0.0",
-    "webpack": "5.38.1",
-    "webpack-cli": "4.7.0",
+    "node-sass": "^6.0.1",
+    "postcss": "^8.3.5",
+    "postcss-loader": "^6.1.1",
+    "sass-loader": "^12.1.0",
+    "style-loader": "3.0.0",
+    "webpack": "5.42.0",
+    "webpack-cli": "4.7.2",
     "webpack-dev-server": "3.11.2"
   }
 }
