@@ -1,7 +1,7 @@
 {
   "name": "garage-pi",
   "version": "2.1.0",
-  "description": "A Custom Website For A Garage Door Opener",
+  "description": "A Custom UI For A Garage Door Opener",
   "main": "main.js",
   "scripts": {
     "start": "webpack serve",
