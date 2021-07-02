@@ -176,9 +176,11 @@ const getTideTimes = (predictionData, actualData) => {
 		if (predictionData[i].time > lastActualDate) break;
 	}
 
+	if (i + 1 >= predictionData.length) {
+		return { highTide: null, lowTide: null, nextTideIsLow: null };
+	}
 	let graphStartsDown = predictionData[i].prediction > predictionData[i + 1].prediction;
 	let firstInflectionPoint = predictionData[i + 1];
-
 	i += 2;
 	if (i >= predictionData.length) {
 		return { highTide: null, lowTide: null, nextTideIsLow: null };
@@ -191,6 +193,10 @@ const getTideTimes = (predictionData, actualData) => {
 	}
 
 	let secondInflectionPoint = firstInflectionPoint;
+	i += 1;
+	if (i >= predictionData.length) {
+		return { highTide: null, lowTide: null, nextTideIsLow: null };
+	}
 
 	for (; i < predictionData.length; i++) {
 		const nextDataPointIsBelow =

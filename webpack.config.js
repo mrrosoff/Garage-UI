@@ -22,6 +22,7 @@ module.exports = {
 		}
 	},
 	devtool: "eval-source-map",
+	mode: process.env.NODE_ENV || "development",
 	module: {
 		rules: [
 			{
@@ -57,7 +58,14 @@ module.exports = {
 			favicon: "./static/template/favicon.ico",
 			title: "Rosoff Club"
 		}),
-		new webpack.HotModuleReplacementPlugin()
+		new webpack.HotModuleReplacementPlugin(),
+		new webpack.DefinePlugin({
+			 "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV || "development")
+		})
 	],
+    resolve: {
+      extensions: ["", ".ts", ".tsx", ".js", ".jsx"]
+    },
+    stats: "minimal",
 	target: "electron-renderer"
 };
