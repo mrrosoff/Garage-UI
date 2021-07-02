@@ -31,37 +31,20 @@ function createWindow() {
 
 	let indexPath;
 
-	if (process.env.NODE_ENV === "dev") {
-		indexPath = url.format({
-			protocol: "http:",
-			host: "localhost:3000",
-			pathname: "/",
-			slashes: true
-		});
+	if (process.env.NODE_ENV === "production") {
+		indexPath ="file://" + path.join(__dirname, "dist", "index.html");
 	} else {
-		indexPath = url.format({
-			protocol: "file:",
-			pathname: path.join(__dirname, "dist", "index.html"),
-			slashes: true
-		});
+		indexPath = "http://localhost:3000";
 	}
 
 	mainWindow.loadURL(indexPath);
 	mainWindow.once("ready-to-show", () => mainWindow.show());
-	mainWindow.on("closed", () => {
-		mainWindow = null;
-	});
+	mainWindow.on("closed", () => mainWindow = null);
 }
 
 app.on("ready", async () => createWindow());
 
-app.on("window-all-closed", () => {
-	if (process.platform !== "darwin") {
-		app.quit();
-	}
-});
+app.on("window-all-closed", () => app.quit());
 app.on("activate", () => {
-	if (mainWindow === null) {
-		createWindow();
-	}
+	if (mainWindow === null) createWindow();
 });
