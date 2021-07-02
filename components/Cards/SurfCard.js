@@ -76,6 +76,8 @@ const renderCustomizedLabel = (props) => {
 	const theme = useTheme();
 	const { x, y, width, value } = props;
 	const radius = 10;
+	const waveHeight = (Math.round(value * 2) / 2);
+	const isDecimal = waveHeight % 1 !== 0;
 	return (
 		<text
 			style={{ fontWeight: 600 }}
@@ -85,7 +87,7 @@ const renderCustomizedLabel = (props) => {
 			textAnchor="middle"
 			dominantBaseline="middle"
 		>
-			{Math.floor(value) + " ft"}
+			{isDecimal ? waveHeight.toFixed(1) : waveHeight.toFixed(0) + " ft"}
 		</text>
 	);
 };
