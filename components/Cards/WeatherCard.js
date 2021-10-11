@@ -1,9 +1,11 @@
 import React from "react";
 
-import { Box, Grid, makeStyles, Typography, useTheme } from "@material-ui/core";
+import { Box, Grid, Typography, useTheme } from "@mui/material";
 
-import OpacityIcon from "@material-ui/icons/Opacity";
-import { grey } from "@material-ui/core/colors";
+import makeStyles from '@mui/styles/makeStyles';
+
+import OpacityIcon from "@mui/icons-material/Opacity";
+import { grey } from "@mui/material/colors";
 
 import moment from "moment";
 

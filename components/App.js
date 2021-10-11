@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 
-import { CssBaseline } from "@material-ui/core";
-import { blue, green } from "@material-ui/core/colors";
+import { CssBaseline } from "@mui/material";
+import { blue, green } from "@mui/material/colors";
 
-import { createMuiTheme, responsiveFontSizes, ThemeProvider } from "@material-ui/core/styles";
+import { createTheme, responsiveFontSizes, ThemeProvider, StyledEngineProvider } from "@mui/material/styles";
 
 import { SnackbarProvider } from "notistack";
 
@@ -16,9 +16,9 @@ const App = () => {
 		setInterval(() => setCurrentDate(new Date()), 180000);
 	}, []);
 
-	let theme = createMuiTheme({
+	let theme = createTheme({
 		palette: {
-			type: currentDate.getHours() < 4 || currentDate.getHours() > 20 ? "dark" : "light",
+			mode: currentDate.getHours() < 4 || currentDate.getHours() > 20 ? "dark" : "light",
 			primary: { main: blue[500] },
 			secondary: { main: green[500] }
 		}
@@ -26,13 +26,15 @@ const App = () => {
 	theme = responsiveFontSizes(theme);
 
 	return (
-		<ThemeProvider theme={theme}>
-			<CssBaseline />
-			<SnackbarProvider maxSnack={3} preventDuplicate>
-				<DashBoard />
-			</SnackbarProvider>
-		</ThemeProvider>
-	);
+        <StyledEngineProvider injectFirst>
+            <ThemeProvider theme={theme}>
+                <CssBaseline />
+                <SnackbarProvider maxSnack={3} preventDuplicate>
+                    <DashBoard />
+                </SnackbarProvider>
+            </ThemeProvider>
+        </StyledEngineProvider>
+    );
 };
 
 export default App;

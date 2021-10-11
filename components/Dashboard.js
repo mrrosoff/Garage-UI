@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 
-import { Box, Grid, Paper } from "@material-ui/core";
-import { grey } from "@material-ui/core/colors";
+import { Box, Grid, Paper } from "@mui/material";
+import { grey } from "@mui/material/colors";
 
-import { makeStyles } from "@material-ui/core/styles";
+import makeStyles from '@mui/styles/makeStyles';
 
 import TideCard from "./Cards/TideCard";
 import WeatherCard from "./Cards/WeatherCard";

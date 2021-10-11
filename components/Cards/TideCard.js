@@ -1,10 +1,10 @@
 import React from "react";
 
-import { Box, Grid, Typography, useTheme } from "@material-ui/core";
-import ArrowUpwardIcon from "@material-ui/icons/ArrowUpward";
-import ArrowDownwardIcon from "@material-ui/icons/ArrowDownward";
-import { makeStyles } from "@material-ui/core/styles";
-import { grey, purple } from "@material-ui/core/colors";
+import { Box, Grid, Typography, useTheme } from "@mui/material";
+import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
+import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
+import makeStyles from '@mui/styles/makeStyles';
+import { grey, purple } from "@mui/material/colors";
 
 import {
 	CartesianGrid,
@@ -64,14 +64,14 @@ const TideCard = (props) => {
 	}
 
 	return (
-		<Box p={2} className={classes.cardBox} display={"flex"} flexDirection={"column"}>
-			<Grid item container justify={"space-between"}>
+        <Box p={2} className={classes.cardBox} display={"flex"} flexDirection={"column"}>
+			<Grid item container justifyContent={"space-between"}>
 				<Grid item>
 					<Typography style={{ fontSize: 32, fontWeight: 500 }}>Tide</Typography>
 				</Grid>
 				<Grid item>
 					{lowTide && highTide ? (
-						<Grid container spacing={3} justify={"center"} alignItems={"center"}>
+						<Grid container spacing={3} justifyContent={"center"} alignItems={"center"}>
 							<Grid item>
 								<TideTime
 									tide={nextTideIsLow ? "low" : "high"}
@@ -99,13 +99,13 @@ const TideCard = (props) => {
 				/>
 			</Box>
 		</Box>
-	);
+    );
 };
 
 const TideTime = (props) => {
 	const Icon = props.tide === "low" ? ArrowDownwardIcon : ArrowUpwardIcon;
 	return (
-		<Grid container justify={"center"} alignItems={"center"} spacing={1}>
+        <Grid container justifyContent={"center"} alignItems={"center"} spacing={1}>
 			<Icon style={{ fontSize: 20 }} />
 			<Grid item>
 				<Typography style={{ fontSize: 20, fontWeight: 500 }}>
@@ -113,7 +113,7 @@ const TideTime = (props) => {
 				</Typography>
 			</Grid>
 		</Grid>
-	);
+    );
 };
 
 const TideGraph = (props) => {
