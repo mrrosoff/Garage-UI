@@ -1,9 +1,13 @@
 import React from "react";
 
-import { Button, Grid, SvgIcon } from "@material-ui/core";
+import { Button, Grid, SvgIcon } from "@mui/material";
 
 import { remote } from "electron";
-const mainProcess = remote.require("./main.js");
+
+let mainProcess = undefined;
+try {
+	mainProcess = remote.require("./main.js");
+} catch (err) {}
 
 const SideBar = (props) => {
 	return (
@@ -12,14 +16,17 @@ const SideBar = (props) => {
 			direction={"column"}
 			spacing={1}
 			style={{ height: "100%" }}
-			justify={"center"}
+			justifyContent={"center"}
 			alignItems={"center"}
 			alignContent={"center"}
 		>
 			<Grid item style={{ height: "100%", width: "100%" }}>
 				<Button
 					style={{ height: "100%", width: "100%" }}
-					onClick={() => mainProcess.garageSwitch()}
+					onClick={() => {
+						if (mainProcess) mainProcess.garageSwitch();
+						else console.log("Not Supported Platform");
+					}}
 				>
 					<HomeIcon />
 				</Button>

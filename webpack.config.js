@@ -4,18 +4,19 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const { spawn } = require("child_process");
 
-const output = "dist";
+const outputDirectory = "dist";
 
 module.exports = {
 	entry: "./index.js",
 	devServer: {
-		contentBase: path.resolve(__dirname, output),
+		static: {
+			directory: path.resolve(__dirname, outputDirectory)
+		},
 		port: 3000,
 		open: false,
 		hot: true,
 		historyApiFallback: true,
-		stats: "minimal",
-		before() {
+		onBeforeSetupMiddleware: () => {
 			spawn("electron", ["."], { shell: true, env: process.env, stdio: "inherit" })
 				.on("close", (code) => process.exit(code))
 				.on("error", (spawnError) => console.error(spawnError));
@@ -50,7 +51,7 @@ module.exports = {
 			}
 		]
 	},
-	output: { filename: "bundle.js", path: path.resolve(__dirname, output) },
+	output: { filename: "bundle.js", path: path.resolve(__dirname, outputDirectory) },
 	plugins: [
 		new CleanWebpackPlugin(),
 		new HtmlWebpackPlugin({
@@ -58,14 +59,13 @@ module.exports = {
 			favicon: "./static/template/favicon.ico",
 			title: "Rosoff Club"
 		}),
-		new webpack.HotModuleReplacementPlugin(),
 		new webpack.DefinePlugin({
-			 "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV || "development")
+			"process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV || "development")
 		})
 	],
-    resolve: {
-      extensions: ["", ".ts", ".tsx", ".js", ".jsx"]
-    },
-    stats: "minimal",
+	resolve: {
+		extensions: ["", ".ts", ".tsx", ".js", ".jsx"]
+	},
+	stats: "minimal",
 	target: "electron-renderer"
 };

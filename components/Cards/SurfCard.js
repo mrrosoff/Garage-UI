@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Box, Grid, Typography, useTheme } from "@material-ui/core";
+import { Box, Grid, Typography, useTheme } from "@mui/material";
 
 import {
 	CartesianGrid,
@@ -11,8 +11,8 @@ import {
 	Bar,
 	LabelList
 } from "recharts";
-import { makeStyles } from "@material-ui/core/styles";
-import { grey } from "@material-ui/core/colors";
+import makeStyles from '@mui/styles/makeStyles';
+import { grey } from "@mui/material/colors";
 
 const useStyles = makeStyles((theme) => ({
 	cardBox: {
@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
 const SurfCard = (props) => {
 	const classes = useStyles();
 	return (
-		<Box
+        <Box
 			pt={2}
 			pl={2}
 			pr={2}
@@ -35,7 +35,7 @@ const SurfCard = (props) => {
 			display={"flex"}
 			flexDirection={"column"}
 		>
-			<Grid item container justify={"space-between"}>
+			<Grid item container justifyContent={"space-between"}>
 				<Grid item>
 					<Typography style={{ fontSize: 32, fontWeight: 500 }}>Surf</Typography>
 				</Grid>
@@ -44,7 +44,7 @@ const SurfCard = (props) => {
 				<SurfGraph {...props} />
 			</Box>
 		</Box>
-	);
+    );
 };
 
 const SurfGraph = (props) => {
@@ -83,7 +83,7 @@ const renderCustomizedLabel = (props) => {
 			style={{ fontWeight: 600 }}
 			x={x + width / 2}
 			y={y - radius}
-			fill={theme.palette.type === "dark" ? "#FFFFFF" : "#000000"}
+			fill={theme.palette.mode === "dark" ? "#FFFFFF" : "#000000"}
 			textAnchor="middle"
 			dominantBaseline="middle"
 		>
