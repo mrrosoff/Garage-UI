@@ -16,6 +16,7 @@ ipcMain.on("garageSwitch", (event) => {
 
 		flipSwitch();
 	} catch (err) {
+		console.error(err);
 		event.sender.send("notSupportedPlatform", err);
 	}
 });
