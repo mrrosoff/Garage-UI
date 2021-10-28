@@ -4,8 +4,8 @@ import { Button, Grid, SvgIcon } from "@mui/material";
 
 import { ipcRenderer } from "electron";
 
-ipcRenderer.on("notSupportedPlatform", () => {
-	console.info("Not Supported Platform for Garage Door");
+ipcRenderer.on("notSupportedPlatform", (_, err) => {
+	console.info("Not Supported Platform for Garage Door", err);
 });
 
 const SideBar = (props) => {
