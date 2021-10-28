@@ -1,21 +1,24 @@
-const { app, BrowserWindow } = require("electron");
+const { app, ipcMain, BrowserWindow } = require("electron");
 const path = require("path");
-const url = require("url");
 
 let mainWindow;
 
-exports.garageSwitch = () => {
-	let gpio = require("onoff").Gpio;
-	let doorPin = new gpio(4, "out");
-	doorPin.writeSync(1);
+ipcMain.on("garageSwitch", (event) => {
+	try {
+		const gpio = require("onoff").Gpio;
+		const doorPin = new gpio(4, "out");
+		doorPin.writeSync(1);
 
-	const flipSwitch = () => {
-		doorPin.writeSync(0);
-		setTimeout(() => doorPin.writeSync(1), 500);
-	};
+		const flipSwitch = () => {
+			doorPin.writeSync(0);
+			setTimeout(() => doorPin.writeSync(1), 500);
+		};
 
-	flipSwitch();
-};
+		flipSwitch();
+	} catch (err) {
+		event.sender.send("notSupportedPlatform", err);
+	}
+});
 
 function createWindow() {
 	mainWindow = new BrowserWindow({
@@ -29,17 +32,14 @@ function createWindow() {
 		webPreferences: { enableRemoteModule: true, nodeIntegration: true, contextIsolation: false }
 	});
 
-	let indexPath;
-
-	if (process.env.NODE_ENV === "production") {
-		indexPath ="file://" + path.join(__dirname, "dist", "index.html");
-	} else {
+	let indexPath = "file://" + path.join(__dirname, "dist", "index.html");
+	if (process.env.NODE_ENV === "development") {
 		indexPath = "http://localhost:3000";
 	}
 
 	mainWindow.loadURL(indexPath);
 	mainWindow.once("ready-to-show", () => mainWindow.show());
-	mainWindow.on("closed", () => mainWindow = null);
+	mainWindow.on("closed", () => (mainWindow = null));
 }
 
 app.on("ready", async () => createWindow());

@@ -2,14 +2,13 @@ import React from "react";
 
 import { Button, Grid, SvgIcon } from "@mui/material";
 
-import { remote } from "electron";
+import { ipcRenderer } from "electron";
+
+ipcRenderer.on("notSupportedPlatform", () => {
+	console.info("Not Supported Platform for Garage Door");
+});
 
 const SideBar = (props) => {
-	let mainProcess;
-	if (remote) {
-		mainProcess = remote.require("./main");
-	}
-
 	return (
 		<Grid
 			container
@@ -23,10 +22,7 @@ const SideBar = (props) => {
 			<Grid item style={{ height: "100%", width: "100%" }}>
 				<Button
 					style={{ height: "100%", width: "100%" }}
-					onClick={() => {
-						if (mainProcess) mainProcess.garageSwitch();
-						else console.log("Not Supported Platform");
-					}}
+					onClick={() => ipcRenderer.send("garageSwitch")}
 				>
 					<HomeIcon />
 				</Button>
