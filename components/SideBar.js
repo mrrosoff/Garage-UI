@@ -4,10 +4,10 @@ import { Button, Grid, SvgIcon } from "@mui/material";
 
 import { remote } from "electron";
 
-let mainProcess = undefined;
-try {
-	mainProcess = remote.require("./main.js");
-} catch (err) {}
+let mainProcess;
+if (remote) {
+	mainProcess = remote.require("./main");
+}
 
 const SideBar = (props) => {
 	return (
