@@ -33,9 +33,9 @@ function createWindow() {
 		webPreferences: { enableRemoteModule: true, nodeIntegration: true, contextIsolation: false }
 	});
 
-	let indexPath = "file://" + path.join(__dirname, "dist", "index.html");
-	if (process.env.NODE_ENV === "development") {
-		indexPath = "http://localhost:3000";
+	let indexPath = "http://localhost:3000";
+	if (process.env.NODE_ENV === "production") {
+		indexPath = "file://" + path.join(__dirname, "dist", "index.html");
 	}
 
 	mainWindow.loadURL(indexPath);
