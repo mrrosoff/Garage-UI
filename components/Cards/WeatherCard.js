@@ -2,12 +2,12 @@ import React from "react";
 
 import { Box, Grid, Typography, useTheme } from "@mui/material";
 
-import makeStyles from '@mui/styles/makeStyles';
+import makeStyles from "@mui/styles/makeStyles";
 
 import OpacityIcon from "@mui/icons-material/Opacity";
 import { grey } from "@mui/material/colors";
 
-import moment from "moment";
+import { DateTime } from "luxon";
 
 const useStyles = makeStyles((theme) => ({
 	cardBox: {
@@ -43,7 +43,7 @@ const WeatherCard = (props) => {
 										{Math.floor(props.weatherData.main.temp) + " °F"}
 									</Typography>
 									<Typography style={{ fontSize: 18 }}>
-										{moment(new Date().getTime()).format("h:mm A")}
+										{DateTime.now().toLocaleString(DateTime.TIME_SIMPLE)}
 									</Typography>
 								</Box>
 								<Box pl={4}>

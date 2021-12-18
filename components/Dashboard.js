@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 
-import { Box, Grid, Paper } from "@mui/material";
+import { Box, Paper } from "@mui/material";
 import { grey } from "@mui/material/colors";
 
-import makeStyles from '@mui/styles/makeStyles';
+import makeStyles from "@mui/styles/makeStyles";
 
 import TideCard from "./Cards/TideCard";
 import WeatherCard from "./Cards/WeatherCard";
@@ -26,18 +26,18 @@ const useStyles = makeStyles((theme) => ({
 
 const DashBoard = (props) => {
 	const classes = useStyles();
+
 	const [weatherData, setWeatherData] = useState();
 	const [surfData, setSurfData] = useState([]);
 	const [tidePredictionData, setTidePredictionData] = useState();
 	const [tideActualData, setTideActualData] = useState();
 
 	useEffect(() => {
-		const getWeatherFromAPI = () => {
-			axios
-				.get(
-					`https://api.openweathermap.org/data/2.5/weather?zip=92130&units=imperial&appid=114e2f8559d9daba8a4ad4e51464c8b6`
-				)
-				.then((r) => setWeatherData(r.data));
+		const getWeatherFromAPI = async () => {
+			const { data } = await axios.get(
+				"https://api.openweathermap.org/data/2.5/weather?zip=92130&units=imperial&appid=114e2f8559d9daba8a4ad4e51464c8b6"
+			);
+			setWeatherData(data);
 		};
 
 		getWeatherFromAPI();
@@ -46,18 +46,17 @@ const DashBoard = (props) => {
 	}, []);
 
 	useEffect(() => {
-		const getTidesFromAPI = () => {
-			axios
-				.get(
-					`https://api.tidesandcurrents.noaa.gov/api/prod/datagetter?date=today&station=9410230&product=predictions&datum=MLLW&time_zone=lst_ldt&units=english&format=json`
-				)
-				.then((r) => setTidePredictionData(r.data));
+		const getTidesFromAPI = async () => {
+			const predictionResp = await axios.get(
+				"https://api.tidesandcurrents.noaa.gov/api/prod/datagetter?date=today&station=9410230&product=predictions&datum=MLLW&time_zone=lst_ldt&units=english&format=json"
+			);
 
-			axios
-				.get(
-					`https://api.tidesandcurrents.noaa.gov/api/prod/datagetter?date=today&station=9410230&product=one_minute_water_level&datum=MLLW&time_zone=lst_ldt&units=english&format=json`
-				)
-				.then((r) => setTideActualData(r.data));
+			const actualResp = await axios.get(
+				"https://api.tidesandcurrents.noaa.gov/api/prod/datagetter?date=today&station=9410230&product=one_minute_water_level&datum=MLLW&time_zone=lst_ldt&units=english&format=json"
+			);
+
+			setTidePredictionData(predictionResp.data);
+			setTideActualData(actualResp.data);
 		};
 
 		getTidesFromAPI();
@@ -66,28 +65,22 @@ const DashBoard = (props) => {
 	}, []);
 
 	useEffect(() => {
-		const getSurfFromAPI = () => {
-			axios
-				.get(
-					`https://services.surfline.com/kbyg/spots/forecasts/wave?spotId=5842041f4e65fad6a770883b&days=1&intervalHours=1&maxHeights=true`
-				)
-				.then((r) => {
-					setSurfDataWithSplice(r, "Blacks", 0, setSurfData);
-				});
-			axios
-				.get(
-					`https://services.surfline.com/kbyg/spots/forecasts/wave?spotId=5842041f4e65fad6a77088af&days=1&intervalHours=1&maxHeights=true`
-				)
-				.then((r) => {
-					setSurfDataWithSplice(r, "15th Street", 1, setSurfData);
-				});
-			axios
-				.get(
-					`https://services.surfline.com/kbyg/spots/forecasts/wave?spotId=5842041f4e65fad6a77088a0&days=1&intervalHours=1&maxHeights=true`
-				)
-				.then((r) => {
-					setSurfDataWithSplice(r, "Beacons", 2, setSurfData);
-				});
+		const getSurfFromAPI = async () => {
+			const blacksResp = await axios.get(
+				"https://services.surfline.com/kbyg/spots/forecasts/wave?spotId=5842041f4e65fad6a770883b&days=1&intervalHours=1&maxHeights=true"
+			);
+
+			const fifteenthResp = await axios.get(
+				"https://services.surfline.com/kbyg/spots/forecasts/wave?spotId=5842041f4e65fad6a77088af&days=1&intervalHours=1&maxHeights=true"
+			);
+
+			const beaconsResp = await axios.get(
+				"https://services.surfline.com/kbyg/spots/forecasts/wave?spotId=5842041f4e65fad6a77088a0&days=1&intervalHours=1&maxHeights=true"
+			);
+
+			setSurfDataWithSplice(blacksResp, "Blacks", 0, setSurfData);
+			setSurfDataWithSplice(fifteenthResp, "15th Street", 1, setSurfData);
+			setSurfDataWithSplice(beaconsResp, "Beacons", 2, setSurfData);
 		};
 
 		getSurfFromAPI();

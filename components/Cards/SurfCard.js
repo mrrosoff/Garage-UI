@@ -11,7 +11,7 @@ import {
 	Bar,
 	LabelList
 } from "recharts";
-import makeStyles from '@mui/styles/makeStyles';
+import makeStyles from "@mui/styles/makeStyles";
 import { grey } from "@mui/material/colors";
 
 const useStyles = makeStyles((theme) => ({
@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
 const SurfCard = (props) => {
 	const classes = useStyles();
 	return (
-        <Box
+		<Box
 			pt={2}
 			pl={2}
 			pr={2}
@@ -44,7 +44,7 @@ const SurfCard = (props) => {
 				<SurfGraph {...props} />
 			</Box>
 		</Box>
-    );
+	);
 };
 
 const SurfGraph = (props) => {
@@ -76,7 +76,7 @@ const renderCustomizedLabel = (props) => {
 	const theme = useTheme();
 	const { x, y, width, value } = props;
 	const radius = 10;
-	const waveHeight = (Math.round(value * 2) / 2);
+	const waveHeight = Math.round(value * 2) / 2;
 	const isDecimal = waveHeight % 1 !== 0;
 	return (
 		<text
