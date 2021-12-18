@@ -71,7 +71,7 @@ const TideCard = (props) => {
 				</Grid>
 				<Grid item>
 					{lowTide && highTide ? (
-						<Grid container spacing={3} justifyContent={"center"} alignItems={"center"}>
+						<Grid container spacing={2} justifyContent={"center"} alignItems={"center"}>
 							<Grid item>
 								<TideTime
 									tide={nextTideIsLow ? "low" : "high"}
@@ -105,14 +105,12 @@ const TideCard = (props) => {
 const TideTime = (props) => {
 	const Icon = props.tide === "low" ? ArrowDownwardIcon : ArrowUpwardIcon;
 	return (
-		<Grid container justifyContent={"center"} alignItems={"center"} spacing={1}>
-			<Icon style={{ fontSize: 20 }} />
-			<Grid item>
-				<Typography style={{ fontSize: 20, fontWeight: 500 }}>
-					{DateTime.fromJSDate(props.data).toLocaleString(DateTime.TIME_SIMPLE)}
-				</Typography>
-			</Grid>
-		</Grid>
+		<Box display={"flex"} justifyContent={"center"} alignItems={"center"} spacing={1}>
+			<Icon sx={{ fontSize: 20 }} />
+			<Typography sx={{ pl: 1, fontSize: 20, fontWeight: 500 }}>
+				{DateTime.fromJSDate(props.data).toLocaleString(DateTime.TIME_SIMPLE)}
+			</Typography>
+		</Box>
 	);
 };
 
@@ -181,7 +179,9 @@ const getTideTimes = (predictionData, actualData) => {
 	if (i + 1 >= predictionData.length) {
 		return { highTide: null, lowTide: null, nextTideIsLow: null };
 	}
-	let graphStartsDown = predictionData[i].prediction > predictionData[i + 1].prediction;
+	const currentPrediction = parseFloat(predictionData[i].prediction);
+	const nextPrediction = parseFloat(predictionData[i + 1].prediction);
+	let graphStartsDown = currentPrediction > nextPrediction;
 	let firstInflectionPoint = predictionData[i + 1];
 	i += 2;
 	if (i >= predictionData.length) {
@@ -189,7 +189,9 @@ const getTideTimes = (predictionData, actualData) => {
 	}
 
 	for (; i < predictionData.length; i++) {
-		const nextDataPointIsBelow = firstInflectionPoint.prediction > predictionData[i].prediction;
+		const lastPrediction = parseFloat(firstInflectionPoint.prediction);
+		const currentPrediction = parseFloat(predictionData[i].prediction);
+		const nextDataPointIsBelow = lastPrediction > currentPrediction;
 		if (graphStartsDown !== nextDataPointIsBelow) break;
 		firstInflectionPoint = predictionData[i];
 	}
@@ -201,8 +203,9 @@ const getTideTimes = (predictionData, actualData) => {
 	}
 
 	for (; i < predictionData.length; i++) {
-		const nextDataPointIsBelow =
-			secondInflectionPoint.prediction > predictionData[i].prediction;
+		const lastPrediction = parseFloat(secondInflectionPoint.prediction);
+		const currentPrediction = parseFloat(predictionData[i].prediction);
+		const nextDataPointIsBelow = lastPrediction > currentPrediction;
 		if (!graphStartsDown !== nextDataPointIsBelow) break;
 		secondInflectionPoint = predictionData[i];
 	}
