@@ -3,7 +3,7 @@ import React from "react";
 import { Box, Grid, Typography, useTheme } from "@mui/material";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
-import makeStyles from '@mui/styles/makeStyles';
+import makeStyles from "@mui/styles/makeStyles";
 import { grey, purple } from "@mui/material/colors";
 
 import {
@@ -15,7 +15,7 @@ import {
 	XAxis,
 	YAxis
 } from "recharts";
-import moment from "moment";
+import { DateTime } from "luxon";
 
 const useStyles = makeStyles((theme) => ({
 	cardBox: {
@@ -64,7 +64,7 @@ const TideCard = (props) => {
 	}
 
 	return (
-        <Box p={2} className={classes.cardBox} display={"flex"} flexDirection={"column"}>
+		<Box p={2} className={classes.cardBox} display={"flex"} flexDirection={"column"}>
 			<Grid item container justifyContent={"space-between"}>
 				<Grid item>
 					<Typography style={{ fontSize: 32, fontWeight: 500 }}>Tide</Typography>
@@ -99,21 +99,21 @@ const TideCard = (props) => {
 				/>
 			</Box>
 		</Box>
-    );
+	);
 };
 
 const TideTime = (props) => {
 	const Icon = props.tide === "low" ? ArrowDownwardIcon : ArrowUpwardIcon;
 	return (
-        <Grid container justifyContent={"center"} alignItems={"center"} spacing={1}>
+		<Grid container justifyContent={"center"} alignItems={"center"} spacing={1}>
 			<Icon style={{ fontSize: 20 }} />
 			<Grid item>
 				<Typography style={{ fontSize: 20, fontWeight: 500 }}>
-					{moment(props.data.getTime()).format("h:mm A")}
+					{DateTime.fromJSDate(props.data).toLocaleString(DateTime.TIME_SIMPLE)}
 				</Typography>
 			</Grid>
 		</Grid>
-    );
+	);
 };
 
 const TideGraph = (props) => {
@@ -127,7 +127,9 @@ const TideGraph = (props) => {
 					scale="time"
 					interval="preserveStartEnd"
 					minTickGap={40}
-					tickFormatter={(tickItem) => moment(tickItem).format("h:mm A")}
+					tickFormatter={(tickItem) =>
+						DateTime.fromMillis(tickItem).toLocaleString(DateTime.TIME_SIMPLE)
+					}
 					domain={[props.domain.getTime(), props.domain.getTime()]}
 				/>
 				<YAxis
