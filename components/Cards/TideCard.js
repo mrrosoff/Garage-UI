@@ -17,8 +17,6 @@ import {
 } from "recharts";
 import { DateTime } from "luxon";
 
-const formatString = "yyyy-MM-dd HH:mm";
-
 const useStyles = makeStyles((theme) => ({
 	cardBox: {
 		borderWidth: 2,
@@ -29,6 +27,8 @@ const useStyles = makeStyles((theme) => ({
 	}
 }));
 
+const formatString = "yyyy-MM-dd HH:mm";
+
 const TideCard = (props) => {
 	const classes = useStyles();
 
@@ -36,11 +36,10 @@ const TideCard = (props) => {
 		return null;
 	}
 
-	const firstDataPointDate = DateTime.fromFormat(
-		props.tidePredictionData.predictions[0].t,
-		formatString
+	const domain = DateTime.fromISO(
+		DateTime.fromFormat(props.tidePredictionData.predictions[0].t, formatString).toISODate()
 	);
-	const domain = DateTime.fromISO(firstDataPointDate.toISODate());
+
 	const predictionData = props.tidePredictionData.predictions.map(({ t, v }) => ({
 		time: DateTime.fromFormat(t, formatString).toMillis(),
 		prediction: v
@@ -50,14 +49,13 @@ const TideCard = (props) => {
 	const { highTide, lowTide, nextTideIsLow } = getTideTimes(predictionData, props.tideActualData);
 
 	if (props.tideActualData && props.tideActualData.data) {
+		const actualData = props.tideActualData.data.map(({ t, v }) => ({
+			time: DateTime.fromFormat(t, formatString).toMillis(),
+			actual: v
+		}));
 		data = predictionData.map((obj) => ({
 			...obj,
-			...props.tideActualData.data
-				.map(({ t, v }) => ({
-					time: DateTime.fromFormat(t, formatString).toMillis(),
-					actual: v
-				}))
-				.find((item) => item.time === obj.time)
+			...actualData.find((item) => item.time === obj.time)
 		}));
 	}
 
@@ -163,7 +161,7 @@ const getTideTimes = (predictionData, actualData) => {
 	const lastActualDate = DateTime.fromFormat(
 		actualData.data[actualData.data.length - 1].t,
 		formatString
-	);
+	).toMillis();
 
 	for (; i < predictionData.length; i++) {
 		if (predictionData[i].time > lastActualDate) break;
