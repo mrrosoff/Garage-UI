@@ -32,7 +32,7 @@ const App = () => {
 		return () => clearInterval(interval);
 	}, []);
 
-	let mode = "light";
+	let mode = "dark";
 
 	if (sunData) {
 		const nowHour = DateTime.now().hour;

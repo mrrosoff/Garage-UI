@@ -1,33 +1,32 @@
 import React from "react";
 
-import { Button, Grid, SvgIcon } from "@mui/material";
+import { Box, Button, SvgIcon, Typography } from "@mui/material";
 
 import { ipcRenderer } from "electron";
 
 ipcRenderer.on("notSupportedPlatform", (_, err) => {
-	console.info("Not Supported Platform for Garage Door", err);
+	console.info("Not Supported Platform for Garage Door");
 });
 
 const SideBar = (props) => {
 	return (
-		<Grid
-			container
-			direction={"column"}
-			spacing={1}
-			style={{ height: "100%" }}
-			justifyContent={"center"}
-			alignItems={"center"}
-			alignContent={"center"}
-		>
-			<Grid item style={{ height: "100%", width: "100%" }}>
-				<Button
-					style={{ height: "100%", width: "100%" }}
-					onClick={() => ipcRenderer.send("garageSwitch")}
-				>
-					<HomeIcon />
-				</Button>
-			</Grid>
-		</Grid>
+		<Box display={"flex"} flexDirection={"column"} style={{ height: "100%", width: "100%" }}>
+			{props.specialDay && (
+				<Box display={"flex"} justifyContent={"center"} style={{ width: "100%" }} mb={2}>
+					<Typography sx={{ fontSize: 30, mr: 2 }}>{props.specialDay.emoji}</Typography>
+					<Typography style={{ fontWeight: 500, fontSize: 30 }}>
+						{props.specialDay.text}
+					</Typography>
+					<Typography sx={{ fontSize: 30, ml: 2 }}>{props.specialDay.emoji}</Typography>
+				</Box>
+			)}
+			<Button
+				style={{ height: "100%", width: "100%" }}
+				onClick={() => ipcRenderer.send("garageSwitch")}
+			>
+				<HomeIcon />
+			</Button>
+		</Box>
 	);
 };
 

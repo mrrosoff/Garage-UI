@@ -17,6 +17,8 @@ import {
 } from "recharts";
 import { DateTime } from "luxon";
 
+const formatString = "yyyy-MM-dd HH:mm";
+
 const useStyles = makeStyles((theme) => ({
 	cardBox: {
 		borderWidth: 2,
@@ -34,16 +36,13 @@ const TideCard = (props) => {
 		return null;
 	}
 
-	const firstDataPointDate = new Date(props.tidePredictionData.predictions[0].t);
-	const domain = new Date(
-		firstDataPointDate.getFullYear(),
-		firstDataPointDate.getMonth(),
-		firstDataPointDate.getDate()
+	const firstDataPointDate = DateTime.fromFormat(
+		props.tidePredictionData.predictions[0].t,
+		formatString
 	);
-
+	const domain = DateTime.fromISO(firstDataPointDate.toISODate());
 	const predictionData = props.tidePredictionData.predictions.map(({ t, v }) => ({
-		time: new Date(t),
-		timeNumber: new Date(t).getTime(),
+		time: DateTime.fromFormat(t, formatString).toMillis(),
 		prediction: v
 	}));
 
@@ -55,11 +54,10 @@ const TideCard = (props) => {
 			...obj,
 			...props.tideActualData.data
 				.map(({ t, v }) => ({
-					time: new Date(t),
-					timeNumber: new Date(t).getTime(),
+					time: DateTime.fromFormat(t, formatString).toMillis(),
 					actual: v
 				}))
-				.find((item) => item.timeNumber === obj.timeNumber)
+				.find((item) => item.time === obj.time)
 		}));
 	}
 
@@ -70,7 +68,7 @@ const TideCard = (props) => {
 					<Typography style={{ fontSize: 32, fontWeight: 500 }}>Tide</Typography>
 				</Grid>
 				<Grid item>
-					{lowTide && highTide ? (
+					{(lowTide || highTide) && (
 						<Grid container spacing={2} justifyContent={"center"} alignItems={"center"}>
 							<Grid item>
 								<TideTime
@@ -85,8 +83,6 @@ const TideCard = (props) => {
 								/>
 							</Grid>
 						</Grid>
-					) : (
-						<Typography style={{ fontSize: 20, fontWeight: 500 }}>Tomorrow</Typography>
 					)}
 				</Grid>
 			</Grid>
@@ -103,12 +99,13 @@ const TideCard = (props) => {
 };
 
 const TideTime = (props) => {
+	if (!props.data) return null;
 	const Icon = props.tide === "low" ? ArrowDownwardIcon : ArrowUpwardIcon;
 	return (
 		<Box display={"flex"} justifyContent={"center"} alignItems={"center"} spacing={1}>
 			<Icon sx={{ fontSize: 20 }} />
 			<Typography sx={{ pl: 1, fontSize: 20, fontWeight: 500 }}>
-				{DateTime.fromJSDate(props.data).toLocaleString(DateTime.TIME_SIMPLE)}
+				{DateTime.fromMillis(props.data).toLocaleString(DateTime.TIME_SIMPLE)}
 			</Typography>
 		</Box>
 	);
@@ -116,11 +113,13 @@ const TideTime = (props) => {
 
 const TideGraph = (props) => {
 	const theme = useTheme();
+	const minHeight = Math.min(...props.predictionData.map((item) => item.prediction)) - 0.5;
+	const maxHeight = Math.max(...props.predictionData.map((item) => item.prediction)) + 0.5;
 	return (
 		<ResponsiveContainer width={"100%"} height={"100%"}>
 			<LineChart data={props.data} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
 				<XAxis
-					dataKey="timeNumber"
+					dataKey="time"
 					type="number"
 					scale="time"
 					interval="preserveStartEnd"
@@ -128,20 +127,11 @@ const TideGraph = (props) => {
 					tickFormatter={(tickItem) =>
 						DateTime.fromMillis(tickItem).toLocaleString(DateTime.TIME_SIMPLE)
 					}
-					domain={[props.domain.getTime(), props.domain.getTime()]}
+					domain={["dataMin", "dataMax"]}
 				/>
-				<YAxis
-					hide
-					scale={"linear"}
-					domain={[
-						Math.floor(
-							Math.min(...props.predictionData.map((item) => item.prediction))
-						),
-						Math.ceil(Math.max(...props.predictionData.map((item) => item.prediction)))
-					]}
-				/>
-				<CartesianGrid strokeDasharray="3 3" />
-				<ReferenceLine x={new Date().getTime()} stroke={purple[500]} strokeWidth={2} />
+				<YAxis hide scale={"linear"} domain={[minHeight, maxHeight]} />
+				<CartesianGrid strokeDasharray="4 4" horizontalPoints={[0]} />
+				<ReferenceLine x={DateTime.now().toMillis()} stroke={purple[500]} strokeWidth={2} />
 				<Line
 					name="Predicted"
 					type="monotone"
@@ -170,7 +160,10 @@ const getTideTimes = (predictionData, actualData) => {
 		return { highTide: null, lowTide: null, nextTideIsLow: null };
 	}
 	let i = 0;
-	const lastActualDate = new Date(actualData.data[actualData.data.length - 1].t);
+	const lastActualDate = DateTime.fromFormat(
+		actualData.data[actualData.data.length - 1].t,
+		formatString
+	);
 
 	for (; i < predictionData.length; i++) {
 		if (predictionData[i].time > lastActualDate) break;
@@ -212,7 +205,13 @@ const getTideTimes = (predictionData, actualData) => {
 
 	const highTide = graphStartsDown ? secondInflectionPoint.time : firstInflectionPoint.time;
 	const lowTide = graphStartsDown ? firstInflectionPoint.time : secondInflectionPoint.time;
-	return { highTide, lowTide, nextTideIsLow: lowTide < highTide };
+	let nullTide = "throwAway";
+
+	if (i === predictionData.length) {
+		nullTide = graphStartsDown ? "highTide" : "lowTide";
+	}
+
+	return { highTide, lowTide, nextTideIsLow: lowTide < highTide, [nullTide]: null };
 };
 
 export default TideCard;

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 
 import { Box, Paper } from "@mui/material";
-import { grey } from "@mui/material/colors";
 
 import makeStyles from "@mui/styles/makeStyles";
 
@@ -11,18 +10,30 @@ import SurfCard from "./Cards/SurfCard";
 import SideBar from "./SideBar";
 
 import axios from "axios";
+import { DateTime } from "luxon";
 
 const useStyles = makeStyles((theme) => ({
 	root: {
 		padding: theme.spacing(3)
-	},
-	cardBox: {
-		borderWidth: 2,
-		borderStyle: "solid",
-		borderColor: grey[300],
-		borderRadius: 5
 	}
 }));
+
+const formatString = "MM-dd";
+
+const specialDays = [
+	{ date: DateTime.fromFormat("01-01", formatString), text: "Happy New Year", emoji: "🎉" },
+	{ date: DateTime.fromFormat("02-14", formatString), text: "Happy Valentines Day", emoji: "💖" },
+	{ date: DateTime.fromFormat("05-16", formatString), text: "Happy Birthday Max", emoji: "🎉" },
+	{ date: DateTime.fromFormat("05-24", formatString), text: "Happy Birthday Jaden", emoji: "🎉" },
+	{ date: DateTime.fromFormat("07-04", formatString), text: "Happy Forth Of July", emoji: "🇺🇸" },
+	{
+		date: DateTime.fromFormat("07-19", formatString),
+		text: "Happy Birthday Mother",
+		emoji: "🎉"
+	},
+	{ date: DateTime.fromFormat("10-31", formatString), text: "Happy Halloween", emoji: "🎃" },
+	{ date: DateTime.fromFormat("12-17", formatString), text: "Happy Birthday Jack", emoji: "🎉" }
+];
 
 const DashBoard = (props) => {
 	const classes = useStyles();
@@ -31,6 +42,7 @@ const DashBoard = (props) => {
 	const [surfData, setSurfData] = useState([]);
 	const [tidePredictionData, setTidePredictionData] = useState();
 	const [tideActualData, setTideActualData] = useState();
+	const [specialDay, setSpecialDay] = useState();
 
 	useEffect(() => {
 		const getWeatherFromAPI = async () => {
@@ -88,6 +100,18 @@ const DashBoard = (props) => {
 		return () => clearInterval(interval);
 	}, []);
 
+	useEffect(() => {
+		const getSpecialDay = async () => {
+			const specialDay = specialDays.find((day) => DateTime.now().hasSame(day.date, "day"));
+			if (specialDay) {
+				setSpecialDay(specialDay);
+			}
+		};
+
+		const interval = setInterval(getSpecialDay, 60000);
+		return () => clearInterval(interval);
+	}, []);
+
 	return (
 		<Box height={"100%"} p={3}>
 			<Box height={"100%"} display={"flex"} flexDirection={"row"}>
@@ -97,7 +121,7 @@ const DashBoard = (props) => {
 						style={{ width: "100%", height: "100%" }}
 						className={classes.root}
 					>
-						<SideBar {...props} />
+						<SideBar specialDay={specialDay} />
 					</Paper>
 				</Box>
 				<Box width={"66.66%"} height={"100%"}>
