@@ -22,7 +22,6 @@ const useStyles = makeStyles((theme) => ({
 
 const WeatherCard = (props) => {
 	const classes = useStyles();
-
 	return (
 		<Box p={2} className={classes.cardBox}>
 			<Grid container direction={"column"} spacing={1}>
@@ -50,7 +49,7 @@ const WeatherCard = (props) => {
 									<i
 										className={`wi wi-owm-${props.weatherData.weather[0].id}`}
 										alt={"Weather Icon"}
-										style={{ fontSize: 42 }}
+										style={{ fontSize: 50 }}
 									/>
 								</Box>
 							</Box>
