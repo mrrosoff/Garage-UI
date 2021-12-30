@@ -65,7 +65,7 @@ const TideCard = (props) => {
 				<Grid item>
 					<Typography style={{ fontSize: 32, fontWeight: 500 }}>Tide</Typography>
 				</Grid>
-				<Grid item>
+				{/* <Grid item>
 					{(lowTide || highTide) && (
 						<Grid container spacing={2} justifyContent={"center"} alignItems={"center"}>
 							<Grid item>
@@ -82,7 +82,7 @@ const TideCard = (props) => {
 							</Grid>
 						</Grid>
 					)}
-				</Grid>
+				</Grid> */}
 			</Grid>
 			<Box pt={2} flexGrow={1}>
 				<TideGraph
