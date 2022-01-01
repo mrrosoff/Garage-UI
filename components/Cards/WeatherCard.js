@@ -21,7 +21,13 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const WeatherCard = (props) => {
+
+	if (!props.weatherData) {
+		return null;
+	}
+
 	const classes = useStyles();
+	
 	return (
 		<Box p={2} className={classes.cardBox}>
 			<Grid container direction={"column"} spacing={1}>
@@ -39,7 +45,7 @@ const WeatherCard = (props) => {
 											fontWeight: 500
 										}}
 									>
-										{Math.floor(props.weatherData.main.temp) + " °F"}
+										{Math.floor(props.weatherData[0].TempF) + " °F"}
 									</Typography>
 									<Typography style={{ fontSize: 18 }}>
 										{DateTime.now().toLocaleString(DateTime.TIME_SIMPLE)}
@@ -47,7 +53,7 @@ const WeatherCard = (props) => {
 								</Box>
 								<Box pl={4}>
 									<i
-										className={`wi wi-owm-${props.weatherData.weather[0].id}`}
+										className={`wi wi-owm-${props.weatherData[0].Conditions}`}
 										alt={"Weather Icon"}
 										style={{ fontSize: 50 }}
 									/>
@@ -66,6 +72,7 @@ const WeatherCard = (props) => {
 
 const OtherDetails = (props) => {
 	const theme = useTheme();
+	
 	return (
 		<Grid container spacing={2}>
 			<Grid item>
@@ -78,23 +85,23 @@ const OtherDetails = (props) => {
 					/>
 					<Box pl={1}>
 						<Typography style={{ fontSize: 16, fontWeight: 400 }}>
-							{props.weatherData.main.humidity + "%"}
+							{props.weatherData[0].Humidity + "%"}
 						</Typography>
 					</Box>
 				</Box>
 			</Grid>
 			<Grid item>
 				<Box display={"flex"} alignItems={"center"}>
-					<i
-						className={`wi wi-wind from-${props.weatherData.wind.deg}-deg`}
+					{/* <i
+						className={`wi wi-wind from--deg`}
 						style={{
 							fontSize: 22,
 							color: theme.palette.primary.main
 						}}
-					/>
+					/> */}
 					<Box pl={1}>
 						<Typography style={{ fontSize: 16, fontWeight: 400 }}>
-							{Math.floor(props.weatherData.wind.speed) + " mi/h"}
+							{Math.floor(props.weatherData[0].WindMph) + " mi/h"}
 						</Typography>
 					</Box>
 				</Box>

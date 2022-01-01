@@ -1,17 +1,10 @@
-# Garage-UI
+# Snow-UI
 
-### A Custom UI For A Garage Door Opener
+### A Custom UI For Skiing/Snowboard Conditions
 
 ## About Project
 
-After viewing the button on my family's garageAPI wall for enough years, I decided to finally do something about it. I 
-imagined a world where there was a central database for important information about family endeavors, where one could go
-for quick information at a glance, but also for more detailed info.
-
-Thus, the Garage-Pi was born.
-
-A Raspberry Pi runs this repo as an Electron app out of our garage. It of course has garage door controls, but it also 
-shows tide, weather, and surf data. The app is configured so that new data sources can be easily added at a later date.
+This project is a custom UI for snow reports and conditions for a specific ski-resort. Specifically, the default is for Steamboat Springs, Colorado. The UI displays the current snow conditions, current weather conditions, and the forecast for the next 5 days. The UI also displays statistics for the resort, such as the total accumilation of snow in the past 30 days and the status of trails and lifts.
 
 ## Installation
 

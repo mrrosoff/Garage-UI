@@ -5,8 +5,6 @@ import { Box, Paper } from "@mui/material";
 import makeStyles from "@mui/styles/makeStyles";
 
 import WeatherCard from "./Cards/WeatherCard";
-import SurfCard from "./Cards/SurfCard";
-import SideBar from "./SideBar";
 
 import axios from "axios";
 import { DateTime } from "luxon";
@@ -49,7 +47,7 @@ const DashBoard = (props) => {
 				"https://mtnpowder.com/feed/6/weather"
 			);
 			
-			setWeatherData(data);
+			setWeatherData(data.CurrentConditions);
 		};
 
 		getWeatherFromAPI();
@@ -89,13 +87,10 @@ const DashBoard = (props) => {
 			<Box height={"100%"} display={"flex"} flexDirection={"row"}>
 				<Box width={"100%"} height={"100%"} display={"flex"} flexDirection={"column"}>
 					<Box display={"flex"}>
-						{/* <Box>{weatherData && <WeatherCard weatherData={weatherData} />}</Box>
-						<Box pl={3} flexGrow={1}></Box> */}
+						<Box>{weatherData && <WeatherCard weatherData={weatherData} />}</Box>
+						<Box pl={3} flexGrow={1}></Box>
 					</Box>
 					<Box pt={3} flexGrow={1}>
-						<SnowfallCard
-							snowfallData={snowfallData}
-						/>
 					</Box>
 				</Box>
 			</Box>

@@ -2,7 +2,7 @@ import React from "react";
 
 import { Box, Grid, Typography, useTheme } from "@mui/material";
 import makeStyles from "@mui/styles/makeStyles";
-import { grey } from "@mui/material/colors";
+import { grey, blue } from "@mui/material/colors";
 
 import {
 	ComposedChart,
@@ -27,8 +27,6 @@ const useStyles = makeStyles((theme) => ({
 		height: "100%"
 	}
 }));
-
-const formatString = "yyyy-MM-dd HH:mm";
 
 const SnowfallCard = (props) => {
 	const classes = useStyles();
@@ -92,7 +90,7 @@ const SnowfallCard = (props) => {
 const renderCustomizedLabel = (props) => {
 	const { x, y, width, value } = props;
 	const radius = 12;
-
+	const theme = useTheme();
 	return (
 		<g>
 			<text
@@ -100,10 +98,10 @@ const renderCustomizedLabel = (props) => {
 				y={y - radius}
 				textAnchor="middle"
 				dominantBaseline="middle"
-				color="#ffff"
+				color={theme.palette.primary.main}
 				fontSize={15}
 			>
-				{value != 0 ? value +"\"" : ""}
+				{value != 0 ? value + '"' : ""}
 			</text>
 		</g>
 	);
@@ -139,8 +137,6 @@ const SnowfallChart = (props) => {
 				<YAxis dataKey="Accumilation" scale={"linear"} domain={[0, accumMax]} yAxisId="1" />
 				<YAxis hide dataKey="SnowIn" scale={"linear"} domain={[0, snowInMax]} yAxisId="2" />
 
-				<Tooltip />
-
 				<Area
 					type="monotone"
 					dataKey="Accumilation"
@@ -149,7 +145,7 @@ const SnowfallChart = (props) => {
 					yAxisId="1"
 				/>
 
-				<Bar dataKey="SnowIn" barSize={5} fill="#00000" yAxisId="2">
+				<Bar dataKey="SnowIn" barSize={5} fill={blue[500]} yAxisId="2">
 					<LabelList dataKey="SnowIn" content={renderCustomizedLabel} />
 				</Bar>
 			</ComposedChart>
