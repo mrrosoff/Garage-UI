@@ -6,7 +6,7 @@
   "scripts": {
     "start": "webpack serve",
     "build": "NODE_ENV=production webpack",
-    "garage": "npm run build && NODE_ENV=production electron ."
+    "snow": "npm run build && NODE_ENV=production electron ."
   },
   "author": "Matthew Ernst",
   "license": "MIT",
