@@ -1,10 +1,12 @@
 const path = require("path");
 const webpack = require("webpack");
+
 const HtmlWebpackPlugin = require("html-webpack-plugin");
-const { CleanWebpackPlugin } = require("clean-webpack-plugin");
+
 const { spawn } = require("child_process");
 
 const outputDirectory = "dist";
+const mode = process.env.NODE_ENV || "development";
 
 module.exports = {
 	entry: "./index.js",
@@ -23,7 +25,7 @@ module.exports = {
 		}
 	},
 	devtool: "eval-source-map",
-	mode: process.env.NODE_ENV || "development",
+	mode: mode,
 	module: {
 		rules: [
 			{
@@ -53,15 +55,12 @@ module.exports = {
 	},
 	output: { filename: "bundle.js", path: path.resolve(__dirname, outputDirectory) },
 	plugins: [
-		new CleanWebpackPlugin(),
 		new HtmlWebpackPlugin({
 			template: "./static/template/index.html",
 			favicon: "./static/template/favicon.ico",
 			title: "Rosoff Club"
 		}),
-		new webpack.DefinePlugin({
-			"process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV || "development")
-		})
+		new webpack.DefinePlugin({ IS_DEVELOPMENT: mode === "development" })
 	],
 	resolve: {
 		extensions: ["", ".ts", ".tsx", ".js", ".jsx"]
