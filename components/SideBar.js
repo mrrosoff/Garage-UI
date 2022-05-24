@@ -14,7 +14,7 @@ const SideBar = (props) => {
 			{props.specialDay && (
 				<Box display={"flex"} justifyContent={"center"} style={{ width: "100%" }} mb={2}>
 					<Typography sx={{ fontSize: 30, mr: 2 }}>{props.specialDay.emoji}</Typography>
-					<Typography style={{ fontWeight: 500, fontSize: 30 }}>
+					<Typography style={{ fontWeight: 500, fontSize: 30, textAlign: "center" }}>
 						{props.specialDay.text}
 					</Typography>
 					<Typography sx={{ fontSize: 30, ml: 2 }}>{props.specialDay.emoji}</Typography>
