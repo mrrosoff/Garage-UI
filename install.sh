@@ -9,13 +9,14 @@ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
 echo "Done."
 
 echo "Setting up NVM..."
+nvm install v16.13.2
 nvm alias default 16.13.2
 echo "Done."
 
 echo "Installing dependencies..."
 sudo apt-get update -y
 sudo apt-get upgrade -y
-sudo apt-get install -y npm matchbox xorg ttf-mscorefonts-installer xwit sqlite3 libnss3
+sudo apt-get install -y matchbox xorg ttf-mscorefonts-installer xwit sqlite3 libnss3
 echo "Done."
 
 echo "Installing auto start script..."
