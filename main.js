@@ -44,7 +44,8 @@ function createWindow() {
 }
 
 app.on("ready", async () => createWindow());
-
+// For sunrise and sunset times API. No SSL Certificate error.
+app.commandLine.appendSwitch("ignore-certificate-errors");
 app.on("window-all-closed", () => app.quit());
 app.on("activate", () => {
 	if (mainWindow === null) createWindow();

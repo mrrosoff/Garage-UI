@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
-import { Box, Grid, Typography, useTheme } from "@mui/material";
+import { Box, Grid, LinearProgress, Typography, useTheme } from "@mui/material";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import makeStyles from "@mui/styles/makeStyles";
@@ -31,36 +31,68 @@ const formatString = "yyyy-MM-dd HH:mm";
 
 const TideCard = (props) => {
 	const classes = useStyles();
+	const [domain, setDomain] = useState();
+	const [predictionData, setPredictionData] = useState();
+	const [data, setData] = useState();
+	const [highTide, setHighTide] = useState();
+	const [lowTide, setLowTide] = useState();
+	const [nextTideIsLow, setNextTideIsLow] = useState();
 
-	if (!props.tidePredictionData.predictions) {
-		return null;
-	}
+	useEffect(() => {
+		if (!props.tidePredictionData?.predictions) {
+			return;
+		}
 
-	const domain = DateTime.fromISO(
-		DateTime.fromFormat(props.tidePredictionData.predictions[0].t, formatString).toISODate()
-	);
+		setDomain(
+			DateTime.fromISO(
+				DateTime.fromFormat(
+					props.tidePredictionData.predictions[0].t,
+					formatString
+				).toISODate()
+			)
+		);
 
-	const predictionData = props.tidePredictionData.predictions.map(({ t, v }) => ({
-		time: DateTime.fromFormat(t, formatString).toMillis(),
-		prediction: v
-	}));
+		const tempData =
+			props.tidePredictionData.predictions.map(({ t, v }) => ({
+				time: DateTime.fromFormat(t, formatString).toMillis(),
+				prediction: v
+			}));
 
-	let data = predictionData;
-	const { highTide, lowTide, nextTideIsLow } = getTideTimes(predictionData, props.tideActualData);
+		setPredictionData(tempData);
 
-	if (props.tideActualData && props.tideActualData.data) {
-		const actualData = props.tideActualData.data.map(({ t, v }) => ({
-			time: DateTime.fromFormat(t, formatString).toMillis(),
-			actual: v
-		}));
-		data = predictionData.map((obj) => ({
-			...obj,
-			...actualData.find((item) => item.time === obj.time)
-		}));
-	}
+		setData(tempData);
+		const { highTide, lowTide, nextTideIsLow } = getTideTimes(
+			tempData,
+			props.tideActualData
+		);
+		setHighTide(highTide);
+		setLowTide(lowTide);
+		setNextTideIsLow(nextTideIsLow);
+
+		if (props.tideActualData && props.tideActualData.data) {
+			const actualData = props.tideActualData.data.map(({ t, v }) => ({
+				time: DateTime.fromFormat(t, formatString).toMillis(),
+				actual: v
+			})).filter((datapoint) => datapoint.actual);
+
+			setData(
+				tempData.map((obj) => ({
+					...obj,
+					...actualData.find((item) => item.time === obj.time)
+				}))
+			);
+		}
+	}, [props.tidePredictionData, props.showTideActualData]);
 
 	return (
-		<Box p={2} className={classes.cardBox} display={"flex"} flexDirection={"column"}>
+		<Box
+			pt={2}
+			pl={2}
+			pr={2}
+			className={classes.cardBox}
+			display={"flex"}
+			flexDirection={"column"}
+		>
 			<Grid item container justifyContent={"space-between"}>
 				<Grid item>
 					<Typography style={{ fontSize: 32, fontWeight: 500 }}>Tide</Typography>
@@ -85,12 +117,27 @@ const TideCard = (props) => {
 				</Grid>
 			</Grid>
 			<Box pt={2} flexGrow={1}>
-				<TideGraph
-					data={data}
-					domain={domain}
-					predictionData={predictionData}
-					showTideActualData={!!props.tideActualData}
-				/>
+				{data ? (
+					<TideGraph
+						data={data}
+						domain={domain}
+						predictionData={predictionData}
+						showTideActualData={!!props.tideActualData}
+					/>
+				) : (
+					<LoadingTideData />
+				)}
+			</Box>
+		</Box>
+	);
+};
+
+const LoadingTideData = () => {
+	return (
+		<Box sx={{ width: "100%", height: "100%", display: "flex", flexDirection: "column", p: 2 }}>
+			<Box sx={{ flexGrow: 1 }} />
+			<Box>
+				<LinearProgress sx={{ height: 8 }} />
 			</Box>
 		</Box>
 	);
