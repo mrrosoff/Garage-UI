@@ -49,7 +49,7 @@ const DashBoard = (props) => {
 	useEffect(() => {
 		const getWeatherFromAPI = async () => {
 			const { data } = await axios.get(
-				"https://api.openweathermap.org/data/2.5/weather?zip=92131&units=imperial&appid=114e2f8559d9daba8a4ad4e51464c8b6"
+				"https://api.openweathermap.org/data/2.5/weather?zip=92130&units=imperial&appid=114e2f8559d9daba8a4ad4e51464c8b6"
 			);
 			setWeatherData(data);
 		};

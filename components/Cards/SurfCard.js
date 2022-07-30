@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Box, CircularProgress, Grid, LinearProgress, Typography, useTheme } from "@mui/material";
+import { Box, Grid, LinearProgress, Typography, useTheme } from "@mui/material";
 
 import {
 	CartesianGrid,
