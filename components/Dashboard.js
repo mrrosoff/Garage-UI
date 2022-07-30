@@ -39,9 +39,11 @@ const DashBoard = (props) => {
 	const classes = useStyles();
 
 	const [weatherData, setWeatherData] = useState();
-	const [surfData, setSurfData] = useState([]);
+	const [uvIndex, setUvIndex] = useState();
 	const [tidePredictionData, setTidePredictionData] = useState();
 	const [tideActualData, setTideActualData] = useState();
+	const [surfData, setSurfData] = useState([]);
+	const [waterTemperature, setWaterTemperature] = useState();
 	const [specialDay, setSpecialDay] = useState();
 
 	useEffect(() => {
@@ -54,6 +56,24 @@ const DashBoard = (props) => {
 
 		getWeatherFromAPI();
 		const interval = setInterval(getWeatherFromAPI, 60000);
+		return () => clearInterval(interval);
+	}, []);
+
+	useEffect(() => {
+		const getUvIndexFromAPI = async () => {
+			var openuv = require("openuv")("v1", "6ea4a58a63389383792262542bf2ee9d");
+			openuv.uv({ lat: 32.95325541910332, lng: -117.24177865770446 }, (err, data) => {
+				if (err) {
+					console.log(err);
+					setUvIndex("-");
+				} else {
+					setUvIndex(data.uv.toFixed(0));
+				}
+			});
+		};
+
+		getUvIndexFromAPI();
+		const interval = setInterval(getUvIndexFromAPI, 7200000);
 		return () => clearInterval(interval);
 	}, []);
 
@@ -101,6 +121,20 @@ const DashBoard = (props) => {
 	}, []);
 
 	useEffect(() => {
+		const getWaterTemperatureFromAPI = async () => {
+			const response = await axios.get(
+				"https://api.tidesandcurrents.noaa.gov/api/prod/datagetter?date=latest&station=9410230&product=water_temperature&units=english&time_zone=lst&application=web_services&format=json"
+			);
+
+			setWaterTemperature(parseInt(response.data.data[0].v));
+		};
+
+		getWaterTemperatureFromAPI();
+		const interval = setInterval(getWaterTemperatureFromAPI, 60000);
+		return () => clearInterval(interval);
+	}, []);
+
+	useEffect(() => {
 		const getSpecialDay = async () => {
 			const specialDay = specialDays.find((day) => DateTime.now().hasSame(day.date, "day"));
 			if (specialDay) {
@@ -111,7 +145,6 @@ const DashBoard = (props) => {
 		const interval = setInterval(getSpecialDay, 10);
 		return () => clearInterval(interval);
 	}, []);
-
 
 	return (
 		<Box height={"100%"} p={3}>
@@ -139,19 +172,20 @@ const DashBoard = (props) => {
 						>
 							<Box display={"flex"}>
 								<Box>
-									{weatherData && <WeatherCard weatherData={weatherData} />}
+									<WeatherCard weatherData={weatherData} uvIndex={uvIndex} />
 								</Box>
 								<Box pl={3} flexGrow={1}>
-									{surfData.length > 0 && <SurfCard surfData={surfData} />}
+									<SurfCard
+										surfData={surfData}
+										waterTemperature={waterTemperature}
+									/>
 								</Box>
 							</Box>
 							<Box pt={3} flexGrow={1}>
-								{tidePredictionData && (
-									<TideCard
-										tidePredictionData={tidePredictionData}
-										tideActualData={tideActualData}
-									/>
-								)}
+								<TideCard
+									tidePredictionData={tidePredictionData}
+									tideActualData={tideActualData}
+								/>
 							</Box>
 						</Box>
 					</Paper>

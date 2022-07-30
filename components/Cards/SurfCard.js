@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Box, Grid, Typography, useTheme } from "@mui/material";
+import { Box, Grid, LinearProgress, Typography, useTheme } from "@mui/material";
 
 import {
 	CartesianGrid,
@@ -12,6 +12,7 @@ import {
 	LabelList
 } from "recharts";
 import makeStyles from "@mui/styles/makeStyles";
+import DeviceThermostat from "@mui/icons-material/DeviceThermostat";
 import { grey } from "@mui/material/colors";
 
 const useStyles = makeStyles((theme) => ({
@@ -26,6 +27,7 @@ const useStyles = makeStyles((theme) => ({
 
 const SurfCard = (props) => {
 	const classes = useStyles();
+
 	return (
 		<Box
 			pt={2}
@@ -39,9 +41,27 @@ const SurfCard = (props) => {
 				<Grid item>
 					<Typography style={{ fontSize: 32, fontWeight: 500 }}>Surf</Typography>
 				</Grid>
+				<Grid item>
+					<Grid container spacing={2} justifyContent={"center"}>
+						<Grid item>
+							<WaterTemperature waterTemperature={props.waterTemperature} />
+						</Grid>
+					</Grid>
+				</Grid>
 			</Grid>
 			<Box pt={1} flexGrow={1}>
-				<SurfGraph {...props} />
+				{props.surfData.length > 0 ? <SurfGraph {...props} /> : <LoadingSurfData />}
+			</Box>
+		</Box>
+	);
+};
+
+const LoadingSurfData = () => {
+	return (
+		<Box sx={{ width: "100%", height: "100%", display: "flex", flexDirection: "column", p: 2}}>
+			<Box sx={{ flexGrow: 1 }} />
+			<Box>
+				<LinearProgress sx={{height: 8}}/>
 			</Box>
 		</Box>
 	);
@@ -89,6 +109,18 @@ const renderCustomizedLabel = (props) => {
 		>
 			{isDecimal ? waveHeight.toFixed(1) : waveHeight.toFixed(0) + " ft"}
 		</text>
+	);
+};
+
+const WaterTemperature = (props) => {
+	if (!props.waterTemperature) return null;
+	return (
+		<Box display={"flex"} justifyContent={"center"} alignItems={"center"}>
+			<DeviceThermostat sx={{ fontSize: 20 }} />
+			<Typography sx={{ pl: 1, fontSize: 20, fontWeight: 500 }}>
+				{props.waterTemperature + "°F"}
+			</Typography>
+		</Box>
 	);
 };
 

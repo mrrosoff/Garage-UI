@@ -6,6 +6,7 @@ import { ipcRenderer } from "electron";
 
 ipcRenderer.on("notSupportedPlatform", (_, err) => {
 	console.info("Not Supported Platform for Garage Door");
+	console.info(err)
 });
 
 const SideBar = (props) => {
