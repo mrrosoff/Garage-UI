@@ -15,5 +15,17 @@ shows tide, weather, and surf data. The app is configured so that new data sourc
 
 ## Installation
 
-Clone the repository and run the [install script](install.sh). This will install the dependencies, build the app, and change 
-your Raspberry Pi to auto update itself and auto launch to Garage-UI.
+Clone the repository and run the [install script](install.sh). This will install the dependencies, build the app, and change your Raspberry Pi to auto update itself and auto launch to Garage-UI.
+
+## Environment Variables
+
+We currently use the following environment variables:
+
+```
+lat=32.95325541910332
+lng=-117.24177865770446
+zipCode=92130
+noaaStation=9410230
+timeInterval=60000
+openWeatherMapAppId="114e2f8559d9daba8a4ad4e51464c8b6"
+```

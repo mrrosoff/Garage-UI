@@ -20,6 +20,7 @@
 		"autoprefixer": "^10.4.8",
 		"axios": "^0.27.2",
 		"clsx": "latest",
+		"dotenv": "^16.0.1",
 		"luxon": "^3.0.1",
 		"onoff": "^6.0.3",
 		"openuv": "^0.1.2",
