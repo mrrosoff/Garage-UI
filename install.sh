@@ -19,6 +19,22 @@ sudo apt-get upgrade -y
 sudo apt-get install -y matchbox xorg ttf-mscorefonts-installer xwit sqlite3 libnss3
 echo "Done."
 
+echo "Setting up emojis..."
+mkdir emj_temp
+cd emj_temp
+wget https://fontsdata.com/zipdown-segoeuiemoji-132714.htm 
+wget https://noto-website.storage.googleapis.com/pkgs/NotoColorEmoji-unhinted.zip
+mv zipdown-segoeuiemoji-132714.htm segoeuiemoji.zip
+unzip segoeuiemoji.zip
+unzip NotoColorEmoji-unhinted.zip
+mkdir $HOME/.fonts &>/dev/null
+mv seguiemj.ttf "$HOME/.fonts/Segoe UI.ttf"
+mv NotoColorEmoji.ttf "$HOME/.fonts/Noto Color Emoji.ttf"
+fc-cache -f -v &>/dev/null
+cd ..
+rm -rf emj_temp
+echo "Done"
+
 echo "Installing auto start script..."
 echo "
     cd ${GARAGE-UI-DIR}
