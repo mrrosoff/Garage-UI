@@ -2,11 +2,11 @@
     "name": "garage-ui",
     "version": "2.1.2",
     "description": "A Custom UI For A Garage Door Opener",
-	"main": "dist/electron/main.js",
+    "main": "dist/electron/main.js",
     "scripts": {
         "start": "vite",
         "build": "vite build",
-        "preview": "vite preview"
+        "garage": "npm run build && NODE_ENV=production electron ."
     },
     "author": "Max Rosoff",
     "license": "MIT",

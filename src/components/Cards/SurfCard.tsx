@@ -1,5 +1,4 @@
 import { Box, Grid, LinearProgress, Typography, useTheme } from "@mui/material";
-
 import {
     CartesianGrid,
     ResponsiveContainer,

@@ -6,33 +6,12 @@ import axios from "axios";
 import { DateTime } from "luxon";
 
 import callExternalAPIOnInterval from "../hooks/callExternalAPIOnInterval";
+import specialDays, { SpecialDay } from "../specialDays";
+
 import TideCard from "./Cards/TideCard";
 import WeatherCard from "./Cards/WeatherCard";
 import SurfCard from "./Cards/SurfCard";
 import SideBar from "./SideBar";
-
-interface SpecialDay {
-    emoji: string;
-    text: string;
-    date: DateTime;
-}
-
-const formatString = "MM-dd";
-
-const specialDays: SpecialDay[] = [
-    { date: DateTime.fromFormat("01-01", formatString), text: "Happy New Year", emoji: "🎉" },
-    { date: DateTime.fromFormat("02-14", formatString), text: "Happy Valentines Day", emoji: "💖" },
-    { date: DateTime.fromFormat("05-16", formatString), text: "Happy Birthday Max", emoji: "🎉" },
-    { date: DateTime.fromFormat("05-24", formatString), text: "Happy Birthday Jaden", emoji: "🎉" },
-    { date: DateTime.fromFormat("07-04", formatString), text: "Happy Forth Of July", emoji: "🇺🇸" },
-    {
-        date: DateTime.fromFormat("07-19", formatString),
-        text: "Happy Birthday Mother",
-        emoji: "🎉"
-    },
-    { date: DateTime.fromFormat("10-31", formatString), text: "Happy Halloween", emoji: "🎃" },
-    { date: DateTime.fromFormat("12-17", formatString), text: "Happy Birthday Jack", emoji: "🎉" }
-];
 
 const DashBoard = () => {
     const {
@@ -60,7 +39,6 @@ const DashBoard = () => {
         VITE_TIME_INTERVAL,
         `${openWeatherMapAPI}?zip=${VITE_ZIP_CODE}&units=imperial&appid=${VITE_OPEN_WEATHER_MAP_ID}`
     );
-
     const uvIndex = callExternalAPIOnInterval(
         VITE_TIME_INTERVAL,
         `${openUVAPI}?lat=${VITE_LATITUDE}&lng=${VITE_LONGITUDE}`,

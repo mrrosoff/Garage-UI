@@ -1,6 +1,5 @@
 import { CssBaseline, PaletteMode } from "@mui/material";
 import { blue, green } from "@mui/material/colors";
-
 import {
     createTheme,
     responsiveFontSizes,

@@ -1,5 +1,4 @@
 import { Box, Grid, LinearProgress, Typography, useTheme } from "@mui/material";
-
 import OpacityIcon from "@mui/icons-material/Opacity";
 import WbSunny from "@mui/icons-material/WbSunny";
 import { grey } from "@mui/material/colors";

@@ -17,6 +17,7 @@ const garageSwitch = (): boolean => {
         flipSwitch();
         return true;
     } catch (err) {
+        console.log("Unsupported Platform Or Unknown Error Occured");
         return false;
     }
 };
@@ -37,7 +38,7 @@ function createWindow() {
 
     let indexPath = "http://localhost:3000";
     if (process.env.NODE_ENV === "production") {
-        indexPath = "file://" + path.join(__dirname, "dist", "index.html");
+        indexPath = "file://" + path.join(__dirname, "..", "index.html");
     }
 
     mainWindow.loadURL(indexPath);
