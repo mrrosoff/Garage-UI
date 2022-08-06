@@ -10,6 +10,9 @@ export default defineConfig({
             main: {
                 entry: "electron/main.ts"
             },
+            preload: {
+                input: "electron/preload.ts"
+            },
             renderer: {}
         }),
         react()

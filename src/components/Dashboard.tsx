@@ -52,14 +52,15 @@ const DashBoard = () => {
     } = import.meta.env;
 
     const openWeatherMapAPI = "https://api.openweathermap.org/data/2.5/weather";
-    const openUVAPI = "https://api.openweathermap.org/data/2.5/onecall";
-    const noaaAPI = "https://tidesandcurrents.noaa.gov/api/datagetter";
+    const openUVAPI = "https://api.openuv.io/api/v1/uv";
+    const noaaAPI = "https://api.tidesandcurrents.noaa.gov/api/prod/datagetter";
     const surfAPI = "https://services.surfline.com/kbyg/spots/forecasts";
 
     const weatherData = callExternalAPIOnInterval(
         VITE_TIME_INTERVAL,
         `${openWeatherMapAPI}?zip=${VITE_ZIP_CODE}&units=imperial&appid=${VITE_OPEN_WEATHER_MAP_ID}`
     );
+
     const uvIndex = callExternalAPIOnInterval(
         VITE_TIME_INTERVAL,
         `${openUVAPI}?lat=${VITE_LATITUDE}&lng=${VITE_LONGITUDE}`,

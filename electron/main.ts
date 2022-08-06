@@ -5,8 +5,6 @@ import { Gpio } from "onoff";
 let mainWindow;
 
 const garageSwitch = (): boolean => {
-    console.log("here");
-
     try {
         const doorPin = new Gpio(4, "out");
         doorPin.writeSync(1);

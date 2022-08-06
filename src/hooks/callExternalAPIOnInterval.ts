@@ -11,8 +11,10 @@ const callExternalAPIOnInterval = (
 
     useEffect(() => {
         const getAPIData = async () => {
-            const { data } = await axios.get(url, { headers });
-            setData(data);
+            try {
+                const { data } = await axios.get(url, { headers });
+                setData(data);
+            } catch (error) {}
         };
 
         getAPIData();

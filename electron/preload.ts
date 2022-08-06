@@ -1,4 +1,4 @@
-const { contextBridge, ipcRenderer } = require("electron");
+import { contextBridge, ipcRenderer } from "electron";
 
 contextBridge.exposeInMainWorld("garageAPI", {
     garageSwitch: () => ipcRenderer.invoke("garageSwitch")
