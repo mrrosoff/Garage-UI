@@ -1,8 +1,4 @@
-import React from "react";
-
-import "dotenv/config";
-
-import { CssBaseline } from "@mui/material";
+import { CssBaseline, PaletteMode } from "@mui/material";
 import { blue, green } from "@mui/material/colors";
 
 import {
@@ -18,12 +14,13 @@ import callExternalAPIOnInterval from "../hooks/callExternalAPIOnInterval";
 import DashBoard from "./Dashboard";
 
 const App = () => {
+    const { VITE_TIME_INTERVAL, VITE_LATITUDE, VITE_LONGITUDE } = import.meta.env;
     const sunData = callExternalAPIOnInterval(
-        process.env.timeInterval,
-        `https://api.sunrise-sunset.org/json?lat=${process.env.lat}&lng=${process.env.lng}&formatted=0`
+        VITE_TIME_INTERVAL,
+        `https://api.sunrise-sunset.org/json?lat=${VITE_LATITUDE}&lng=${VITE_LONGITUDE}&formatted=0`
     );
 
-    let mode = "light";
+    let mode: PaletteMode = "light";
 
     if (sunData?.results) {
         const nowHour = DateTime.now().hour;

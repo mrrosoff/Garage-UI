@@ -58,7 +58,7 @@ sudo printf "
     elif [ \$LOCAL = \$BASE ]; then
        	echo \"Need to pull and npm install\"
         git pull
-        npm install --legacy-peer-deps
+        npm install
         \$(npm bin)/electron-rebuild
     else
         echo \"Diverged\"

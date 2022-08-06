@@ -2,8 +2,12 @@ import { useEffect, useState } from "react";
 
 import axios from "axios";
 
-const callExternalAPIOnInterval = (timeInterval, url, headers = {}) => {
-    const [data, setData] = useState();
+const callExternalAPIOnInterval = (
+    timeInterval: number,
+    url: string,
+    headers = {}
+): any | any[] | undefined => {
+    const [data, setData] = useState<any | any[]>();
 
     useEffect(() => {
         const getAPIData = async () => {

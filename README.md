@@ -22,10 +22,21 @@ Clone the repository and run the [install script](install.sh). This will install
 We currently use the following environment variables:
 
 ```
-lat=32.95325541910332
-lng=-117.24177865770446
-zipCode=92130
-noaaStation=9410230
-timeInterval=60000
-openWeatherMapAppId="114e2f8559d9daba8a4ad4e51464c8b6"
+VITE_LATITUDE=32.95325541910332
+VITE_LONGITUDE=-117.24177865770446
+VITE_ZIP_CODE=92130
+VITE_NOAA_STATION=9410230
+VITE_TIME_INTERVAL=60000
+
+VITE_OPEN_WEATHER_MAP_ID="your-key-here"
+VITE_OPEN_UV_API_TOKEN="your-token-here"
+
+VITE_SURF_SPOT_ONE_ID="5842041f4e65fad6a770883b"
+VITE_SURF_SPOT_ONE_NAME="Blacks"
+
+VITE_SURF_SPOT_TWO_ID="5842041f4e65fad6a77088af"
+VITE_SURF_SPOT_TWO_NAME="15th Street"
+
+VITE_SURF_SPOT_THREE_ID="5842041f4e65fad6a77088a0"
+VITE_SURF_SPOT_THREE_NAME="Beacons"
 ```
