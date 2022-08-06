@@ -12,15 +12,13 @@ export NVM_DIR="$HOME/.config/nvm"
 
 nvm install v16.13.2
 nvm alias default 16.13.2
-echo "Done."
 
-echo "Installing dependencies..."
+echo "Installing Dependencies..."
 sudo apt-get update -y
 sudo apt-get upgrade -y
 sudo apt-get install -y matchbox xorg ttf-mscorefonts-installer xwit sqlite3 libnss3
-echo "Done."
 
-echo "Setting up emojis..."
+echo "Setting Up Emojis..."
 mkdir emj_temp
 cd emj_temp
 wget https://fontsdata.com/zipdown-segoeuiemoji-132714.htm 
@@ -34,9 +32,8 @@ mv NotoColorEmoji.ttf "$HOME/.fonts/Noto Color Emoji.ttf"
 fc-cache -f -v &>/dev/null
 cd ..
 rm -rf emj_temp
-echo "Done"
 
-echo "Installing auto start script..."
+echo "Installing Auto Start Script..."
 sudo chmod 757 /etc/X11/xinit/xinitrc
 sudo printf "
 
@@ -71,9 +68,8 @@ sudo printf "
     npm run garage
 
 " > /etc/X11/xinit/xinitrc
-echo "Done."
 
-echo "Appending startup script to bashrc..."
+echo "Appending Startup Script to Shell"
 printf "
     RED='\033[1;31m'
     GREEN='\033[1;32m'
@@ -83,13 +79,11 @@ printf "
     sleep 4s
     startx -- -nocursor | tee $GARAGE_UI_DIR/logs.txt 
 " >> ~/.bashrc
-echo "Done."
 
-echo "Scheduling auto updates..."
+echo "Scheduling Auto Updates..."
 sudo printf  "# m h dom mon dow command\n0 2 * * 0 /sbin/shutdown -r now" >> temp_cron
 sudo crontab temp_cron
 rm temp_cron
-echo "Done."
 
 GREEN='\033[1;32m'
 NC='\033[0m'
