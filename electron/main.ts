@@ -1,17 +1,26 @@
 import { app, ipcMain, BrowserWindow } from "electron";
 import path from "path";
 import { Gpio } from "onoff";
+import { RelayWiring } from "../src/vite-env";
 
 let mainWindow;
 
-const garageSwitch = (): boolean => {
+const garageSwitch = (
+    event: any,
+    relayWiring: RelayWiring = "forward",
+    relayPin: number = 4
+): boolean => {
+    const relayOn = 1;
+    const relayOff = 0;
+    const relayDirection = relayWiring === "forward";
+
     try {
-        const doorPin = new Gpio(4, "out");
-        doorPin.writeSync(1);
+        const doorPin = new Gpio(relayPin, "out");
+        doorPin.writeSync(relayDirection ? relayOff : relayOn);
 
         const flipSwitch = () => {
-            doorPin.writeSync(0);
-            setTimeout(() => doorPin.writeSync(1), 500);
+            doorPin.writeSync(relayDirection ? relayOn : relayOff);
+            setTimeout(() => doorPin.writeSync(relayDirection ? relayOff : relayOn), 500);
         };
 
         flipSwitch();

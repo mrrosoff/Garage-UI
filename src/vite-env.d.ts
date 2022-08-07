@@ -1,4 +1,5 @@
 /// <reference types="vite/client" />
+export type RelayWiring = "forward" | "backward" | undefined;
 
 interface ImportMetaEnv {
     readonly VITE_LATITUDE: number;
@@ -16,14 +17,17 @@ interface ImportMetaEnv {
     readonly VITE_SURF_SPOT_TWO_NAME: string;
     readonly VITE_SURF_SPOT_THREE_ID: string;
     readonly VITE_SURF_SPOT_THREE_NAME: string;
+    readonly VITE_RELAY_DIRECTION: RelayWiring;
+    readonly VITE_RELAY_PIN: number;
 }
 
 interface ImportMeta {
     readonly env: ImportMetaEnv;
 }
-
-interface Window {
-    readonly garageAPI: {
-        garageSwitch(): boolean;
-    };
+declare global {
+    interface Window {
+        readonly garageAPI: {
+            garageSwitch(relayWiring: RelayWiring, relayPin: number): boolean;
+        };
+    }
 }
