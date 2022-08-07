@@ -8,7 +8,6 @@ NC='\033[0m'
 dt="$YELLOW $(date '+%m/%d/%Y %H:%M:%S') $NC";
 LOG_PATH="$HOME/xinit_logs"
 
-cd $HOME/Garage-UI	
 printf "$dt -- in $HOME \n\n" > $LOG_PATH
 
 git fetch 

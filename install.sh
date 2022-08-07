@@ -38,6 +38,7 @@ rm -rf emj_temp
 echo "Installing Auto Start Script..."
 sudo chmod 757 /etc/X11/xinit/xinitrc
 
+sed -i '1s/^/cd $GARAGE_UI_DIR\n/' xinitrc
 cat xinitrc > /etc/X11/xinit/xinitrc
 
 echo "Appending Startup Script to Shell"
