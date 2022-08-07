@@ -12,13 +12,13 @@ export NVM_DIR="$HOME/.config/nvm"
 
 nvm install v17.6.0
 nvm use
-nvm alias default 17.16.0
+nvm alias default 17.6.0
 
 echo "Installing Dependencies..."
 sudo apt-get update -y
 sudo apt-get upgrade -y
 sudo apt-get install -y matchbox xorg ttf-mscorefonts-installer xwit sqlite3 libnss3
-sudo apt-get autoremove
+sudo apt-get autoremove -y
 
 echo "Setting Up Emojis..."
 mkdir emj_temp
