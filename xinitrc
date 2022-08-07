@@ -8,7 +8,7 @@ NC='\033[0m'
 dt="$YELLOW $(date '+%m/%d/%Y %H:%M:%S') $NC";
 LOG_PATH="$HOME/xinit_logs"
 
-cd /home/mfernst/Garage-UI	
+cd $HOME/Garage-UI	
 printf "$dt -- in $HOME \n\n" > $LOG_PATH
 
 git fetch 
@@ -32,7 +32,7 @@ else
 	printf "$GREEN Done. $NC\n\n" >> $LOG_PATH
 
 	printf "$dt -- Installing dependecies..." >> $LOG_PATH
-	npm install --legacy-peer-deps &>> $LOG_PATH
+	npm install &>> $LOG_PATH
 	$(npm bin)/electron-rebuild &>> $LOG_PATH
 	printf "$GREEN Done. $NC\n\n" >> $LOG_PATH
 fi
