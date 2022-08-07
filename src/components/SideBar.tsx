@@ -1,6 +1,8 @@
 import { Box, Button, SvgIcon, Typography } from "@mui/material";
 
 const SideBar = (props: any) => {
+    const { VITE_RELAY_DIRECTION, VITE_RELAY_PIN } = import.meta.env;
+
     return (
         <Box display={"flex"} flexDirection={"column"} style={{ height: "100%", width: "100%" }}>
             {props.specialDay && (
@@ -15,7 +17,10 @@ const SideBar = (props: any) => {
             <Button
                 style={{ height: "100%", width: "100%" }}
                 onClick={async () => {
-                    const result = await window.garageAPI.garageSwitch();
+                    const result = await window.garageAPI.garageSwitch(
+                        VITE_RELAY_DIRECTION,
+                        VITE_RELAY_PIN
+                    );
                     if (!result) {
                         console.log("Unsupported Platform or Unknown Error Occured");
                     }
