@@ -15,5 +15,28 @@ shows tide, weather, and surf data. The app is configured so that new data sourc
 
 ## Installation
 
-Clone the repository and run the [install script](install.sh). This will install the dependencies, build the app, and change 
-your Raspberry Pi to auto update itself and auto launch to Garage-UI.
+Clone the repository and run the [install script](install.sh). This will install the dependencies, build the app, and change your Raspberry Pi to auto update itself and auto launch to Garage-UI.
+
+## Environment Variables
+
+We currently use the following environment variables:
+
+```
+VITE_LATITUDE=32.95325541910332
+VITE_LONGITUDE=-117.24177865770446
+VITE_ZIP_CODE=92130
+VITE_NOAA_STATION=9410230
+VITE_TIME_INTERVAL=60000
+
+VITE_OPEN_WEATHER_MAP_ID="your-key-here"
+VITE_OPEN_UV_API_TOKEN="your-token-here"
+
+VITE_SURF_SPOT_ONE_ID="5842041f4e65fad6a770883b"
+VITE_SURF_SPOT_ONE_NAME="Blacks"
+
+VITE_SURF_SPOT_TWO_ID="5842041f4e65fad6a77088af"
+VITE_SURF_SPOT_TWO_NAME="15th Street"
+
+VITE_SURF_SPOT_THREE_ID="5842041f4e65fad6a77088a0"
+VITE_SURF_SPOT_THREE_NAME="Beacons"
+```
