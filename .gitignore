@@ -2,10 +2,12 @@
 
 .idea
 
+# MacOS Files
+.DS_Store
+
 # Node Files
 
 node_modules
-package-lock.json
 
 # Tim's files
 
