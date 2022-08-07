@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+
 import { Box, Grid, LinearProgress, Typography, useTheme } from "@mui/material";
 import {
     CartesianGrid,
@@ -11,7 +13,46 @@ import {
 import DeviceThermostat from "@mui/icons-material/DeviceThermostat";
 import { grey } from "@mui/material/colors";
 
-const SurfCard = (props: any) => {
+import axios from "axios";
+
+import callExternalAPIOnInterval from "../../hooks/callExternalAPIOnInterval";
+
+const SurfCard = () => {
+    const {
+        VITE_TIME_INTERVAL,
+        VITE_SURF_SPOT_ONE_ID,
+        VITE_SURF_SPOT_ONE_NAME,
+        VITE_SURF_SPOT_TWO_ID,
+        VITE_SURF_SPOT_TWO_NAME,
+        VITE_SURF_SPOT_THREE_ID,
+        VITE_SURF_SPOT_THREE_NAME
+    } = import.meta.env;
+
+    const [surfData, setSurfData] = useState<any>([]);
+
+    const surfAPI = "https://services.surfline.com/kbyg/spots/forecasts";
+    useEffect(() => {
+        const getSurfFromAPI = async () => {
+            const blacksResp = await axios.get(
+                `${surfAPI}/wave?spotId=${VITE_SURF_SPOT_ONE_ID}&days=1&intervalHours=1&maxHeights=true`
+            );
+            const fifteenthResp = await axios.get(
+                `${surfAPI}/wave?spotId=${VITE_SURF_SPOT_TWO_ID}&days=1&intervalHours=1&maxHeights=true`
+            );
+            const beaconsResp = await axios.get(
+                `${surfAPI}/wave?spotId=${VITE_SURF_SPOT_THREE_ID}&days=1&intervalHours=1&maxHeights=true`
+            );
+
+            setSurfDataWithSplice(blacksResp, VITE_SURF_SPOT_ONE_NAME, 0, setSurfData);
+            setSurfDataWithSplice(fifteenthResp, VITE_SURF_SPOT_TWO_NAME, 1, setSurfData);
+            setSurfDataWithSplice(beaconsResp, VITE_SURF_SPOT_THREE_NAME, 2, setSurfData);
+        };
+
+        getSurfFromAPI();
+        const interval = setInterval(getSurfFromAPI, VITE_TIME_INTERVAL);
+        return () => clearInterval(interval);
+    }, []);
+
     return (
         <Box
             pt={2}
@@ -34,13 +75,13 @@ const SurfCard = (props: any) => {
                 <Grid item>
                     <Grid container spacing={2} justifyContent={"center"}>
                         <Grid item>
-                            <WaterTemperature waterTemperature={props.waterTemperature} />
+                            <WaterTemperature />
                         </Grid>
                     </Grid>
                 </Grid>
             </Grid>
             <Box pt={1} flexGrow={1}>
-                {props.surfData.length > 0 ? <SurfGraph {...props} /> : <LoadingSurfData />}
+                {surfData.length > 0 ? <SurfGraph surfData={surfData} /> : <LoadingSurfData />}
             </Box>
         </Box>
     );
@@ -106,16 +147,43 @@ const renderCustomizedLabel = (props: any) => {
     );
 };
 
-const WaterTemperature = (props: any) => {
-    if (!props.waterTemperature) return null;
+const WaterTemperature = () => {
+    const { VITE_NOAA_STATION, VITE_TIME_INTERVAL } = import.meta.env;
+
+    const noaaAPI = "https://api.tidesandcurrents.noaa.gov/api/prod/datagetter";
+    const waterTemperature = callExternalAPIOnInterval(
+        VITE_TIME_INTERVAL,
+        `${noaaAPI}?date=latest&station=${VITE_NOAA_STATION}&product=water_temperature&units=english&time_zone=lst_ldt&format=json`
+    );
+
+    if (!waterTemperature) return null;
     return (
         <Box display={"flex"} justifyContent={"center"} alignItems={"center"}>
             <DeviceThermostat sx={{ fontSize: 20 }} />
             <Typography sx={{ pl: 1, fontSize: 20, fontWeight: 500 }}>
-                {props.waterTemperature + "°F"}
+                {parseInt(waterTemperature?.data[0].v) + "°F"}
             </Typography>
         </Box>
     );
 };
+
+const setSurfDataWithSplice = (r: any, location: string, id: number, setSurfData: Function) => {
+    setSurfData((surfData: any) => {
+        const isItem = surfData.some((item: any) => item.name === location);
+        surfData.splice(
+            isItem ? surfData.findIndex((item: any) => item.name === location) : 0,
+            isItem ? 1 : 0,
+            {
+                id: id,
+                name: location,
+                waveHeight: calculateTodaysAverage(r.data.data.wave)
+            }
+        );
+        return surfData;
+    });
+};
+
+const calculateTodaysAverage = (data: any) =>
+    data.map((item: any) => item.surf.max).reduce((a: any, b: any) => a + b) / data.length;
 
 export default SurfCard;

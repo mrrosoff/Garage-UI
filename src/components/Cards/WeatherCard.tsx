@@ -5,7 +5,17 @@ import { grey } from "@mui/material/colors";
 
 import { DateTime } from "luxon";
 
-const WeatherCard = (props: any) => {
+import callExternalAPIOnInterval from "../../hooks/callExternalAPIOnInterval";
+
+const WeatherCard = () => {
+    const { VITE_ZIP_CODE, VITE_TIME_INTERVAL, VITE_OPEN_WEATHER_MAP_ID } = import.meta.env;
+
+    const openWeatherMapAPI = "https://api.openweathermap.org/data/2.5/weather";
+    const weatherData = callExternalAPIOnInterval(
+        VITE_TIME_INTERVAL,
+        `${openWeatherMapAPI}?zip=${VITE_ZIP_CODE}&units=imperial&appid=${VITE_OPEN_WEATHER_MAP_ID}`
+    );
+
     return (
         <Box
             pt={2}
@@ -29,7 +39,11 @@ const WeatherCard = (props: any) => {
             </Grid>
 
             <Box pt={1} flexGrow={1}>
-                {props.weatherData ? <WeatherDetails {...props} /> : <LoadingWeatherData />}
+                {weatherData ? (
+                    <WeatherDetails weatherData={weatherData} />
+                ) : (
+                    <LoadingWeatherData />
+                )}
             </Box>
         </Box>
     );
@@ -41,12 +55,7 @@ const WeatherDetails = (props: any) => {
             <Grid item>
                 <Box display={"flex"} alignItems={"center"}>
                     <Box display={"flex"} flexDirection={"column"}>
-                        <Typography
-                            style={{
-                                fontSize: 28,
-                                fontWeight: 500
-                            }}
-                        >
+                        <Typography style={{ fontSize: 28, fontWeight: 500 }}>
                             {Math.floor(props.weatherData.main.temp) + " °F"}
                         </Typography>
                         <Typography style={{ fontSize: 18 }}>
@@ -68,69 +77,85 @@ const WeatherDetails = (props: any) => {
     );
 };
 
-const LoadingWeatherData = () => {
+const LoadingWeatherData = (): JSX.Element => {
+    const theme = useTheme();
     return (
         <Box sx={{ width: "100%", height: "100%", display: "flex", flexDirection: "column", p: 2 }}>
             <Box sx={{ flexGrow: 1 }} />
             <Box>
-                <LinearProgress sx={{ height: 8 }} />
+                <LinearProgress sx={{ height: theme.spacing(1) }} />
             </Box>
         </Box>
     );
 };
 
-const OtherDetails = (props: any) => {
-    const theme = useTheme();
+const OtherDetails = (props: any): JSX.Element => {
+    const { VITE_STATE, VITE_CITY, VITE_TIME_INTERVAL } = import.meta.env;
+    const baseUVAPIURL =
+        "https://s3.amazonaws.com/dmap-api-cache-ncc-production/20220806/daily/cities";
+    const uvAPIURL = `${baseUVAPIURL}/${VITE_STATE}/${encodeURI(VITE_CITY.toUpperCase())}.json`;
+    const uvIndex = callExternalAPIOnInterval(VITE_TIME_INTERVAL, uvAPIURL);
 
     return (
         <Grid container spacing={2}>
             <Grid item>
-                <Box display={"flex"} alignItems={"center"}>
-                    <WbSunny
-                        style={{
-                            fontSize: 18,
-                            fill: theme.palette.primary.main
-                        }}
-                    />
-                    <Box pl={1}>
-                        <Typography style={{ fontSize: 16, fontWeight: 400 }}>
-                            {props.uvIndex}
-                        </Typography>
-                    </Box>
-                </Box>
+                <UVIndex uvIndex={uvIndex} />
             </Grid>
             <Grid item>
-                <Box display={"flex"} alignItems={"center"}>
-                    <OpacityIcon
-                        style={{
-                            fontSize: 18,
-                            fill: theme.palette.primary.main
-                        }}
-                    />
-                    <Box pl={1}>
-                        <Typography style={{ fontSize: 16, fontWeight: 400 }}>
-                            {props.weatherData.main.humidity + "%"}
-                        </Typography>
-                    </Box>
-                </Box>
+                <Humidity humidity={props.weatherData.main.humidity} />
             </Grid>
             <Grid item>
-                <Box display={"flex"} alignItems={"center"}>
-                    <i
-                        className={`wi wi-wind from-${props.weatherData.wind.deg}-deg`}
-                        style={{
-                            fontSize: 22,
-                            color: theme.palette.primary.main
-                        }}
-                    />
-                    <Box pl={1}>
-                        <Typography style={{ fontSize: 16, fontWeight: 400 }}>
-                            {Math.floor(props.weatherData.wind.speed) + " mph"}
-                        </Typography>
-                    </Box>
-                </Box>
+                <Wind
+                    windDirection={props.weatherData.wind.deg}
+                    windSpeed={props.weatherData.wind.speed}
+                />
             </Grid>
         </Grid>
+    );
+};
+
+const UVIndex = (props: { uvIndex: { UV_INDEX: number }[] }): JSX.Element => {
+    const theme = useTheme();
+    return (
+        <Box display={"flex"} alignItems={"center"}>
+            <WbSunny style={{ fontSize: 18, fill: theme.palette.primary.main }} />
+            <Box pl={1}>
+                <Typography style={{ fontSize: 16, fontWeight: 400 }}>
+                    {props.uvIndex ? props.uvIndex[0]?.UV_INDEX : "-"}
+                </Typography>
+            </Box>
+        </Box>
+    );
+};
+
+const Humidity = (props: { humidity: number }): JSX.Element => {
+    const theme = useTheme();
+    return (
+        <Box display={"flex"} alignItems={"center"}>
+            <OpacityIcon style={{ fontSize: 18, fill: theme.palette.primary.main }} />
+            <Box pl={1}>
+                <Typography style={{ fontSize: 16, fontWeight: 400 }}>
+                    {props.humidity + "%"}
+                </Typography>
+            </Box>
+        </Box>
+    );
+};
+
+const Wind = (props: { windDirection: number; windSpeed: number }): JSX.Element => {
+    const theme = useTheme();
+    return (
+        <Box display={"flex"} alignItems={"center"}>
+            <i
+                className={`wi wi-wind from-${props.windDirection}-deg`}
+                style={{ fontSize: 22, color: theme.palette.primary.main }}
+            />
+            <Box pl={1}>
+                <Typography style={{ fontSize: 16, fontWeight: 400 }}>
+                    {Math.floor(props.windSpeed) + " mph"}
+                </Typography>
+            </Box>
+        </Box>
     );
 };
 

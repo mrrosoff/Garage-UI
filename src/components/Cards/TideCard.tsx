@@ -16,9 +16,22 @@ import {
 } from "recharts";
 import { DateTime } from "luxon";
 
+import callExternalAPIOnInterval from "../../hooks/callExternalAPIOnInterval";
+
 const formatString = "yyyy-MM-dd HH:mm";
 
 const TideCard = (props: any) => {
+    const { VITE_TIME_INTERVAL, VITE_NOAA_STATION } = import.meta.env;
+    const noaaAPI = "https://api.tidesandcurrents.noaa.gov/api/prod/datagetter";
+    const tidePredictionData = callExternalAPIOnInterval(
+        VITE_TIME_INTERVAL,
+        `${noaaAPI}?date=today&station=${VITE_NOAA_STATION}&product=predictions&datum=MLLW&time_zone=lst_ldt&units=english&format=json`
+    );
+    const tideActualData = callExternalAPIOnInterval(
+        VITE_TIME_INTERVAL,
+        `${noaaAPI}?date=today&station=${VITE_NOAA_STATION}&product=one_minute_water_level&datum=MLLW&time_zone=lst_ldt&units=english&format=json`
+    );
+
     const [domain, setDomain] = useState<DateTime>();
     const [predictionData, setPredictionData] = useState<any>();
     const [data, setData] = useState<any>();
@@ -27,20 +40,17 @@ const TideCard = (props: any) => {
     const [nextTideIsLow, setNextTideIsLow] = useState<boolean | null>();
 
     useEffect(() => {
-        if (!props.tidePredictionData?.predictions) {
+        if (!tidePredictionData?.predictions) {
             return;
         }
 
         setDomain(
             DateTime.fromISO(
-                DateTime.fromFormat(
-                    props.tidePredictionData.predictions[0].t,
-                    formatString
-                ).toISODate()
+                DateTime.fromFormat(tidePredictionData.predictions[0].t, formatString).toISODate()
             )
         );
 
-        const tempData = props.tidePredictionData.predictions.map((item: any) => ({
+        const tempData = tidePredictionData.predictions.map((item: any) => ({
             time: DateTime.fromFormat(item.t, formatString).toMillis(),
             prediction: item.v
         }));
@@ -48,13 +58,13 @@ const TideCard = (props: any) => {
         setPredictionData(tempData);
 
         setData(tempData);
-        const { highTide, lowTide, nextTideIsLow } = getTideTimes(tempData, props.tideActualData);
+        const { highTide, lowTide, nextTideIsLow } = getTideTimes(tempData, tideActualData);
         setHighTide(highTide);
         setLowTide(lowTide);
         setNextTideIsLow(nextTideIsLow);
 
-        if (props.tideActualData && props.tideActualData.data) {
-            const actualData = props.tideActualData.data
+        if (tideActualData && tideActualData.data) {
+            const actualData = tideActualData.data
                 .map((item: any) => ({
                     time: DateTime.fromFormat(item.t, formatString).toMillis(),
                     actual: item.v
@@ -68,7 +78,7 @@ const TideCard = (props: any) => {
                 }))
             );
         }
-    }, [props.tidePredictionData, props.showTideActualData]);
+    }, [tidePredictionData, tideActualData]);
 
     return (
         <Box
@@ -114,7 +124,7 @@ const TideCard = (props: any) => {
                         data={data}
                         domain={domain}
                         predictionData={predictionData}
-                        showTideActualData={!!props.tideActualData}
+                        showTideActualData={!!tideActualData}
                     />
                 ) : (
                     <LoadingTideData />

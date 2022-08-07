@@ -14,73 +14,9 @@ import SurfCard from "./Cards/SurfCard";
 import SideBar from "./SideBar";
 
 const DashBoard = () => {
-    const {
-        VITE_TIME_INTERVAL,
-        VITE_LATITUDE,
-        VITE_LONGITUDE,
-        VITE_ZIP_CODE,
-        VITE_NOAA_STATION,
-        VITE_OPEN_WEATHER_MAP_ID,
-        VITE_OPEN_UV_API_TOKEN,
-        VITE_SURF_SPOT_ONE_ID,
-        VITE_SURF_SPOT_ONE_NAME,
-        VITE_SURF_SPOT_TWO_ID,
-        VITE_SURF_SPOT_TWO_NAME,
-        VITE_SURF_SPOT_THREE_ID,
-        VITE_SURF_SPOT_THREE_NAME
-    } = import.meta.env;
+    const { VITE_TIME_INTERVAL } = import.meta.env;
 
-    const openWeatherMapAPI = "https://api.openweathermap.org/data/2.5/weather";
-    const openUVAPI = "https://api.openuv.io/api/v1/uv";
-    const noaaAPI = "https://api.tidesandcurrents.noaa.gov/api/prod/datagetter";
-    const surfAPI = "https://services.surfline.com/kbyg/spots/forecasts";
-
-    const weatherData = callExternalAPIOnInterval(
-        VITE_TIME_INTERVAL,
-        `${openWeatherMapAPI}?zip=${VITE_ZIP_CODE}&units=imperial&appid=${VITE_OPEN_WEATHER_MAP_ID}`
-    );
-    const uvIndex = callExternalAPIOnInterval(
-        VITE_TIME_INTERVAL,
-        `${openUVAPI}?lat=${VITE_LATITUDE}&lng=${VITE_LONGITUDE}`,
-        { "x-access-token": VITE_OPEN_UV_API_TOKEN }
-    );
-    const tidePredictionData = callExternalAPIOnInterval(
-        VITE_TIME_INTERVAL,
-        `${noaaAPI}?date=today&station=${VITE_NOAA_STATION}&product=predictions&datum=MLLW&time_zone=lst_ldt&units=english&format=json`
-    );
-    const tideActualData = callExternalAPIOnInterval(
-        VITE_TIME_INTERVAL,
-        `${noaaAPI}?date=today&station=${VITE_NOAA_STATION}&product=one_minute_water_level&datum=MLLW&time_zone=lst_ldt&units=english&format=json`
-    );
-    const waterTemperature = callExternalAPIOnInterval(
-        VITE_TIME_INTERVAL,
-        `${noaaAPI}?date=latest&station=${VITE_NOAA_STATION}&product=water_temperature&units=english&time_zone=lst_ldt&format=json`
-    );
-
-    const [surfData, setSurfData] = useState<any>([]);
     const [specialDay, setSpecialDay] = useState<SpecialDay>();
-
-    useEffect(() => {
-        const getSurfFromAPI = async () => {
-            const blacksResp = await axios.get(
-                `${surfAPI}/wave?spotId=${VITE_SURF_SPOT_ONE_ID}&days=1&intervalHours=1&maxHeights=true`
-            );
-            const fifteenthResp = await axios.get(
-                `${surfAPI}/wave?spotId=${VITE_SURF_SPOT_TWO_ID}&days=1&intervalHours=1&maxHeights=true`
-            );
-            const beaconsResp = await axios.get(
-                `${surfAPI}/wave?spotId=${VITE_SURF_SPOT_THREE_ID}&days=1&intervalHours=1&maxHeights=true`
-            );
-
-            setSurfDataWithSplice(blacksResp, VITE_SURF_SPOT_ONE_NAME, 0, setSurfData);
-            setSurfDataWithSplice(fifteenthResp, VITE_SURF_SPOT_TWO_NAME, 1, setSurfData);
-            setSurfDataWithSplice(beaconsResp, VITE_SURF_SPOT_THREE_NAME, 2, setSurfData);
-        };
-
-        getSurfFromAPI();
-        const interval = setInterval(getSurfFromAPI, VITE_TIME_INTERVAL);
-        return () => clearInterval(interval);
-    }, []);
 
     useEffect(() => {
         const getSpecialDay = async () => {
@@ -112,23 +48,14 @@ const DashBoard = () => {
                         >
                             <Box display={"flex"}>
                                 <Box>
-                                    <WeatherCard
-                                        weatherData={weatherData}
-                                        uvIndex={parseInt(uvIndex?.uv) || "-"}
-                                    />
+                                    <WeatherCard />
                                 </Box>
                                 <Box pl={3} flexGrow={1}>
-                                    <SurfCard
-                                        surfData={surfData}
-                                        waterTemperature={parseInt(waterTemperature?.data[0].v)}
-                                    />
+                                    <SurfCard />
                                 </Box>
                             </Box>
                             <Box pt={3} flexGrow={1}>
-                                <TideCard
-                                    tidePredictionData={tidePredictionData}
-                                    tideActualData={tideActualData}
-                                />
+                                <TideCard />
                             </Box>
                         </Box>
                     </Paper>
@@ -137,24 +64,5 @@ const DashBoard = () => {
         </Box>
     );
 };
-
-const setSurfDataWithSplice = (r: any, location: string, id: number, setSurfData: Function) => {
-    setSurfData((surfData: any) => {
-        const isItem = surfData.some((item: any) => item.name === location);
-        surfData.splice(
-            isItem ? surfData.findIndex((item: any) => item.name === location) : 0,
-            isItem ? 1 : 0,
-            {
-                id: id,
-                name: location,
-                waveHeight: calculateTodaysAverage(r.data.data.wave)
-            }
-        );
-        return surfData;
-    });
-};
-
-const calculateTodaysAverage = (data: any) =>
-    data.map((item: any) => item.surf.max).reduce((a: any, b: any) => a + b) / data.length;
 
 export default DashBoard;

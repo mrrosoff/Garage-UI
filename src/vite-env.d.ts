@@ -3,6 +3,8 @@
 interface ImportMetaEnv {
     readonly VITE_LATITUDE: number;
     readonly VITE_LONGITUDE: number;
+    readonly VITE_STATE: string;
+    readonly VITE_CITY: string;
     readonly VITE_ZIP_CODE: number;
     readonly VITE_NOAA_STATION: number;
     readonly VITE_TIME_INTERVAL: number;
