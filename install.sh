@@ -37,35 +37,56 @@ echo "Installing Auto Start Script..."
 sudo chmod 757 /etc/X11/xinit/xinitrc
 sudo printf "
 
-   export NVM_DIR=\"$HOME/.config/nvm\"
-   [ -s \"\$NVM_DIR/nvm.sh\" ] && \. \"\$NVM_DIR/nvm.sh\"  # This loads nvm
-   [ -s \"\$NVM_DIR/bash_completion\" ] && \. \"\$NVM_DIR/bash_completion\"  # This loads nvm bash_completion
+export NVM_DIR=\"$HOME/.config/nvm\"
+[ -s \"\$NVM_DIR/nvm.sh\" ] && \. \"\$NVM_DIR/nvm.sh\"  # This loads nvm
+[ -s \"\$NVM_DIR/bash_completion\" ] && \. \"\$NVM_DIR/bash_completion\"  # This loads nvm bash_completion
 
-   cd ${GARAGE_UI_DIR}
 
-    git fetch
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[0;33m'
+NC='\033[0m'
 
-    UPSTREAM=\${1:-'@{u}'}
-    LOCAL=\$(git rev-parse @)
-    REMOTE=\$(git rev-parse \"\$UPSTREAM\")
-    BASE=\$(git merge-base @ \"\$UPSTREAM\")
+dt=\"\$YELLOW $(date '+%m/%d/%Y %H:%M:%S') \$NC\";
+LOG_PATH=\"\$HOME/xinit_logs\"
 
-    if [ \$LOCAL = \$REMOTE ]; then
-        echo \"Up to date\"
-    elif [ \$LOCAL = \$BASE ]; then
-       	echo \"Need to pull and npm install\"
-        git pull
-        npm install
-        \$(npm bin)/electron-rebuild
-    else
-        echo \"Diverged\"
-    fi
+cd /home/mfernst/Garage-UI
+printf \"\$dt INFO -- in \$HOME \n\n\" > \$LOG_PATH
 
-    xset -dpms
-    xset s off
-    matchbox-window-manager &
+git fetch
 
-    npm run garage
+UPSTREAM=\${1:-'@{u}'}
+LOCAL=\$(git rev-parse @)
+REMOTE=\$(git rev-parse \"\$UPSTREAM\")
+printf \"\$dt INFO -- Checking remote vs local...\n\" >> \$LOG_PATH
+
+printf \"\$dt INFO -- \" >> \$LOG_PATH
+git status &>> \$LOG_PATH
+printf \"\n\n\" >> \$LOG_PATH
+
+if [ \$LOCAL = \$REMOTE ]; then
+  printf \"\$dt INFO -- \$GREEN Up-to-date\$NC \n\" >> \$LOG_PATH
+else
+  printf \"\$dt INFO -- \$RED Need to pull and npm install\$NC \n\" >> \$LOG_PATH
+
+  printf \"\$dt INFO -- Pulling...\n\" >> \$LOG_PATH
+  git pull -f &>> \$LOG_PATH
+  printf \"\$GREEN Done. \$NC\n\n\" >> \$LOG_PATH
+
+  printf \"\$dt INFO -- Installing dependecies...\" >> \$LOG_PATH
+  npm install &>> \$LOG_PATH
+  \$(npm bin)/electron-rebuild &>> \$LOG_PATH
+  printf \"\$GREEN Done. \$NC\n\n\" >> \$LOG_PATH
+fi
+
+printf \"\$dt INFO -- \$GREEN Success! Starting Garage-UI... \$NC\n\n\" >> \$LOG_PATH
+
+xset -dpms
+xset s off
+matchbox-window-manager &
+
+printf \"\$dt INFO --" >> \$LOG_PATH
+npm run garage &>> \$LOG_PATH
 
 " > /etc/X11/xinit/xinitrc
 
@@ -81,7 +102,7 @@ printf "
 " >> ~/.bashrc
 
 echo "Scheduling Auto Updates..."
-sudo printf  "# m h dom mon dow command\n0 2 * * 0 /sbin/shutdown -r now" >> temp_cron
+sudo printf  "# m h dom mon dow command\n0 2 * * 0 /sbin/shutdown -r now\n" >> temp_cron
 sudo crontab temp_cron
 rm temp_cron
 
