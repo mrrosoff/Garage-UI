@@ -156,7 +156,7 @@ const WaterTemperature = () => {
         `${noaaAPI}?date=latest&station=${VITE_NOAA_STATION}&product=water_temperature&units=english&time_zone=lst_ldt&format=json`
     );
 
-    if (!waterTemperature) return null;
+    if (!waterTemperature?.data) return null;
     return (
         <Box display={"flex"} justifyContent={"center"} alignItems={"center"}>
             <DeviceThermostat sx={{ fontSize: 20 }} />
