@@ -40,9 +40,7 @@ const TideCard = (props: any) => {
     const [nextTideIsLow, setNextTideIsLow] = useState<boolean | null>();
 
     useEffect(() => {
-        if (!tidePredictionData?.predictions) {
-            return;
-        }
+        if (!tidePredictionData?.predictions) return;
 
         setDomain(
             DateTime.fromISO(
