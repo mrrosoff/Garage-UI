@@ -9,11 +9,13 @@
 
 node_modules
 
-# Tim's files
+# Environment File
 
-/venv
-/env
-__pycache__
+.env
+
+# For debugging
+
+logs.txt
 
 # Output Files
 
