@@ -27,25 +27,25 @@ const SurfCard = () => {
         VITE_SURF_SPOT_THREE_ID,
         VITE_SURF_SPOT_THREE_NAME
     } = import.meta.env;
-
     const [surfData, setSurfData] = useState<any>([]);
 
     const surfAPI = "https://services.surfline.com/kbyg/spots/forecasts";
+
     useEffect(() => {
         const getSurfFromAPI = async () => {
-            const blacksResp = await axios.get(
+            const beachOne = await axios.get(
                 `${surfAPI}/wave?spotId=${VITE_SURF_SPOT_ONE_ID}&days=1&intervalHours=1&maxHeights=true`
             );
-            const fifteenthResp = await axios.get(
+            const beachTwo = await axios.get(
                 `${surfAPI}/wave?spotId=${VITE_SURF_SPOT_TWO_ID}&days=1&intervalHours=1&maxHeights=true`
             );
-            const beaconsResp = await axios.get(
+            const beachThree = await axios.get(
                 `${surfAPI}/wave?spotId=${VITE_SURF_SPOT_THREE_ID}&days=1&intervalHours=1&maxHeights=true`
             );
 
-            setSurfDataWithSplice(blacksResp, VITE_SURF_SPOT_ONE_NAME, 0, setSurfData);
-            setSurfDataWithSplice(fifteenthResp, VITE_SURF_SPOT_TWO_NAME, 1, setSurfData);
-            setSurfDataWithSplice(beaconsResp, VITE_SURF_SPOT_THREE_NAME, 2, setSurfData);
+            setSurfDataWithSplice(beachOne, VITE_SURF_SPOT_ONE_NAME, 0, setSurfData);
+            setSurfDataWithSplice(beachTwo, VITE_SURF_SPOT_TWO_NAME, 1, setSurfData);
+            setSurfDataWithSplice(beachThree, VITE_SURF_SPOT_THREE_NAME, 2, setSurfData);
         };
 
         getSurfFromAPI();

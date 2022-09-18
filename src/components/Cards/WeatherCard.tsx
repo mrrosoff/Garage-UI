@@ -90,16 +90,10 @@ const LoadingWeatherData = (): JSX.Element => {
 };
 
 const OtherDetails = (props: any): JSX.Element => {
-    const { VITE_STATE, VITE_CITY, VITE_TIME_INTERVAL } = import.meta.env;
-    const baseUVAPIURL =
-        "https://s3.amazonaws.com/dmap-api-cache-ncc-production/20220806/daily/cities";
-    const uvAPIURL = `${baseUVAPIURL}/${VITE_STATE}/${encodeURI(VITE_CITY.toUpperCase())}.json`;
-    const uvIndex = callExternalAPIOnInterval(VITE_TIME_INTERVAL, uvAPIURL);
-
     return (
-        <Grid container spacing={2}>
+        <Grid container spacing={1}>
             <Grid item>
-                <UVIndex uvIndex={uvIndex} />
+                <UVIndex />
             </Grid>
             <Grid item>
                 <Humidity humidity={props.weatherData.main.humidity} />
@@ -114,15 +108,24 @@ const OtherDetails = (props: any): JSX.Element => {
     );
 };
 
-const UVIndex = (props: { uvIndex: { UV_INDEX: number }[] }): JSX.Element => {
+const UVIndex = (): JSX.Element => {
     const theme = useTheme();
+    const { VITE_ZIP_CODE, VITE_TIME_INTERVAL } = import.meta.env;
+    const uvAPIURL = `https://data.epa.gov/efservice/getEnvirofactsUVHOURLY/ZIP/${VITE_ZIP_CODE}/JSON`;
+    const uvIndexData = callExternalAPIOnInterval(VITE_TIME_INTERVAL, uvAPIURL);
+
+    let uvIndex = "-";
+    if (uvIndexData) {
+        const currentHour = DateTime.now().toFormat("hh a");
+        uvIndex = uvIndexData.find((data: { DATE_TIME: string }) =>
+            data.DATE_TIME.includes(currentHour)
+        ).UV_VALUE;
+    }
     return (
         <Box display={"flex"} alignItems={"center"}>
             <WbSunny style={{ fontSize: 18, fill: theme.palette.primary.main }} />
             <Box pl={1}>
-                <Typography style={{ fontSize: 16, fontWeight: 400 }}>
-                    {props.uvIndex ? props.uvIndex[0]?.UV_INDEX : "-"}
-                </Typography>
+                <Typography style={{ fontSize: 16, fontWeight: 400 }}>{uvIndex}</Typography>
             </Box>
         </Box>
     );
