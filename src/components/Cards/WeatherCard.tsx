@@ -119,7 +119,7 @@ const UVIndex = (): JSX.Element => {
         const currentHour = DateTime.now().toFormat("hh a");
         uvIndex = uvIndexData.find((data: { DATE_TIME: string }) =>
             data.DATE_TIME.includes(currentHour)
-        ).UV_VALUE;
+        )?.UV_VALUE ?? "-";
     }
     return (
         <Box display={"flex"} alignItems={"center"}>
