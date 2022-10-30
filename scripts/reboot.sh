@@ -15,17 +15,17 @@ printf "" > $AUTO_START_LOG_PATH
 
 printf "$dt -- ${YELLOW}Updating & Upgrading & Auto Removing...\n" >> $LOG_PATH
 
-printf "$dt -- ${YELLOW}UPDATING...${NC}" >> $LOG_PATH
+printf "$dt -- ${YELLOW}UPDATING...${NC}\n" >> $LOG_PATH
 sudo apt-get update -y &>> $LOG_PATH
 printf "$GREEN Done. $NC\n" >> $LOG_PATH
 
-printf "$dt -- ${YELLOW}UPGRADING...${NC}" >> $LOG_PATH
+printf "$dt -- ${YELLOW}UPGRADING...${NC}\n" >> $LOG_PATH
 sudo apt-get upgrade -y &>> $LOG_PATH
 printf "$GREEN Done. $NC\n" >> $LOG_PATH
 
-printf "$dt -- ${YELLOW}AUTO REMOVING...${NC}" >> $LOG_PATH
+printf "$dt -- ${YELLOW}AUTO REMOVING...${NC}\n" >> $LOG_PATH
 sudo apt-get autoremove -y &>> $LOG_PATH
 printf "${GREEN}Done.${NC}\n" >> $LOG_PATH
 
-printf "$dt -- ${GREEN}Success! Rebooting...${NC}\n\n" >> $LOG_PATH
+printf "$dt -- ${GREEN}Success! Rebooting...${NC}" >> $LOG_PATH
 sudo reboot

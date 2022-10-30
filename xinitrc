@@ -8,7 +8,7 @@ NC='\033[0m'
 dt="${YELLOW}$(date '+%m/%d/%Y %H:%M:%S')${NC}";
 LOG_PATH="${GARAGE_UI_DIR}/logs/auto_start.log"
 
-printf "$dt -- in ${GARAGE_UI_DIR} \n\n" > $LOG_PATH
+printf "$dt -- in ${GARAGE_UI_DIR}\n\n" > $LOG_PATH
 
 git fetch 
 
@@ -30,13 +30,13 @@ else
 	git pull -f &>> $LOG_PATH
 	printf "${GREEN}Done.${NC}\n\n" >> $LOG_PATH
 
-	printf "$dt -- Installing dependecies..." >> $LOG_PATH
+	printf "$dt -- Installing dependecies...\n" >> $LOG_PATH
 	npm install &>> $LOG_PATH
 	$(npm bin)/electron-rebuild &>> $LOG_PATH
 	printf "${GREEN}Done.${NC}\n\n" >> $LOG_PATH
 fi
 
-printf "$dt -- ${GREEN}Success! Starting Garage-UI...${NC}\n\n" >> $LOG_PATH
+printf "$dt -- ${GREEN}Success! Starting Garage-UI...${NC}\n" >> $LOG_PATH
 
 xset -dpms 
 xset s off 
