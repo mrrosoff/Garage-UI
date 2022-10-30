@@ -5,10 +5,10 @@ GREEN='\033[0;32m'
 YELLOW='\033[0;33m'
 NC='\033[0m'
 
-dt="$YELLOW $(date '+%m/%d/%Y %H:%M:%S') $NC";
-LOG_PATH="$HOME/xinit_logs"
+dt="${YELLOW}$(date '+%m/%d/%Y %H:%M:%S')${NC}";
+LOG_PATH="${GARAGE_UI_DIR}/logs/auto_start.log"
 
-printf "$dt -- in $HOME \n\n" > $LOG_PATH
+printf "$dt -- in ${GARAGE_UI_DIR}\n\n" > $LOG_PATH
 
 git fetch 
 
@@ -22,21 +22,21 @@ git status &>> $LOG_PATH
 printf "\n\n" >> $LOG_PATH
 
 if [ $LOCAL = $REMOTE ]; then
-	printf "$dt -- $GREEN Up-to-date$NC \n" >> $LOG_PATH
+	printf "$dt -- ${GREEN}Up-to-date${NC}\n" >> $LOG_PATH
 else
-	printf "$dt -- $RED Need to pull and npm install$NC \n" >> $LOG_PATH
+	printf "$dt -- ${RED}Need to pull and npm install${NC}\n" >> $LOG_PATH
 
 	printf "$dt -- Pulling...\n" >> $LOG_PATH
 	git pull -f &>> $LOG_PATH
-	printf "$GREEN Done. $NC\n\n" >> $LOG_PATH
+	printf "${GREEN}Done.${NC}\n\n" >> $LOG_PATH
 
-	printf "$dt -- Installing dependecies..." >> $LOG_PATH
+	printf "$dt -- Installing dependecies...\n" >> $LOG_PATH
 	npm install &>> $LOG_PATH
 	$(npm bin)/electron-rebuild &>> $LOG_PATH
-	printf "$GREEN Done. $NC\n\n" >> $LOG_PATH
+	printf "${GREEN}Done.${NC}\n\n" >> $LOG_PATH
 fi
 
-printf "$dt -- $GREEN Success! Starting Garage-UI... $NC\n\n" >> $LOG_PATH
+printf "$dt -- ${GREEN}Success! Starting Garage-UI...${NC}\n" >> $LOG_PATH
 
 xset -dpms 
 xset s off 

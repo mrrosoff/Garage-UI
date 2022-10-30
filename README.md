@@ -15,7 +15,7 @@ shows tide, weather, and surf data. The app is configured so that new data sourc
 
 ## Installation
 
-Clone the repository and run the [install script](install.sh). This will install the dependencies, build the app, and change your Raspberry Pi to auto update itself and auto launch to Garage-UI.
+Clone the repository and run the [install script](scripts/install.sh). This will install the dependencies, build the app, and change your Raspberry Pi to auto update itself and auto launch to Garage-UI. ⚠️ ***Make sure to run the script in the Garage-UI directory.***
 
 ## Environment Variables
 

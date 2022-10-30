@@ -14,8 +14,7 @@ node_modules
 .env
 
 # For debugging
-
-logs.txt
+logs
 
 # Output Files
 
