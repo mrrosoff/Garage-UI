@@ -9,6 +9,11 @@ export default defineConfig({
     plugins: [
         electron({
             entry: ["electron/main.ts", "electron/preload.ts"],
+            vite: {
+                build: {
+                    outDir: "dist/electron"
+                }
+            }
         }),
         react(),
         renderer({
@@ -17,6 +22,6 @@ export default defineConfig({
     ],
     server: {
         port: 3000,
-        strictPort: true,
+        strictPort: true
     }
 });
