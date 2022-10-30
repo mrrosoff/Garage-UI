@@ -22,9 +22,9 @@ git status &>> $LOG_PATH
 printf "\n\n" >> $LOG_PATH
 
 if [ $LOCAL = $REMOTE ]; then
-	printf "$dt -- ${GREEN}Up-to-date$NC \n" >> $LOG_PATH
+	printf "$dt -- ${GREEN}Up-to-date${NC}\n" >> $LOG_PATH
 else
-	printf "$dt -- ${RED}Need to pull and npm install$NC \n" >> $LOG_PATH
+	printf "$dt -- ${RED}Need to pull and npm install${NC}\n" >> $LOG_PATH
 
 	printf "$dt -- Pulling...\n" >> $LOG_PATH
 	git pull -f &>> $LOG_PATH

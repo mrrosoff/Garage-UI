@@ -7,25 +7,25 @@ NC='\033[0m'
 
 dt="${YELLOW}$(date '+%m/%d/%Y %H:%M:%S')${NC}";
 LOG_PATH="${GARAGE_UI_DIR}/logs/reboot.log"
-AUTO_START_LOG_PATH="${GARAGE_UI_DIR}/logs/auto_start.log"
 
 # Clear Log Paths
-printf "" > $LOG_PATH
-printf "" > $AUTO_START_LOG_PATH
+rm -rf ${GARAGE_UI_DIR}/logs/*.log &> /dev/null
 
+printf "$dt -- ${YELLOW}Updating & Upgrading & Auto Removing...\n" 
 printf "$dt -- ${YELLOW}Updating & Upgrading & Auto Removing...\n" >> $LOG_PATH
 
 printf "$dt -- ${YELLOW}UPDATING...${NC}\n" >> $LOG_PATH
 sudo apt-get update -y &>> $LOG_PATH
-printf "$GREEN Done. $NC\n" >> $LOG_PATH
+printf "${GREEN}Done.${NC}\n" >> $LOG_PATH
 
 printf "$dt -- ${YELLOW}UPGRADING...${NC}\n" >> $LOG_PATH
 sudo apt-get upgrade -y &>> $LOG_PATH
-printf "$GREEN Done. $NC\n" >> $LOG_PATH
+printf "${GREEN}Done.${NC}\n" >> $LOG_PATH
 
 printf "$dt -- ${YELLOW}AUTO REMOVING...${NC}\n" >> $LOG_PATH
 sudo apt-get autoremove -y &>> $LOG_PATH
 printf "${GREEN}Done.${NC}\n" >> $LOG_PATH
 
-printf "$dt -- ${GREEN}Success! Rebooting...${NC}" >> $LOG_PATH
+printf "$dt -- ${GREEN}Success! Rebooting...${NC}\n" >> $LOG_PATH
+printf "$dt -- ${GREEN}Success! Rebooting...${NC}\n"
 sudo reboot

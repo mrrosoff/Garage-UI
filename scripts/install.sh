@@ -52,19 +52,18 @@ rm -rf emj_temp
 printf "${GREEN}Done.${NC}\n"
 
 printf "${YELLOW}Installing Auto Start Script...${NC}\n"
-rm /etc/X11/xinit/xinitrc 2>/dev/null
 sudo chmod 757 /etc/X11/xinit/xinitrc
 sed -i "2 i cd $GARAGE_UI_DIR" xinitrc
 cat xinitrc > /etc/X11/xinit/xinitrc
 
 printf "${YELLOW}Appending Startup Script to Shell${NC}\n"
 printf "
-export GARAGE_UI_DIR=\${GARAGE_UI_DIR}
+export GARAGE_UI_DIR=\"${GARAGE_UI_DIR}\"
 RED='\033[1;31m'
 GREEN='\033[1;32m'
 NC='\033[0m'
 
-printf -e \"\${GREEN}About to launch Garage-UI... \${RED}press Ctrl+C to exit to bashrc.\${NC}\"
+echo -e \"\${GREEN}About to launch Garage-UI... \${RED}press Ctrl+C to exit to bashrc.\${NC}\"
 sleep 4s
 startx -- -nocursor 
 " >> ~/.bashrc
