@@ -18,7 +18,7 @@ const App = () => {
         throw new Error("Missing .env File. Please Refer to README.md");
     }
 
-    const sunData = callExternalAPIOnInterval(
+    const sunData: any | undefined = callExternalAPIOnInterval(
         VITE_TIME_INTERVAL,
         `https://api.sunrise-sunset.org/json?lat=${VITE_LATITUDE}&lng=${VITE_LONGITUDE}&formatted=0`
     );
