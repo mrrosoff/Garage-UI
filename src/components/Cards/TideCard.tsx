@@ -23,11 +23,11 @@ const formatString = "yyyy-MM-dd HH:mm";
 const TideCard = (props: any) => {
     const { VITE_TIME_INTERVAL, VITE_NOAA_STATION } = import.meta.env;
     const noaaAPI = "https://api.tidesandcurrents.noaa.gov/api/prod/datagetter";
-    const tidePredictionData = callExternalAPIOnInterval(
+    const tidePredictionData: any | undefined = callExternalAPIOnInterval(
         VITE_TIME_INTERVAL,
         `${noaaAPI}?date=today&station=${VITE_NOAA_STATION}&product=predictions&datum=MLLW&time_zone=lst_ldt&units=english&format=json`
     );
-    const tideActualData = callExternalAPIOnInterval(
+    const tideActualData: any | undefined = callExternalAPIOnInterval(
         VITE_TIME_INTERVAL,
         `${noaaAPI}?date=today&station=${VITE_NOAA_STATION}&product=one_minute_water_level&datum=MLLW&time_zone=lst_ldt&units=english&format=json`
     );
@@ -54,7 +54,6 @@ const TideCard = (props: any) => {
         }));
 
         setPredictionData(tempData);
-
         setData(tempData);
         const { highTide, lowTide, nextTideIsLow } = getTideTimes(tempData, tideActualData);
         setHighTide(highTide);
@@ -253,13 +252,12 @@ const getTideTimes = (
 
     const highTide = graphStartsDown ? secondInflectionPoint.time : firstInflectionPoint.time;
     const lowTide = graphStartsDown ? firstInflectionPoint.time : secondInflectionPoint.time;
-    let nullTide = "throwAway";
 
+    const returnObject = { highTide, lowTide, nextTideIsLow: lowTide < highTide };
     if (i === predictionData.length) {
-        nullTide = graphStartsDown ? "highTide" : "lowTide";
+        returnObject[graphStartsDown ? "highTide" : "lowTide"] = null;
     }
-
-    return { highTide, lowTide, nextTideIsLow: lowTide < highTide, [nullTide]: null };
+    return returnObject;
 };
 
 export default TideCard;

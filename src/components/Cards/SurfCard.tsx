@@ -30,7 +30,7 @@ const SurfCard = () => {
 
     const [surfData, setSurfData] = useState<any>([]);
     const surfAPI = "https://services.surfline.com/kbyg/spots/forecasts";
-    
+
     useEffect(() => {
         const getSurfFromAPI = async () => {
             const beachOne = await axios.get(
@@ -151,7 +151,7 @@ const WaterTemperature = () => {
     const { VITE_NOAA_STATION, VITE_TIME_INTERVAL } = import.meta.env;
 
     const noaaAPI = "https://api.tidesandcurrents.noaa.gov/api/prod/datagetter";
-    const waterTemperature = callExternalAPIOnInterval(
+    const waterTemperature: any | undefined = callExternalAPIOnInterval(
         VITE_TIME_INTERVAL,
         `${noaaAPI}?date=latest&station=${VITE_NOAA_STATION}&product=water_temperature&units=english&time_zone=lst_ldt&format=json`
     );

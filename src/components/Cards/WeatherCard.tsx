@@ -11,7 +11,7 @@ const WeatherCard = () => {
     const { VITE_ZIP_CODE, VITE_TIME_INTERVAL, VITE_OPEN_WEATHER_MAP_ID } = import.meta.env;
 
     const openWeatherMapAPI = "https://api.openweathermap.org/data/2.5/weather";
-    const weatherData = callExternalAPIOnInterval(
+    const weatherData: any | undefined = callExternalAPIOnInterval(
         VITE_TIME_INTERVAL,
         `${openWeatherMapAPI}?zip=${VITE_ZIP_CODE}&units=imperial&appid=${VITE_OPEN_WEATHER_MAP_ID}`
     );
@@ -112,15 +112,13 @@ const UVIndex = (): JSX.Element => {
     const theme = useTheme();
     const { VITE_ZIP_CODE, VITE_TIME_INTERVAL } = import.meta.env;
     const uvAPIURL = `https://data.epa.gov/efservice/getEnvirofactsUVHOURLY/ZIP/${VITE_ZIP_CODE}/JSON`;
-    const uvIndexData = callExternalAPIOnInterval(VITE_TIME_INTERVAL, uvAPIURL);
+    const uvIndexData: any[] | undefined = callExternalAPIOnInterval(VITE_TIME_INTERVAL, uvAPIURL);
 
-    let uvIndex = "-";
-    if (uvIndexData) {
-        const currentHour = DateTime.now().toFormat("hh a");
-        uvIndex = uvIndexData.find((data: { DATE_TIME: string }) =>
-            data.DATE_TIME.includes(currentHour)
-        )?.UV_VALUE ?? "-";
-    }
+    const currentHour = DateTime.now().toFormat("hh a");
+    const uvIndex =
+        uvIndexData?.find((data: { DATE_TIME: string }) => data.DATE_TIME.includes(currentHour))
+            ?.UV_VALUE || "-";
+
     return (
         <Box display={"flex"} alignItems={"center"}>
             <WbSunny style={{ fontSize: 18, fill: theme.palette.primary.main }} />

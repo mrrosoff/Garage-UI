@@ -2,10 +2,8 @@ import { useEffect, useState } from "react";
 
 import { Box, Paper } from "@mui/material";
 
-import axios from "axios";
 import { DateTime } from "luxon";
 
-import callExternalAPIOnInterval from "../hooks/callExternalAPIOnInterval";
 import specialDays, { SpecialDay } from "../specialDays";
 
 import TideCard from "./Cards/TideCard";
