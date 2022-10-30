@@ -22,6 +22,7 @@ logs.txt
 build
 coverage
 dist
+dist-electron
 lib
 out
 

@@ -5,15 +5,14 @@ import electron from "vite-plugin-electron";
 
 // https://vitejs.dev/config/
 export default defineConfig({
+    build: {
+        rollupOptions: {
+            input: "electron/preload.ts",
+        }
+    },
     plugins: [
         electron({
-            main: {
-                entry: "electron/main.ts"
-            },
-            preload: {
-                input: "electron/preload.ts"
-            },
-            renderer: {}
+            entry: "electron/main.ts"
         }),
         react()
     ],

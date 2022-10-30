@@ -10,9 +10,9 @@ export NVM_DIR="$HOME/.config/nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
-nvm install v17.6.0
+nvm install v18.0.0
 nvm use
-nvm alias default 17.6.0
+nvm alias default 18.0.0
 
 echo "Installing Dependencies..."
 sudo apt-get update -y

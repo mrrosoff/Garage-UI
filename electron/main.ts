@@ -6,7 +6,7 @@ import { RelayWiring } from "../src/vite-env";
 let mainWindow;
 
 const garageSwitch = (
-    event: any,
+    _event: any,
     relayWiring: RelayWiring = "forward",
     relayPin: number = 4
 ): boolean => {
