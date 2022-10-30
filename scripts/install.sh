@@ -9,10 +9,11 @@ printf "${YELLOW}About to install Garage-UI (Make sure to run ONLY on a Raspberr
 read -p "Continue? (Y/N): " confirm && [[ $confirm == [yY] || $confirm == [yY][eE][sS] ]] || exit 1
 
 if [ $(pwd | sed 's#.*/##') != "Garage-UI" ]; then
-    printf "${RED}Not in Garage-UI directory. Exiting...${NC}\n"
+    printf "${RED}ERROR: Not in Garage-UI directory. Exiting...${NC}\n"
     exit 1
 fi
 
+mkdir logs
 GARAGE_UI_DIR=$PWD
 
 printf "${YELLOW}Installing Node...${NC}\n"
@@ -58,14 +59,14 @@ cat xinitrc > /etc/X11/xinit/xinitrc
 
 printf "${YELLOW}Appending Startup Script to Shell${NC}\n"
 printf "
-    export GARAGE_UI_DIR=\${GARAGE_UI_DIR}
-    RED='\033[1;31m'
-    GREEN='\033[1;32m'
-    NC='\033[0m'
+export GARAGE_UI_DIR=\${GARAGE_UI_DIR}
+RED='\033[1;31m'
+GREEN='\033[1;32m'
+NC='\033[0m'
 
-    printf -e \"\${GREEN}About to launch Garage-UI... \${RED}press Ctrl+C to exit to bashrc.\${NC}\"
-    sleep 4s
-    startx -- -nocursor 
+printf -e \"\${GREEN}About to launch Garage-UI... \${RED}press Ctrl+C to exit to bashrc.\${NC}\"
+sleep 4s
+startx -- -nocursor 
 " >> ~/.bashrc
 printf "${GREEN}Done.${NC}\n"
 
@@ -76,6 +77,6 @@ sudo crontab temp_cron
 rm temp_cron
 printf "${GREEN}Done.${NC}\n"
 
-printf "${GREEN}Success!! Rebooting...${NC}\n"
+printf "${GREEN}Success! Rebooting...${NC}\n"
 sleep 4s
 sudo reboot
