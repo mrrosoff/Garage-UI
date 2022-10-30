@@ -14,6 +14,10 @@ import DashBoard from "./Dashboard";
 
 const App = () => {
     const { VITE_TIME_INTERVAL, VITE_LATITUDE, VITE_LONGITUDE } = import.meta.env;
+    if (!VITE_TIME_INTERVAL) {
+        throw new Error("Missing .env File. Please Refer to README.md");
+    }
+
     const sunData = callExternalAPIOnInterval(
         VITE_TIME_INTERVAL,
         `https://api.sunrise-sunset.org/json?lat=${VITE_LATITUDE}&lng=${VITE_LONGITUDE}&formatted=0`

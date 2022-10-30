@@ -27,10 +27,10 @@ const SurfCard = () => {
         VITE_SURF_SPOT_THREE_ID,
         VITE_SURF_SPOT_THREE_NAME
     } = import.meta.env;
+
     const [surfData, setSurfData] = useState<any>([]);
-
     const surfAPI = "https://services.surfline.com/kbyg/spots/forecasts";
-
+    
     useEffect(() => {
         const getSurfFromAPI = async () => {
             const beachOne = await axios.get(
