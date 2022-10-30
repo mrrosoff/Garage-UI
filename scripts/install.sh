@@ -63,14 +63,11 @@ RED='\033[1;31m'
 GREEN='\033[1;32m'
 NC='\033[0m'
 
-# if not ssh connection
-
 if [[ -z \$SSH_CONNECTION ]]; then
     echo -e \"\${GREEN}About to launch Garage-UI... \${RED}press Ctrl+C to exit to terminal.\${NC}\"
     sleep 4s
     startx -- -nocursor 
 fi
-
 " >> ~/.bashrc
 printf "${GREEN}Done.${NC}\n"
 
