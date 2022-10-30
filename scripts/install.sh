@@ -52,7 +52,8 @@ printf "
 " >> ~/.bashrc
 
 echo "Scheduling Auto Updates..."
-sudo printf  "# m h dom mon dow command\n0 2 * * 0 /sbin/shutdown -r now\n" >> temp_cron
+sudo chmod 757 $GARAGE_UI_DIR/scripts/reboot.sh
+sudo printf  "# m h dom mon dow command\n0 2 * * 0 $GARAGE_UI_DIR/scripts/reboot.sh\n" >> temp_cron
 sudo crontab temp_cron
 rm temp_cron
 
