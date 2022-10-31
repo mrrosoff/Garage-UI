@@ -6,6 +6,10 @@ import renderer from "vite-plugin-electron-renderer";
 
 // https://vitejs.dev/config/
 export default defineConfig({
+    build: {
+        target: "esnext",
+        sourcemap: true,
+    },
     plugins: [
         electron({
             entry: ["electron/main.ts", "electron/preload.ts"],

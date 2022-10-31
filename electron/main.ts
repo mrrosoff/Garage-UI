@@ -40,7 +40,6 @@ function createWindow() {
         fullscreen: process.env.NODE_ENV === "production",
         autoHideMenuBar: true,
         webPreferences: {
-            nodeIntegration: true,
             preload: path.join(__dirname, "preload.js")
         }
     });
