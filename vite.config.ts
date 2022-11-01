@@ -8,7 +8,7 @@ import renderer from "vite-plugin-electron-renderer";
 export default defineConfig({
     build: {
         target: "esnext",
-        sourcemap: true,
+        sourcemap: false,
     },
     plugins: [
         electron({
