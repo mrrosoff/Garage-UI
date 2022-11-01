@@ -112,13 +112,13 @@ const UVIndex = (): JSX.Element => {
     const theme = useTheme();
     const { VITE_ZIP_CODE, VITE_TIME_INTERVAL } = import.meta.env;
     const uvAPIURL = `https://data.epa.gov/efservice/getEnvirofactsUVHOURLY/ZIP/${VITE_ZIP_CODE}/JSON`;
-    let uvIndexData: any[] | undefined = callExternalAPIOnInterval(VITE_TIME_INTERVAL, uvAPIURL);
+    let uvIndexData: any | undefined = callExternalAPIOnInterval(VITE_TIME_INTERVAL, uvAPIURL);
     uvIndexData = Array.isArray(uvIndexData) ? uvIndexData : [];
     const currentHour = DateTime.now().toFormat("hh a");
 
     const uvIndex =
-        uvIndexData.find((data: { DATE_TIME: string }) => data.DATE_TIME.includes(currentHour))
-            .UV_VALUE || "-";
+        uvIndexData?.find((data: { DATE_TIME: string }) => data.DATE_TIME.includes(currentHour))
+            ?.UV_VALUE || "-";
 
     return (
         <Box display={"flex"} alignItems={"center"}>
