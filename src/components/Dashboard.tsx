@@ -6,10 +6,10 @@ import { DateTime } from "luxon";
 
 import specialDays, { SpecialDay } from "../specialDays";
 
-import TideCard from "./Cards/TideCard";
-import WeatherCard from "./Cards/WeatherCard";
-import SurfCard from "./Cards/SurfCard";
 import SideBar from "./SideBar";
+import TodayInfoCard from "./Cards/TodayInfoCard";
+import MountainInfoCard from "./Cards/MountainInfoCard";
+import ForecastCard from "./Cards/ForecastCard";
 
 const DashBoard = () => {
     const { VITE_TIME_INTERVAL } = import.meta.env;
@@ -32,9 +32,9 @@ const DashBoard = () => {
         <Box height={"100%"} p={3}>
             <Box height={"100%"} display={"flex"} flexDirection={"row"}>
                 <Box width={"33.33%"} height={"100%"} paddingRight={3}>
-                    <Paper elevation={2} sx={{ width: "100%", height: "100%", p: 3 }}>
+                    {/* <Paper elevation={2} sx={{ width: "100%", height: "100%", p: 3 }}>
                         <SideBar specialDay={specialDay} />
-                    </Paper>
+                    </Paper> */}
                 </Box>
                 <Box width={"66.66%"} height={"100%"}>
                     <Paper elevation={2} sx={{ width: "100%", height: "100%", p: 3 }}>
@@ -46,14 +46,14 @@ const DashBoard = () => {
                         >
                             <Box display={"flex"}>
                                 <Box>
-                                    <WeatherCard />
+                                    <TodayInfoCard />
                                 </Box>
                                 <Box pl={3} flexGrow={1}>
-                                    <SurfCard />
+                                    <ForecastCard />
                                 </Box>
                             </Box>
                             <Box pt={3} flexGrow={1}>
-                                <TideCard />
+                                <MountainInfoCard />
                             </Box>
                         </Box>
                     </Paper>
