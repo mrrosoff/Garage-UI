@@ -21,21 +21,21 @@ import {
 import { DateTime, Duration } from "luxon";
 import callExternalAPIOnInterval from "../../hooks/callExternalAPIOnInterval";
 
-
-const MountainInfoCard = (props: any) => {
-    const { VITE_TIME_INTERVAL, VITE_RESORT_SNOWFALL, VITE_SKI_RESORT } = import.meta.env;
+const MountainInfoCard = () => {
     const theme = useTheme();
+    const { VITE_TIME_INTERVAL, VITE_SKI_RESORT_ID } = import.meta.env;
     const snowfallData: any | undefined = callExternalAPIOnInterval(
         VITE_TIME_INTERVAL,
-        "https://mtnpowder.com/feed/6/snowfall" //TODO: Replace
+        `https://mtnpowder.com/feed/${VITE_SKI_RESORT_ID}/snowfall`
     );
-    const resortData= callExternalAPIOnInterval(
+    const resortData = callExternalAPIOnInterval(
         VITE_TIME_INTERVAL,
-        "https://mtnpowder.com/feed?resortId=6" //TODO: Replace
+        `https://mtnpowder.com/feed?resortId=${VITE_SKI_RESORT_ID}`
     );
     const snowReport = resortData?.SnowReport;
     const mountainAreas = resortData?.MountainAreas;
 
+    // TODO: Replace with loading screen
     if (!snowfallData || !snowReport || !mountainAreas) {
         return null;
     }

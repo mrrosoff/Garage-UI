@@ -3,68 +3,61 @@ import React from "react";
 import { Box, Grid, Typography, useTheme } from "@mui/material";
 
 import {
-	CartesianGrid,
-	ResponsiveContainer,
-	XAxis,
-	YAxis,
-	BarChart,
-	Bar,
-	LabelList
+    CartesianGrid,
+    ResponsiveContainer,
+    XAxis,
+    YAxis,
+    BarChart,
+    Bar,
+    LabelList
 } from "recharts";
 
 import { grey } from "@mui/material/colors";
 import { DateTime } from "luxon";
 import callExternalAPIOnInterval from "../../hooks/callExternalAPIOnInterval";
 
-
 const TodayInfoCard = () => {
-	const theme = useTheme();
-    const { VITE_TIME_INTERVAL, VITE_RESORT_SNOWFALL, VITE_SKI_RESORT } = import.meta.env;
-    const resortData= callExternalAPIOnInterval(
+    const theme = useTheme();
+    const { VITE_TIME_INTERVAL, VITE_SKI_RESORT_ID } = import.meta.env;
+    const resortData = callExternalAPIOnInterval(
         VITE_TIME_INTERVAL,
-        "https://mtnpowder.com/feed?resortId=6" //TODO: Replace
+        `https://mtnpowder.com/feed?resortId=${VITE_SKI_RESORT_ID}`
     );
-    const todaysWeather = resortData?.Forecast?.OneDay
+    const todaysWeather = resortData?.Forecast?.OneDay;
 
     // TODO: Replace with loading screen
     if (!todaysWeather) {
         return null;
     }
-    
-	return (
-		<Box
-			pt={2}
-			pl={2}
-			pr={2}
-			display={"flex"}
-			flexDirection={"column"}
-		>
-			<Grid item container justifyContent={"space-between"}>
-				<Grid item>
-					<Typography style={{ fontSize: 32, fontWeight: 500 }}>Today</Typography>
-				</Grid>
-			</Grid>
-			<Box pt={5} flexGrow={1} display={"flex"}>
-				<span
-					className={`weather-icon ico-${todaysWeather.conditions}`}
-					alt={"Weather Icon"}
-					style={{ fontSize: 80 }}
-				/>
-				<Box pt={2} pl={10} flexGrow={1}>
-					<Box>
-						<Typography style={{ fontSize: 28 }}>
-							{DateTime.fromISO(todaysWeather.date).toFormat("EEE dd")}
-						</Typography>
-					</Box>
-					<Box pt={2}>
-						<Typography style={{ fontSize: 22 }}>
-							{todaysWeather.temp_high_f} °F / {todaysWeather.temp_low_f} °F
-						</Typography>
-					</Box>
-				</Box>
-			</Box>
-		</Box>
-	);
+
+    return (
+        <Box pt={2} pl={2} pr={2} display={"flex"} flexDirection={"column"}>
+            <Grid item container justifyContent={"space-between"}>
+                <Grid item>
+                    <Typography style={{ fontSize: 32, fontWeight: 500 }}>Today</Typography>
+                </Grid>
+            </Grid>
+            <Box pt={5} flexGrow={1} display={"flex"}>
+                <span
+                    className={`weather-icon ico-${todaysWeather.conditions}`}
+                    alt={"Weather Icon"}
+                    style={{ fontSize: 80 }}
+                />
+                <Box pt={2} pl={10} flexGrow={1}>
+                    <Box>
+                        <Typography style={{ fontSize: 28 }}>
+                            {DateTime.fromISO(todaysWeather.date).toFormat("EEE dd")}
+                        </Typography>
+                    </Box>
+                    <Box pt={2}>
+                        <Typography style={{ fontSize: 22 }}>
+                            {todaysWeather.temp_high_f} °F / {todaysWeather.temp_low_f} °F
+                        </Typography>
+                    </Box>
+                </Box>
+            </Box>
+        </Box>
+    );
 };
 
 export default TodayInfoCard;

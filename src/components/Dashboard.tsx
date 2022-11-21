@@ -31,32 +31,16 @@ const DashBoard = () => {
     return (
         <Box height={"100%"} p={3}>
             <Box height={"100%"} display={"flex"} flexDirection={"row"}>
-                <Box width={"33.33%"} height={"100%"} paddingRight={3}>
-                    {/* <Paper elevation={2} sx={{ width: "100%", height: "100%", p: 3 }}>
-                        <SideBar specialDay={specialDay} />
-                    </Paper> */}
+                <Box width={"33%"} height={"100%"} display={"flex"} flexDirection={"column"}>
+                    <Box width={"100%"} minHeight={"33%"}>
+                        <TodayInfoCard />
+                    </Box>
+                    <Box pt={3} flexGrow={1}>
+                        <ForecastCard />
+                    </Box>
                 </Box>
-                <Box width={"66.66%"} height={"100%"}>
-                    <Paper elevation={2} sx={{ width: "100%", height: "100%", p: 3 }}>
-                        <Box
-                            width={"100%"}
-                            height={"100%"}
-                            display={"flex"}
-                            flexDirection={"column"}
-                        >
-                            <Box display={"flex"}>
-                                <Box>
-                                    <TodayInfoCard />
-                                </Box>
-                                <Box pl={3} flexGrow={1}>
-                                    <ForecastCard />
-                                </Box>
-                            </Box>
-                            <Box pt={3} flexGrow={1}>
-                                <MountainInfoCard />
-                            </Box>
-                        </Box>
-                    </Paper>
+                <Box flexGrow={1} height={"100%"} pl={3}>
+                    <MountainInfoCard />
                 </Box>
             </Box>
         </Box>
