@@ -4,6 +4,7 @@ import { Box, Divider, Typography, useTheme } from "@mui/material";
 
 import { DateTime } from "luxon";
 import callExternalAPIOnInterval from "../../hooks/callExternalAPIOnInterval";
+import { grey } from "@mui/material/colors";
 
 const ForecastCard = () => {
     const theme = useTheme();
@@ -12,9 +13,8 @@ const ForecastCard = () => {
         VITE_TIME_INTERVAL,
         `https://mtnpowder.com/feed?resortId=${VITE_SKI_RESORT_ID}`
     );
-
     const forecastData = resortData?.Forecast;
-	// TODO: Replace with loading screen
+    // TODO: Replace with loading screen
     if (!forecastData) {
         return null;
     }
@@ -24,7 +24,21 @@ const ForecastCard = () => {
 
     return (
         <Box p={2}>
-            <Box height={"100%"} display={"flex"} flexDirection={"column"}>
+            <Box
+                pt={2}
+                pl={2}
+                pr={2}
+                height={"100%"}
+                display={"flex"}
+                flexDirection={"column"}
+                sx={{
+                    borderWidth: 2,
+                    borderStyle: "solid",
+                    borderColor: grey[300],
+                    borderRadius: 5,
+                    height: "100%"
+                }}
+            >
                 <Typography style={{ fontSize: 32, fontWeight: 500 }}>Forecast</Typography>
                 <Box
                     pt={2}
@@ -45,7 +59,6 @@ const ForecastCard = () => {
                                 >
                                     <span
                                         className={`weather-icon ico-${day.conditions}`}
-                                        alt={"Weather Icon"}
                                         style={{ fontSize: 50 }}
                                     />
                                     <Box>

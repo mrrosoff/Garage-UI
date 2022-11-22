@@ -49,7 +49,18 @@ const MountainInfoCard = () => {
     const totalTrails = snowReport.TotalTrails;
 
     return (
-        <Box p={2} display={"flex"} flexDirection={"column"}>
+        <Box
+            p={2}
+            display={"flex"}
+            flexDirection={"column"}
+            sx={{
+                borderWidth: 2,
+                borderStyle: "solid",
+                borderColor: grey[300],
+                borderRadius: 5,
+                height: "100%"
+            }}
+        >
             <Typography style={{ fontSize: 32, fontWeight: 500 }}>Mountain</Typography>
             <Box pt={2} flexGrow={1} display={"flex"} flexDirection={"column"}>
                 <Box display={"flex"}>
@@ -73,22 +84,22 @@ const MountainInfoCard = () => {
 };
 
 const getFullMonthData = (snowfallData: any) => {
-    const transformData = snowfallData.SnowfallEvents.map(({ SnowIn, CreateDate }) => ({
-        SnowIn,
-        time: DateTime.fromISO(CreateDate).toMillis()
-    })).filter(({ time }) => {
+    const transformData = snowfallData.SnowfallEvents.map((snowfallEvent: any) => ({
+        SnowIn: snowfallEvent.SnowIn,
+        time: DateTime.fromISO(snowfallEvent.CreateDate).toMillis()
+    })).filter((snowfallEvent: any) => {
         const lastMonth = Duration.fromObject({ month: 1 });
-        return time > DateTime.now().minus(lastMonth).toMillis();
+        console.log(DateTime.now().minus(lastMonth).toMillis());
+        return snowfallEvent.time > DateTime.now().minus(lastMonth).toMillis();
     });
-
     const fullMonthData = [];
     for (let i = 0; i < 30; i++) {
         const iDays = Duration.fromObject({ days: 30 - i });
         const iDaysAgo = DateTime.now().minus(iDays);
         const foundPoint = transformData.find(
-            ({ time }) =>
-                DateTime.fromMillis(time).day === iDaysAgo.day &&
-                DateTime.fromMillis(time).month === iDaysAgo.month
+            (point: any) =>
+                DateTime.fromMillis(point.time).day === iDaysAgo.day &&
+                DateTime.fromMillis(point.time).month === iDaysAgo.month
         );
 
         if (foundPoint) {
@@ -108,21 +119,21 @@ const getFullMonthData = (snowfallData: any) => {
 };
 
 const getLiftsOpen = (liftData: any) => {
-    return liftData.filter(({ Status }) => Status === "Open");
+    return liftData.filter((lift: any) => lift.Status === "Open");
 };
 
 const getTrailsOpen = (liftData: any) => {
     return liftData
-        .map((lift) => lift.Trails.filter((trail) => trail.Status !== "Closed"))
+        .map((lift: any) => lift.Trails.filter((trail: any) => trail.Status !== "Closed"))
         .flat()
         .reduce(
-            (accumulator, nextTrail) =>
-                accumulator.map((trail) => trail.Name).includes(nextTrail.Name)
+            (accumulator: any, nextTrail: any) =>
+                accumulator.map((trail: any) => trail.Name).includes(nextTrail.Name)
                     ? accumulator
                     : [...accumulator, nextTrail],
             []
         )
-        .sort((a, b) => a.Name.localeCompare(b.Name));
+        .sort((a: any, b: any) => a.Name.localeCompare(b.Name));
 };
 
 const renderCustomizedLabel = (props: any) => {
@@ -146,7 +157,7 @@ const renderCustomizedLabel = (props: any) => {
 };
 
 const RADIAN = Math.PI / 180;
-const pieChartLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, value, name }) => {
+const pieChartLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, value, name }: any) => {
     const radius = innerRadius + (outerRadius - innerRadius) * 0.3;
     const x = cx + radius * Math.cos(-midAngle * RADIAN);
     const y = cy + radius * Math.sin(-midAngle * RADIAN);
@@ -200,9 +211,10 @@ const TrailInfo = (props: any) => {
 };
 
 const SnowfallChart = (props: any) => {
-    const snowInMax = Math.max(...props.snowfallData.map((data) => parseFloat(data.SnowIn))) + 2;
+    const snowInMax =
+        Math.max(...props.snowfallData.map((data: any) => parseFloat(data.SnowIn))) + 2;
     const accumMax =
-        Math.max(...props.snowfallData.map((data) => parseFloat(data.Accumilation))) + 10;
+        Math.max(...props.snowfallData.map((data: any) => parseFloat(data.Accumilation))) + 10;
 
     return (
         <ResponsiveContainer width="100%" height="100%">

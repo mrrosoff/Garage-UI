@@ -31,7 +31,20 @@ const TodayInfoCard = () => {
     }
 
     return (
-        <Box pt={2} pl={2} pr={2} display={"flex"} flexDirection={"column"}>
+        <Box
+            pt={2}
+            pl={2}
+            pr={2}
+            sx={{
+                borderWidth: 2,
+                borderStyle: "solid",
+                borderColor: grey[300],
+                borderRadius: 5,
+                height: "100%"
+            }}
+            display={"flex"}
+            flexDirection={"column"}
+        >
             <Grid item container justifyContent={"space-between"}>
                 <Grid item>
                     <Typography style={{ fontSize: 32, fontWeight: 500 }}>Today</Typography>
@@ -40,7 +53,6 @@ const TodayInfoCard = () => {
             <Box pt={5} flexGrow={1} display={"flex"}>
                 <span
                     className={`weather-icon ico-${todaysWeather.conditions}`}
-                    alt={"Weather Icon"}
                     style={{ fontSize: 80 }}
                 />
                 <Box pt={2} pl={10} flexGrow={1}>
