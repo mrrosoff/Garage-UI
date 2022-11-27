@@ -13,6 +13,7 @@ const ForecastCard = () => {
         VITE_TIME_INTERVAL,
         `https://mtnpowder.com/feed?resortId=${VITE_SKI_RESORT_ID}`
     );
+    
     const forecastData = resortData?.Forecast;
     // TODO: Replace with loading screen
     if (!forecastData) {
@@ -23,63 +24,61 @@ const ForecastCard = () => {
     const weatherForecast = days.map((day) => forecastData[`${day}Day`]);
 
     return (
-        <Box p={2}>
+        <Box
+            p={3}
+            height={"100%"}
+            display={"flex"}
+            flexDirection={"column"}
+            sx={{
+                borderWidth: 2,
+                borderStyle: "solid",
+                borderColor: grey[300],
+                borderRadius: 5,
+                height: "100%"
+            }}
+        >
+            <Typography style={{ fontSize: 32, fontWeight: 500 }}>Forecast</Typography>
             <Box
-                pt={2}
-                pl={2}
-                pr={2}
+                pt={3}
                 height={"100%"}
                 display={"flex"}
                 flexDirection={"column"}
-                sx={{
-                    borderWidth: 2,
-                    borderStyle: "solid",
-                    borderColor: grey[300],
-                    borderRadius: 5,
-                    height: "100%"
-                }}
+                justifyContent={"space-between"}
             >
-                <Typography style={{ fontSize: 32, fontWeight: 500 }}>Forecast</Typography>
-                <Box
-                    pt={2}
-                    height={"100%"}
-                    display={"flex"}
-                    flexDirection={"column"}
-                    justifyContent={"space-between"}
-                >
-                    {weatherForecast.map((day, index) => {
-                        const shouldHaveDivider = index !== weatherForecast.length - 1;
-                        return (
-                            <Fragment key={index}>
+                {weatherForecast.map((day, index) => {
+                    const shouldHaveDivider = index !== weatherForecast.length - 1;
+                    return (
+                        <Fragment key={index}>
+                            <Box
+                                mb={1}
+                                pl={1}
+                                pr={1}
+                                display={"flex"}
+                                justifyContent={"space-between"}
+                                alignItems={"end"}
+                            >
                                 <Box
-                                    p={1}
-                                    display={"flex"}
-                                    justifyContent={"space-between"}
-                                    alignItems={"center"}
-                                >
-                                    <span
-                                        className={`weather-icon ico-${day.conditions}`}
-                                        style={{ fontSize: 50 }}
-                                    />
-                                    <Box>
-                                        <Typography>
-                                            {DateTime.fromISO(day.date).toFormat("EEE dd")}
-                                        </Typography>
-                                        <Typography>
-                                            {day.temp_high_f} °F / {day.temp_low_f} °F
-                                        </Typography>
-                                    </Box>
-                                    <Typography>{day.forecasted_snow_in} in</Typography>
+                                    className={`wi wi-day-${day.conditions}`}
+                                    style={{ fontSize: 35 }}
+                                />
+                                <Box>
                                     <Typography>
-                                        {day.avewind ? day.avewind.dir : "N/A"}{" "}
-                                        {day.avewind ? day.avewind.mph : "0mph"}
+                                        {DateTime.fromISO(day.date).toFormat("EEE dd")}
+                                    </Typography>
+                                    <Typography>
+                                        {day.temp_high_f} °F / {day.temp_low_f} °F
                                     </Typography>
                                 </Box>
-                                {shouldHaveDivider && <Divider />}
-                            </Fragment>
-                        );
-                    })}
-                </Box>
+                                <Typography>{day.forecasted_snow_in} in</Typography>
+                                <Typography>
+                                    {day.avewind ? day.avewind.dir : "N/A"}{" "}
+                                    {day.avewind ? day.avewind.mph : "0mph"}
+                                </Typography>
+                            </Box>
+                            {shouldHaveDivider && <Divider />}
+                        </Fragment>
+                    );
+                })}
             </Box>
         </Box>
     );
