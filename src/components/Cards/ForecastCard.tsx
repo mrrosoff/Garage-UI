@@ -15,7 +15,7 @@ const ForecastCard = () => {
     );
     
     const forecastData = resortData?.Forecast;
-    // TODO: Replace with loading screen
+
     if (!forecastData) {
         return null;
     }
@@ -23,9 +23,10 @@ const ForecastCard = () => {
     const days = ["Two", "Three", "Four", "Five"];
     const weatherForecast = days.map((day) => forecastData[`${day}Day`]);
 
+    console.log(weatherForecast);
     return (
         <Box
-            p={3}
+            p={2}
             height={"100%"}
             display={"flex"}
             flexDirection={"column"}

@@ -32,9 +32,7 @@ const TodayInfoCard = () => {
 
     return (
         <Box
-            pt={2}
-            pl={2}
-            pr={2}
+            p={2}
             sx={{
                 borderWidth: 2,
                 borderStyle: "solid",

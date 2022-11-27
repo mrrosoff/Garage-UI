@@ -22,7 +22,6 @@ import { DateTime, Duration } from "luxon";
 import callExternalAPIOnInterval from "../../hooks/callExternalAPIOnInterval";
 
 const MountainInfoCard = () => {
-    const theme = useTheme();
     const { VITE_TIME_INTERVAL, VITE_SKI_RESORT_ID } = import.meta.env;
     const snowfallData: any | undefined = callExternalAPIOnInterval(
         VITE_TIME_INTERVAL,
@@ -63,21 +62,23 @@ const MountainInfoCard = () => {
         >
             <Typography style={{ fontSize: 32, fontWeight: 500 }}>Mountain</Typography>
             <Box pt={2} flexGrow={1} display={"flex"} flexDirection={"column"}>
-                <Box display={"flex"}>
-                    <Box display={"flex"} flexDirection={"column"} alignItems={"center"} pl={10}>
+                <Box display={"flex"} justifyContent={"space-around"}>
+                    <Box display={"flex"} flexDirection={"column"} alignItems={"center"}>
                         <Typography style={{ fontSize: 24, fontWeight: 500 }}>
                             Trails Open
                         </Typography>
                         <TrailInfo totalOpenTrails={totalOpenTrails} totalTrails={totalTrails} />
                     </Box>
-                    <Box display={"flex"} flexDirection={"column"} alignItems={"center"} pl={40}>
+                    <Box display={"flex"} flexDirection={"column"} alignItems={"center"}>
                         <Typography style={{ fontSize: 24, fontWeight: 500 }}>
                             Lifts Open
                         </Typography>
                         <LiftsInfo totalOpenLifts={totalOpenLifts} totalLifts={totalLifts} />
                     </Box>
                 </Box>
-                <SnowfallChart snowfallData={fullMonthData} />
+                <Box width={"100%"} height={"100%"} mb={-1} ml={-3}>
+                    <SnowfallChart snowfallData={fullMonthData} />
+                </Box>
             </Box>
         </Box>
     );
@@ -156,9 +157,9 @@ const renderCustomizedLabel = (props: any) => {
     );
 };
 
-const RADIAN = Math.PI / 180;
 const pieChartLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, value, name }: any) => {
-    const radius = innerRadius + (outerRadius - innerRadius) * 0.3;
+    const RADIAN = Math.PI / 180;
+    const radius = innerRadius + (outerRadius - innerRadius) * 0.35;
     const x = cx + radius * Math.cos(-midAngle * RADIAN);
     const y = cy + radius * Math.sin(-midAngle * RADIAN);
 
@@ -172,7 +173,7 @@ const pieChartLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, value, name
             textAnchor={x > cx ? "start" : "end"}
             dominantBaseline="central"
         >
-            {name === "Open" ? value : ""}
+            {value}
         </text>
     );
 };
@@ -181,6 +182,7 @@ const LiftsInfo = (props: any) => {
 };
 
 const TrailInfo = (props: any) => {
+    const theme = useTheme();
     const trailsData = [
         {
             name: "Open",
@@ -191,7 +193,7 @@ const TrailInfo = (props: any) => {
             value: props.totalTrails - props.totalOpenTrails
         }
     ];
-    const COLORS = ["#0088FE", "#FFFFFF"];
+    const colors = [theme.palette.primary.main, theme.palette.neutral.mediumDark];
     return (
         <PieChart width={200} height={200}>
             <Pie
@@ -199,11 +201,10 @@ const TrailInfo = (props: any) => {
                 labelLine={false}
                 label={pieChartLabel}
                 outerRadius={80}
-                fill="#8884d8"
                 dataKey="value"
             >
                 {trailsData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                    <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />
                 ))}
             </Pie>
         </PieChart>
@@ -211,6 +212,7 @@ const TrailInfo = (props: any) => {
 };
 
 const SnowfallChart = (props: any) => {
+    const theme = useTheme();
     const snowInMax =
         Math.max(...props.snowfallData.map((data: any) => parseFloat(data.SnowIn))) + 2;
     const accumMax =
@@ -227,7 +229,7 @@ const SnowfallChart = (props: any) => {
                     left: 20
                 }}
             >
-                <CartesianGrid stroke="#f5f5f5" />
+                <CartesianGrid stroke={theme.palette.neutral.medium} />
                 <XAxis
                     dataKey="time"
                     type="number"
@@ -237,19 +239,16 @@ const SnowfallChart = (props: any) => {
                     tickFormatter={(tickItem) => DateTime.fromMillis(tickItem).toFormat("MMMM d")}
                     domain={["dataMin", "dataMax"]}
                 />
-
                 <YAxis dataKey="Accumilation" scale={"linear"} domain={[0, accumMax]} yAxisId="1" />
                 <YAxis hide dataKey="SnowIn" scale={"linear"} domain={[0, snowInMax]} yAxisId="2" />
-
                 <Area
                     type="monotone"
                     dataKey="Accumilation"
-                    fill="#CCCCCC"
-                    stroke="#808080"
+                    fill={theme.palette.neutral.mediumDark}
+                    stroke={theme.palette.neutral.dark}
                     yAxisId="1"
                 />
-
-                <Bar dataKey="SnowIn" barSize={5} fill={blue[500]} yAxisId="2">
+                <Bar dataKey="SnowIn" barSize={5} fill={theme.palette.primary.main} yAxisId="2">
                     <LabelList dataKey="SnowIn" content={renderCustomizedLabel} />
                 </Bar>
             </ComposedChart>
