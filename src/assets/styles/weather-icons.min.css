@@ -215,6 +215,9 @@
 .wi-night-cloudy-windy:before {
     content: "\f030";
 }
+.wi-night-windy:before {
+    content: "\f030";
+}
 .wi-night-fog:before {
     content: "\f04a";
 }

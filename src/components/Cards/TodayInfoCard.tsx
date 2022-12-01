@@ -18,6 +18,8 @@ import callExternalAPIOnInterval from "../../hooks/callExternalAPIOnInterval";
 
 const TodayInfoCard = () => {
     const theme = useTheme();
+    let dayOrNight = theme.palette.mode === "dark" ? "night" : "day";
+
     const { VITE_TIME_INTERVAL, VITE_SKI_RESORT_ID } = import.meta.env;
     const resortData = callExternalAPIOnInterval(
         VITE_TIME_INTERVAL,
@@ -29,6 +31,7 @@ const TodayInfoCard = () => {
     if (!todaysWeather) {
         return null;
     }
+
     return (
         <Box
             p={2}
@@ -49,7 +52,7 @@ const TodayInfoCard = () => {
             </Grid>
             <Box pt={5} flexGrow={1} display={"flex"}>
                 <span
-                    className={`wi wi-day-${todaysWeather.conditions}`}
+                    className={`wi wi-${dayOrNight}-${todaysWeather.conditions}`}
                     style={{ fontSize: 80 }}
                 />
                 <Box pt={2} pl={10} flexGrow={1}>
