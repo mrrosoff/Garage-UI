@@ -983,10 +983,13 @@
 .wi-forecast-io-snow:before {
     content: "\f01b";
 }
+.wi-forecast-io-blizzard:before {
+    content: "\f076";
+}
 .wi-forecast-io-sleet:before {
     content: "\f0b5";
 }
-.wi-forecast-io-wind:before {
+.wi-forecast-io-windy:before {
     content: "\f050";
 }
 .wi-forecast-io-fog:before {

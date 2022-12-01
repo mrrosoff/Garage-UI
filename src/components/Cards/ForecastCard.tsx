@@ -13,7 +13,7 @@ const ForecastCard = () => {
         VITE_TIME_INTERVAL,
         `https://mtnpowder.com/feed?resortId=${VITE_SKI_RESORT_ID}`
     );
-    
+
     const forecastData = resortData?.Forecast;
 
     if (!forecastData) {
@@ -23,7 +23,6 @@ const ForecastCard = () => {
     const days = ["Two", "Three", "Four", "Five"];
     const weatherForecast = days.map((day) => forecastData[`${day}Day`]);
 
-    console.log(weatherForecast);
     return (
         <Box
             p={2}
@@ -59,12 +58,12 @@ const ForecastCard = () => {
                                 alignItems={"end"}
                             >
                                 <Box
-                                    className={`wi wi-day-${day.conditions}`}
+                                    className={`wi wi-forecast-io-${day.conditions}`}
                                     style={{ fontSize: 35 }}
                                 />
                                 <Box>
                                     <Typography>
-                                        {DateTime.fromISO(day.date).toFormat("EEE dd")}
+                                        {DateTime.fromISO(day.date).toFormat("EEE MMM dd")}
                                     </Typography>
                                     <Typography>
                                         {day.temp_high_f} °F / {day.temp_low_f} °F

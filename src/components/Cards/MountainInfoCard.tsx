@@ -90,7 +90,6 @@ const getFullMonthData = (snowfallData: any) => {
         time: DateTime.fromISO(snowfallEvent.CreateDate).toMillis()
     })).filter((snowfallEvent: any) => {
         const lastMonth = Duration.fromObject({ month: 1 });
-        console.log(DateTime.now().minus(lastMonth).toMillis());
         return snowfallEvent.time > DateTime.now().minus(lastMonth).toMillis();
     });
     const fullMonthData = [];

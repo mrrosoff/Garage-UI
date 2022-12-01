@@ -29,7 +29,6 @@ const TodayInfoCard = () => {
     if (!todaysWeather) {
         return null;
     }
-
     return (
         <Box
             p={2}
@@ -50,13 +49,13 @@ const TodayInfoCard = () => {
             </Grid>
             <Box pt={5} flexGrow={1} display={"flex"}>
                 <span
-                    className={`weather-icon ico-${todaysWeather.conditions}`}
+                    className={`wi wi-day-${todaysWeather.conditions}`}
                     style={{ fontSize: 80 }}
                 />
                 <Box pt={2} pl={10} flexGrow={1}>
                     <Box>
                         <Typography style={{ fontSize: 28 }}>
-                            {DateTime.fromISO(todaysWeather.date).toFormat("EEE dd")}
+                            {DateTime.fromISO(todaysWeather.date).toFormat("EEE MMM dd")}
                         </Typography>
                     </Box>
                     <Box pt={2}>
