@@ -149,6 +149,12 @@
 .wi-day-cloudy-high:before {
     content: "\f07d";
 }
+.wi-day-mostly_cloudy:before {
+    content: "\f013";
+}
+.wi-day-partly_cloudy:before {
+    content: "\f083";
+}
 .wi-day-light-wind:before {
     content: "\f0c4";
 }
@@ -1001,7 +1007,13 @@
 .wi-forecast-io-cloudy:before {
     content: "\f013";
 }
+.wi-forecast-io-mostly_cloudy:before {
+    content: "\f013";
+}
 .wi-forecast-io-partly-cloudy-day:before {
+    content: "\f002";
+}
+.wi-forecast-io-partly_cloudy:before {
     content: "\f002";
 }
 .wi-forecast-io-partly-cloudy-night:before {
