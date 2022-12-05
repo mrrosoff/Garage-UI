@@ -1,42 +1,29 @@
-# Garage-UI
+# Garage-UI-Mountain-Edition
 
-### A Custom UI For A Garage Door Opener
+## A Custom UI For A Garage Door Opener
+![Garage-UI](images/LightMode.png)
+### About Project
 
-## About Project
+This project is an another flavor of the original Garage-UI available [here](https://github.com/mrrosoff/Garage-UI). This Garage-UI is the Mountain Edition. It allows users to see the current/forecasted weather, ski conditions, total snowfall, and show live feeds from a ski resort of their choice, all at a glance. Currently, this project does ***not*** open or close a garage door.
 
-After viewing the button on my family's garageAPI wall for enough years, I decided to finally do something about it. I 
-imagined a world where there was a central database for important information about family endeavors, where one could go
-for quick information at a glance, but also for more detailed info.
+This project is an Electron app that runs on a Raspberry Pi. The app is designed to be used with a 10"/12" touch screen. For a suggested list of hardware for this project visit this link.
 
-Thus, the Garage-Pi was born.
+### Installation
 
-A Raspberry Pi runs this repo as an Electron app out of our garage. It of course has garage door controls, but it also 
-shows tide, weather, and surf data. The app is configured so that new data sources can be easily added at a later date.
+Clone the repository and run the [install script](scripts/install.sh). This will install the dependencies, build the app, and change your Raspberry Pi to auto update itself and auto launch to Garage-UI-Mountatin-Edition. ⚠️ ***Make sure to run the script in the Garage-UI-Mountatin-Edition directory.***
 
-## Installation
+### Environment Variables
 
-Clone the repository and run the [install script](scripts/install.sh). This will install the dependencies, build the app, and change your Raspberry Pi to auto update itself and auto launch to Garage-UI. ⚠️ ***Make sure to run the script in the Garage-UI directory.***
+The project uses environment variables to store API keys and other sensitive information. The following environment variables are required to run the project:
 
-## Environment Variables
+```javascript
+// Coordinates for the weather API
+VITE_LATITUDE=40.4850 
+VITE_LONGITUDE=-106.8317
 
-We currently use the following environment variables:
+// For quick start, use ski id 6 for Steamboat Springs, CO
+VITE_SKI_RESORT_ID= // Your ski resort id
 
-```
-VITE_LATITUDE=32.95325541910332
-VITE_LONGITUDE=-117.24177865770446
-VITE_ZIP_CODE=92130
-VITE_NOAA_STATION=9410230
+// How often to hit the API's in milliseconds
 VITE_TIME_INTERVAL=60000
-
-VITE_OPEN_WEATHER_MAP_ID="your-key-here"
-VITE_OPEN_UV_API_TOKEN="your-token-here"
-
-VITE_SURF_SPOT_ONE_ID="5842041f4e65fad6a770883b"
-VITE_SURF_SPOT_ONE_NAME="Blacks"
-
-VITE_SURF_SPOT_TWO_ID="5842041f4e65fad6a77088af"
-VITE_SURF_SPOT_TWO_NAME="15th Street"
-
-VITE_SURF_SPOT_THREE_ID="5842041f4e65fad6a77088a0"
-VITE_SURF_SPOT_THREE_NAME="Beacons"
 ```
