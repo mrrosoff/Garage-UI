@@ -1,8 +1,22 @@
 import React from "react";
 
-import { Box, Grid, Typography, useTheme } from "@mui/material";
+import {
+    Box,
+    Button,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogContentText,
+    DialogTitle,
+    Grid,
+    IconButton,
+    Modal,
+    Typography,
+    useTheme
+} from "@mui/material";
 import { grey, blue } from "@mui/material/colors";
-
+import VideocamIcon from "@mui/icons-material/Videocam";
+import CloseIcon from "@mui/icons-material/Close";
 import {
     ComposedChart,
     Area,
@@ -60,7 +74,10 @@ const MountainInfoCard = () => {
                 height: "100%"
             }}
         >
-            <Typography style={{ fontSize: 32, fontWeight: 500 }}>Mountain</Typography>
+            <Box display={"flex"} justifyContent={"space-between"} flexDirection={"row"}>
+                <Typography style={{ fontSize: 32, fontWeight: 500 }}>Mountain</Typography>
+                <LiveStreamModal />
+            </Box>
             <Box pt={2} flexGrow={1} display={"flex"} flexDirection={"column"}>
                 <Box display={"flex"} justifyContent={"space-around"}>
                     <Box display={"flex"} flexDirection={"column"} alignItems={"center"}>
@@ -207,6 +224,49 @@ const TrailInfo = (props: any) => {
                 ))}
             </Pie>
         </PieChart>
+    );
+};
+
+const LiveStreamModal = (props: any) => {
+    const { VITE_YOUTUBE_LIVE_STREAM_LINK, VITE_LIVE_STREAM_BUTTON_TITLE } = import.meta.env;
+    const [open, setOpen] = React.useState(false);
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
+
+    return (
+        <div>
+            <Button
+                sx={{ borderRadius: 5, height: "80%" }}
+                startIcon={<VideocamIcon />}
+                variant={"contained"}
+                size={"small"}
+                onClick={handleOpen}
+            >
+                {VITE_LIVE_STREAM_BUTTON_TITLE}
+            </Button>
+            <Dialog
+                fullScreen={true}
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="responsive-dialog-title"
+            >
+                <DialogActions>
+                    <IconButton onClick={handleClose}>
+                        <CloseIcon />
+                    </IconButton>
+                </DialogActions>
+                <DialogContent sx={{ pt: 0 }}>
+                    <iframe
+                        width="100%"
+                        height="100%"
+                        src={VITE_YOUTUBE_LIVE_STREAM_LINK + "?autoplay=1"}
+                        frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowfullscreen
+                    ></iframe>
+                </DialogContent>
+            </Dialog>
+        </div>
     );
 };
 
