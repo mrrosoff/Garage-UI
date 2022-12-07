@@ -70,6 +70,7 @@ const ForecastWeather = (props: any) => {
         <>
             {weatherForecast.map((day, index) => {
                 const shouldHaveDivider = index !== weatherForecast.length - 1;
+                const currentDaysConditions = day.conditions.replace("_", "-");
                 return (
                     <Fragment key={index}>
                         <Box
@@ -81,7 +82,7 @@ const ForecastWeather = (props: any) => {
                             alignItems={"end"}
                         >
                             <Box
-                                className={`wi wi-forecast-io-${day.conditions}`}
+                                className={`wi wi-forecast-io-${currentDaysConditions}`}
                                 style={{ fontSize: 35 }}
                             />
                             <Box>

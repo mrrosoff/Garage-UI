@@ -56,10 +56,11 @@ const LoadingScreen = () => {
 };
 
 const TodaysWeather = (props: any) => {
+    const todaysConditions = props.todaysWeather.conditions.replace('_', '-');
     return (
         <>
             <span
-                className={`wi wi-${props.dayOrNight}-${props.todaysWeather.conditions}`}
+                className={`wi wi-${props.dayOrNight}-${todaysConditions}`}
                 style={{ fontSize: 80 }}
             />
             <Box pt={2} pl={10} flexGrow={1}>

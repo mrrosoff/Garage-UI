@@ -4,7 +4,7 @@
  *  Weather themed icons for Bootstrap
  *  Author - Erik Flowers - erik@helloerik.com
  *  Email: erik@helloerik.com
- *  Twitter: http://twitter.com/Erik_UX
+ *  Twitter: http://twitter.com/Erik-UX
  *  ------------------------------------------------------------------------------
  *  Maintained at http://erikflowers.github.io/weather-icons
  *
@@ -26,7 +26,7 @@
         url("../font/weathericons-regular-webfont.woff2") format("woff2"),
         url("../font/weathericons-regular-webfont.woff") format("woff"),
         url("../font/weathericons-regular-webfont.ttf") format("truetype"),
-        url("../font/weathericons-regular-webfont.svg#weather_iconsregular") format("svg");
+        url("../font/weathericons-regular-webfont.svg#weather-iconsregular") format("svg");
     font-weight: normal;
     font-style: normal;
 }
@@ -152,10 +152,10 @@
 .wi-day-cloudy-high:before {
     content: "\f07d";
 }
-.wi-day-mostly_cloudy:before {
+.wi-day-mostly-cloudy:before {
     content: "\f013";
 }
-.wi-day-partly_cloudy:before {
+.wi-day-partly-cloudy:before {
     content: "\f083";
 }
 .wi-day-light-wind:before {
@@ -1013,16 +1013,16 @@
 .wi-forecast-io-cloudy:before {
     content: "\f013";
 }
-.wi-forecast-io-mostly_cloudy:before {
+.wi-forecast-io-mostly-cloudy:before {
     content: "\f013";
 }
 .wi-forecast-io-partly-cloudy-day:before {
     content: "\f002";
 }
-.wi-forecast-io-mostly_sunny:before {
+.wi-forecast-io-mostly-sunny:before {
     content: "\f00c";
 }
-.wi-forecast-io-partly_cloudy:before {
+.wi-forecast-io-partly-cloudy:before {
     content: "\f002";
 }
 .wi-forecast-io-partly-cloudy-night:before {
