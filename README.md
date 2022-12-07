@@ -26,4 +26,8 @@ VITE_SKI_RESORT_ID= // Your ski resort id
 
 // How often to hit the API's in milliseconds
 VITE_TIME_INTERVAL=60000
+
+// Youbute Button Link and Title
+VITE_YOUTUBE_LIVE_STREAM_LINK= // Your live stream link
+VITE_LIVE_STREAM_BUTTON_TITLE= // Your live stream title
 ```
