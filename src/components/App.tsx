@@ -1,5 +1,5 @@
 import { CssBaseline, PaletteMode } from "@mui/material";
-import { blue, green } from "@mui/material/colors";
+import { blue, green, grey } from "@mui/material/colors";
 import {
     createTheme,
     responsiveFontSizes,
@@ -11,6 +11,26 @@ import { DateTime } from "luxon";
 
 import callExternalAPIOnInterval from "../hooks/callExternalAPIOnInterval";
 import DashBoard from "./Dashboard";
+
+/* eslint-disable no-unused-vars */
+declare module "@mui/material/styles" {
+	interface Palette {
+        neutral: Palette["primary"];
+    }
+    interface PaletteOptions {
+        neutral: PaletteOptions["primary"];
+    }
+
+	interface PaletteColor {
+        medium?: string;
+		mediumDark?: string;
+    }
+    interface SimplePaletteColorOptions {
+        medium?: string;
+		mediumDark?: string;
+    }
+}
+/* eslint-enable no-unused-vars */
 
 const App = () => {
     const { VITE_TIME_INTERVAL, VITE_LATITUDE, VITE_LONGITUDE } = import.meta.env;
@@ -37,7 +57,18 @@ const App = () => {
 
     const theme = responsiveFontSizes(
         createTheme({
-            palette: { mode, primary: { main: blue[500] }, secondary: { main: green[500] } }
+            palette: {
+                mode,
+                primary: { main: blue[500] },
+                secondary: { main: green[500] },
+                neutral: {
+                    main: "#FFFFFF",
+                    light: grey[100],
+                    medium: grey[200],
+                    mediumDark: grey[300],
+                    dark: grey[600]
+                }
+            }
         })
     );
 
