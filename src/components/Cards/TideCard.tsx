@@ -18,10 +18,22 @@ import { DateTime } from "luxon";
 
 import callExternalAPIOnInterval from "../../hooks/callExternalAPIOnInterval";
 
-type TideData = {
+interface TideData {
     t: string;
-    v: number;
-}[];
+    v: string;
+}
+
+interface ReformatttedTideData {
+    time: number;
+    prediction: number;
+    actual?: number;
+}
+
+interface TideTimes {
+    highTide: number;
+    lowTide: number;
+    nextTideIsLow: boolean | null;
+}
 
 const formatString = "yyyy-MM-dd HH:mm";
 
@@ -31,26 +43,28 @@ const TideCard = () => {
     const noaaPredicationApi = `${noaaAPI}?date=today&station=${VITE_NOAA_STATION}&product=predictions&datum=MLLW&time_zone=lst_ldt&units=english&format=json`;
     const noaaActualApi = `${noaaAPI}?date=today&station=${VITE_NOAA_STATION}&product=one_minute_water_level&datum=MLLW&time_zone=lst_ldt&units=english&format=json`;
 
-    const tidePredictionData: { predictions: TideData } = callExternalAPIOnInterval(
+    const tidePredictionData: { predictions: TideData[] } = callExternalAPIOnInterval(
         VITE_TIME_INTERVAL,
         noaaPredicationApi
     );
-    const tideActualData: { data: TideData } = callExternalAPIOnInterval(
+    const tideActualData: { data: TideData[] } = callExternalAPIOnInterval(
         VITE_TIME_INTERVAL,
         noaaActualApi
     );
 
     const [graphMinHeight, setGraphMinHeight] = useState<number>();
     const [graphMaxHeight, setGraphMaxHeight] = useState<number>();
-    const [graphData, setGraphData] = useState<any>();
+    const [graphData, setGraphData] = useState<ReformatttedTideData[]>();
 
     useEffect(() => {
         if (!tidePredictionData?.predictions) return;
 
-        let toBeGraphData = tidePredictionData.predictions.map((prediction) => ({
-            time: DateTime.fromFormat(prediction.t, formatString).toMillis(),
-            prediction: prediction.v
-        }));
+        let toBeGraphData: ReformatttedTideData[] = tidePredictionData.predictions.map(
+            (prediction) => ({
+                time: DateTime.fromFormat(prediction.t, formatString).toMillis(),
+                prediction: parseFloat(prediction.v || "0")
+            })
+        );
 
         setGraphMinHeight(Math.min(...toBeGraphData.map((item) => item.prediction)) - 0.5);
         setGraphMaxHeight(Math.max(...toBeGraphData.map((item) => item.prediction)) + 0.5);
@@ -59,7 +73,7 @@ const TideCard = () => {
             const actualData = tideActualData.data
                 .map((item) => ({
                     time: DateTime.fromFormat(item.t, formatString).toMillis(),
-                    actual: item.v
+                    actual: parseFloat(item.v || "0")
                 }))
                 .filter((datapoint) => datapoint.actual);
 
@@ -93,7 +107,7 @@ const TideCard = () => {
                 </Grid>
                 <Grid item>
                     {graphData && (
-                        <TideTimes graphData={graphData} tideActualData={tideActualData} />
+                        <TideTimes graphData={graphData} tideActualData={tideActualData.data} />
                     )}
                 </Grid>
             </Grid>
@@ -124,9 +138,9 @@ const LoadingTideData = () => {
     );
 };
 
-const TideTimes = (props: { graphData: any; tideActualData: any }) => {
-    const [highTide, setHighTide] = useState<any>();
-    const [lowTide, setLowTide] = useState<any>();
+const TideTimes = (props: { graphData: ReformatttedTideData[]; tideActualData: TideData[] }) => {
+    const [highTide, setHighTide] = useState<number>();
+    const [lowTide, setLowTide] = useState<number>();
     const [nextTideIsLow, setNextTideIsLow] = useState<boolean | null>();
 
     useEffect(() => {
@@ -139,23 +153,23 @@ const TideTimes = (props: { graphData: any; tideActualData: any }) => {
         setNextTideIsLow(nextTideIsLow);
     }, [props.graphData, props.tideActualData]);
 
+    if (nextTideIsLow === null) return null;
+
     return (
-        (lowTide || highTide) && (
-            <Grid container spacing={2} justifyContent={"center"} alignItems={"center"}>
-                <Grid item>
-                    <TideTime
-                        tide={nextTideIsLow ? "low" : "high"}
-                        data={nextTideIsLow ? lowTide : highTide}
-                    />
-                </Grid>
-                <Grid item>
-                    <TideTime
-                        tide={nextTideIsLow ? "high" : "low"}
-                        data={nextTideIsLow ? highTide : lowTide}
-                    />
-                </Grid>
+        <Grid container spacing={2} justifyContent={"center"} alignItems={"center"}>
+            <Grid item>
+                <TideTime
+                    tide={nextTideIsLow ? "low" : "high"}
+                    data={nextTideIsLow ? lowTide : highTide}
+                />
             </Grid>
-        )
+            <Grid item>
+                <TideTime
+                    tide={nextTideIsLow ? "high" : "low"}
+                    data={nextTideIsLow ? highTide : lowTide}
+                />
+            </Grid>
+        </Grid>
     );
 };
 
@@ -220,15 +234,15 @@ const TideGraph = (props: {
 };
 
 const getTideTimes = (
-    predictionData: any,
-    actualData: any
-): { highTide: any; lowTide: any; nextTideIsLow: boolean | null } => {
-    if (!actualData || !actualData.data) {
-        return { highTide: null, lowTide: null, nextTideIsLow: null };
+    predictionData: ReformatttedTideData[],
+    actualData: TideData[]
+): TideTimes => {
+    if (!actualData) {
+        return { highTide: 0, lowTide: 0, nextTideIsLow: null };
     }
     let i = 0;
     const lastActualDate = DateTime.fromFormat(
-        actualData.data[actualData.data.length - 1].t,
+        actualData[actualData.length - 1].t,
         formatString
     ).toMillis();
 
@@ -237,20 +251,20 @@ const getTideTimes = (
     }
 
     if (i + 1 >= predictionData.length) {
-        return { highTide: null, lowTide: null, nextTideIsLow: null };
+        return { highTide: 0, lowTide: 0, nextTideIsLow: null };
     }
-    const currentPrediction = parseFloat(predictionData[i].prediction);
-    const nextPrediction = parseFloat(predictionData[i + 1].prediction);
+    const currentPrediction = predictionData[i].prediction;
+    const nextPrediction = predictionData[i + 1].prediction;
     let graphStartsDown = currentPrediction > nextPrediction;
     let firstInflectionPoint = predictionData[i + 1];
     i += 2;
     if (i >= predictionData.length) {
-        return { highTide: null, lowTide: null, nextTideIsLow: null };
+        return { highTide: 0, lowTide: 0, nextTideIsLow: null };
     }
 
     for (; i < predictionData.length; i++) {
-        const lastPrediction = parseFloat(firstInflectionPoint.prediction);
-        const currentPrediction = parseFloat(predictionData[i].prediction);
+        const lastPrediction = firstInflectionPoint.prediction;
+        const currentPrediction = predictionData[i].prediction;
         const nextDataPointIsBelow = lastPrediction > currentPrediction;
         if (graphStartsDown !== nextDataPointIsBelow) break;
         firstInflectionPoint = predictionData[i];
@@ -259,12 +273,12 @@ const getTideTimes = (
     let secondInflectionPoint = firstInflectionPoint;
     i += 1;
     if (i >= predictionData.length) {
-        return { highTide: null, lowTide: null, nextTideIsLow: null };
+        return { highTide: 0, lowTide: 0, nextTideIsLow: null };
     }
 
     for (; i < predictionData.length; i++) {
-        const lastPrediction = parseFloat(secondInflectionPoint.prediction);
-        const currentPrediction = parseFloat(predictionData[i].prediction);
+        const lastPrediction = secondInflectionPoint.prediction;
+        const currentPrediction = predictionData[i].prediction;
         const nextDataPointIsBelow = lastPrediction > currentPrediction;
         if (!graphStartsDown !== nextDataPointIsBelow) break;
         secondInflectionPoint = predictionData[i];
@@ -273,9 +287,9 @@ const getTideTimes = (
     const highTide = graphStartsDown ? secondInflectionPoint.time : firstInflectionPoint.time;
     const lowTide = graphStartsDown ? firstInflectionPoint.time : secondInflectionPoint.time;
 
-    const returnObject = { highTide, lowTide, nextTideIsLow: lowTide < highTide };
+    const returnObject: TideTimes = { highTide, lowTide, nextTideIsLow: lowTide < highTide };
     if (i === predictionData.length) {
-        returnObject[graphStartsDown ? "highTide" : "lowTide"] = null;
+        returnObject[graphStartsDown ? "highTide" : "lowTide"] = null as any;
     }
     return returnObject;
 };
