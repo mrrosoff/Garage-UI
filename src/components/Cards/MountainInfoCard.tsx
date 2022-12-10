@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import {
     Box,
@@ -229,29 +229,27 @@ const TrailInfo = (props: any) => {
 
 const LiveStreamModal = (props: any) => {
     const { VITE_YOUTUBE_LIVE_STREAM_LINK, VITE_LIVE_STREAM_BUTTON_TITLE } = import.meta.env;
-    const [open, setOpen] = React.useState(false);
-    const handleOpen = () => setOpen(true);
-    const handleClose = () => setOpen(false);
+    const [open, setOpen] = useState(false);
 
     return (
-        <div>
+        <>
             <Button
                 sx={{ borderRadius: 5, height: "80%" }}
                 startIcon={<VideocamIcon />}
                 variant={"contained"}
                 size={"small"}
-                onClick={handleOpen}
+                onClick={() => setOpen(true)}
             >
                 {VITE_LIVE_STREAM_BUTTON_TITLE}
             </Button>
             <Dialog
                 fullScreen={true}
                 open={open}
-                onClose={handleClose}
+                onClose={() => setOpen(false)}
                 aria-labelledby="responsive-dialog-title"
             >
-                <DialogActions>
-                    <IconButton onClick={handleClose}>
+                <DialogActions style={{ justifyContent: "space-between" }}>
+                    <IconButton onClick={() => setOpen(false)}>
                         <CloseIcon />
                     </IconButton>
                 </DialogActions>
@@ -260,13 +258,12 @@ const LiveStreamModal = (props: any) => {
                         width="100%"
                         height="100%"
                         src={VITE_YOUTUBE_LIVE_STREAM_LINK + "?autoplay=1"}
-                        frameBorder="0"
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                         allowFullScreen
-                    ></iframe>
+                    />
                 </DialogContent>
             </Dialog>
-        </div>
+        </>
     );
 };
 
