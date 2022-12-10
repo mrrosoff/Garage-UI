@@ -18,63 +18,58 @@ import { DateTime } from "luxon";
 
 import callExternalAPIOnInterval from "../../hooks/callExternalAPIOnInterval";
 
+type TideData = {
+    t: string;
+    v: number;
+}[];
+
 const formatString = "yyyy-MM-dd HH:mm";
 
-const TideCard = (props: any) => {
+const TideCard = () => {
     const { VITE_TIME_INTERVAL, VITE_NOAA_STATION } = import.meta.env;
     const noaaAPI = "https://api.tidesandcurrents.noaa.gov/api/prod/datagetter";
-    const tidePredictionData: any | undefined = callExternalAPIOnInterval(
+    const noaaPredicationApi = `${noaaAPI}?date=today&station=${VITE_NOAA_STATION}&product=predictions&datum=MLLW&time_zone=lst_ldt&units=english&format=json`;
+    const noaaActualApi = `${noaaAPI}?date=today&station=${VITE_NOAA_STATION}&product=one_minute_water_level&datum=MLLW&time_zone=lst_ldt&units=english&format=json`;
+
+    const tidePredictionData: { predictions: TideData } = callExternalAPIOnInterval(
         VITE_TIME_INTERVAL,
-        `${noaaAPI}?date=today&station=${VITE_NOAA_STATION}&product=predictions&datum=MLLW&time_zone=lst_ldt&units=english&format=json`
+        noaaPredicationApi
     );
-    const tideActualData: any | undefined = callExternalAPIOnInterval(
+    const tideActualData: { data: TideData } = callExternalAPIOnInterval(
         VITE_TIME_INTERVAL,
-        `${noaaAPI}?date=today&station=${VITE_NOAA_STATION}&product=one_minute_water_level&datum=MLLW&time_zone=lst_ldt&units=english&format=json`
+        noaaActualApi
     );
 
-    const [domain, setDomain] = useState<DateTime>();
-    const [predictionData, setPredictionData] = useState<any>();
-    const [data, setData] = useState<any>();
-    const [highTide, setHighTide] = useState<any>();
-    const [lowTide, setLowTide] = useState<any>();
-    const [nextTideIsLow, setNextTideIsLow] = useState<boolean | null>();
+    const [graphMinHeight, setGraphMinHeight] = useState<number>();
+    const [graphMaxHeight, setGraphMaxHeight] = useState<number>();
+    const [graphData, setGraphData] = useState<any>();
 
     useEffect(() => {
         if (!tidePredictionData?.predictions) return;
 
-        setDomain(
-            DateTime.fromISO(
-                DateTime.fromFormat(tidePredictionData.predictions[0].t, formatString).toISODate()
-            )
-        );
-
-        const tempData = tidePredictionData.predictions.map((item: any) => ({
-            time: DateTime.fromFormat(item.t, formatString).toMillis(),
-            prediction: item.v
+        let toBeGraphData = tidePredictionData.predictions.map((prediction) => ({
+            time: DateTime.fromFormat(prediction.t, formatString).toMillis(),
+            prediction: prediction.v
         }));
 
-        setPredictionData(tempData);
-        setData(tempData);
-        const { highTide, lowTide, nextTideIsLow } = getTideTimes(tempData, tideActualData);
-        setHighTide(highTide);
-        setLowTide(lowTide);
-        setNextTideIsLow(nextTideIsLow);
+        setGraphMinHeight(Math.min(...toBeGraphData.map((item) => item.prediction)) - 0.5);
+        setGraphMaxHeight(Math.max(...toBeGraphData.map((item) => item.prediction)) + 0.5);
 
         if (tideActualData && tideActualData.data) {
             const actualData = tideActualData.data
-                .map((item: any) => ({
+                .map((item) => ({
                     time: DateTime.fromFormat(item.t, formatString).toMillis(),
                     actual: item.v
                 }))
-                .filter((datapoint: any) => datapoint.actual);
+                .filter((datapoint) => datapoint.actual);
 
-            setData(
-                tempData.map((obj: any) => ({
-                    ...obj,
-                    ...actualData.find((item: any) => item.time === obj.time)
-                }))
-            );
+            toBeGraphData = toBeGraphData.map((prediction) => ({
+                ...prediction,
+                ...actualData.find((actual: any) => actual.time === prediction.time)
+            }));
         }
+
+        setGraphData(toBeGraphData);
     }, [tidePredictionData, tideActualData]);
 
     return (
@@ -97,30 +92,17 @@ const TideCard = (props: any) => {
                     <Typography style={{ fontSize: 32, fontWeight: 500 }}>Tide</Typography>
                 </Grid>
                 <Grid item>
-                    {(lowTide || highTide) && (
-                        <Grid container spacing={2} justifyContent={"center"} alignItems={"center"}>
-                            <Grid item>
-                                <TideTime
-                                    tide={nextTideIsLow ? "low" : "high"}
-                                    data={nextTideIsLow ? lowTide : highTide}
-                                />
-                            </Grid>
-                            <Grid item>
-                                <TideTime
-                                    tide={nextTideIsLow ? "high" : "low"}
-                                    data={nextTideIsLow ? highTide : lowTide}
-                                />
-                            </Grid>
-                        </Grid>
+                    {graphData && (
+                        <TideTimes graphData={graphData} tideActualData={tideActualData} />
                     )}
                 </Grid>
             </Grid>
             <Box pt={2} flexGrow={1}>
-                {data ? (
+                {graphMinHeight && graphMaxHeight && graphData ? (
                     <TideGraph
-                        data={data}
-                        domain={domain}
-                        predictionData={predictionData}
+                        graphData={graphData}
+                        minHeight={graphMinHeight}
+                        maxHeight={graphMaxHeight}
                         showTideActualData={!!tideActualData}
                     />
                 ) : (
@@ -142,6 +124,41 @@ const LoadingTideData = () => {
     );
 };
 
+const TideTimes = (props: { graphData: any; tideActualData: any }) => {
+    const [highTide, setHighTide] = useState<any>();
+    const [lowTide, setLowTide] = useState<any>();
+    const [nextTideIsLow, setNextTideIsLow] = useState<boolean | null>();
+
+    useEffect(() => {
+        const { highTide, lowTide, nextTideIsLow } = getTideTimes(
+            props.graphData,
+            props.tideActualData
+        );
+        setHighTide(highTide);
+        setLowTide(lowTide);
+        setNextTideIsLow(nextTideIsLow);
+    }, [props.graphData, props.tideActualData]);
+
+    return (
+        (lowTide || highTide) && (
+            <Grid container spacing={2} justifyContent={"center"} alignItems={"center"}>
+                <Grid item>
+                    <TideTime
+                        tide={nextTideIsLow ? "low" : "high"}
+                        data={nextTideIsLow ? lowTide : highTide}
+                    />
+                </Grid>
+                <Grid item>
+                    <TideTime
+                        tide={nextTideIsLow ? "high" : "low"}
+                        data={nextTideIsLow ? highTide : lowTide}
+                    />
+                </Grid>
+            </Grid>
+        )
+    );
+};
+
 const TideTime = (props: any) => {
     if (!props.data) return null;
     const Icon = props.tide === "low" ? ArrowDownwardIcon : ArrowUpwardIcon;
@@ -155,13 +172,16 @@ const TideTime = (props: any) => {
     );
 };
 
-const TideGraph = (props: any) => {
+const TideGraph = (props: {
+    graphData: any;
+    minHeight: number;
+    maxHeight: number;
+    showTideActualData: boolean;
+}) => {
     const theme = useTheme();
-    const minHeight = Math.min(...props.predictionData.map((item: any) => item.prediction)) - 0.5;
-    const maxHeight = Math.max(...props.predictionData.map((item: any) => item.prediction)) + 0.5;
     return (
         <ResponsiveContainer width={"100%"} height={"100%"}>
-            <LineChart data={props.data} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+            <LineChart data={props.graphData} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
                 <XAxis
                     dataKey="time"
                     type="number"
@@ -173,7 +193,7 @@ const TideGraph = (props: any) => {
                     }
                     domain={["dataMin", "dataMax"]}
                 />
-                <YAxis hide scale={"linear"} domain={[minHeight, maxHeight]} />
+                <YAxis hide scale={"linear"} domain={[props.minHeight, props.maxHeight]} />
                 <CartesianGrid strokeDasharray="4 4" horizontalPoints={[0]} />
                 <ReferenceLine x={DateTime.now().toMillis()} stroke={purple[500]} strokeWidth={2} />
                 <Line
