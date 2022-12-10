@@ -2,6 +2,8 @@
 
 ### A Custom UI For A Garage Door Opener
 
+![Garage-UI](src/assets/example.png)
+
 ## About Project
 
 After viewing the button on my family's garageAPI wall for enough years, I decided to finally do something about it. I 
