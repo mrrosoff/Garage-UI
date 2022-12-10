@@ -13,9 +13,10 @@ import {
     Modal,
     Typography,
     useTheme,
-    LinearProgress
+    LinearProgress,
+    CircularProgress
 } from "@mui/material";
-import { grey, blue } from "@mui/material/colors";
+import { grey } from "@mui/material/colors";
 import VideocamIcon from "@mui/icons-material/Videocam";
 import CloseIcon from "@mui/icons-material/Close";
 
@@ -66,30 +67,39 @@ const MountainInfoCard = () => {
                 <LiveStreamModal />
             </Box>
             <Box pt={2} flexGrow={1} display={"flex"} flexDirection={"column"}>
-                {snowfallData && snowReport && mountainAreas ? (
-                    <TrailsOpenAndSnowfallChart
-                        totalOpenLifts={snowReport.TotalOpenLifts}
-                        totalLifts={snowReport.TotalLifts}
-                        totalOpenTrails={snowReport.TotalOpenTrails}
-                        totalTrails={snowReport.TotalTrails}
-                        snowfallData={getFullMonthData(snowfallData)}
-                    />
-                ) : (
-                    <LoadingScreen />
-                )}
+                <TrailsOpenAndSnowfallChart
+                    totalOpenLifts={snowReport?.TotalOpenLifts}
+                    totalLifts={snowReport?.TotalLifts}
+                    totalOpenTrails={snowReport?.TotalOpenTrails}
+                    totalTrails={snowReport?.TotalTrails}
+                    snowfallData={getFullMonthData(snowfallData)}
+                />
             </Box>
         </Box>
     );
 };
 
-const LoadingScreen = () => {
+const SnowfallChartLoadingScreen = () => {
     return (
         <Box
-            sx={{ width: "100%", height: "100%", display: "flex", flexDirection: "column", pb: 40 }}
+            sx={{ width: "100%", height: "100%", display: "flex", flexDirection: "column", pb: 10, pl: 5}}
         >
             <Box sx={{ flexGrow: 1 }} />
             <Box>
                 <LinearProgress sx={{ height: 8 }} />
+            </Box>
+        </Box>
+    );
+};
+
+const TrailLiftInfoLoadingScreen = () => {
+    return (
+        <Box
+            sx={{ width: "100%", height: "100%", display: "flex", flexDirection: "column", pt: 5, pl: 5}}
+        >
+            <Box sx={{ flexGrow: 1 }} />
+            <Box>
+                <CircularProgress sx={{ height: 8 }} />
             </Box>
         </Box>
     );
@@ -102,21 +112,32 @@ const TrailsOpenAndSnowfallChart = (props: any) => {
             <Box display={"flex"} justifyContent={"space-around"}>
                 <Box display={"flex"} flexDirection={"column"} alignItems={"center"}>
                     <Typography style={{ fontSize: 24, fontWeight: 500 }}>Trails Open</Typography>
-                    <TrailInfo totalOpenTrails={totalOpenTrails} totalTrails={totalTrails} />
+                    {totalOpenTrails && totalTrails ? (
+                        <TrailInfo totalOpenTrails={totalOpenTrails} totalTrails={totalTrails} />
+                    ) : (
+                        <TrailLiftInfoLoadingScreen />
+                    )}
                 </Box>
                 <Box display={"flex"} flexDirection={"column"} alignItems={"center"}>
                     <Typography style={{ fontSize: 24, fontWeight: 500 }}>Lifts Open</Typography>
-                    <LiftsInfo totalOpenLifts={totalOpenLifts} totalLifts={totalLifts} />
+                    {totalOpenLifts && totalLifts ? (
+                        <LiftsInfo totalOpenLifts={totalOpenLifts} totalLifts={totalLifts} />
+                    ) : (
+                        <TrailLiftInfoLoadingScreen />
+                    )}
                 </Box>
             </Box>
             <Box width={"100%"} height={"100%"} mb={-1} ml={-3}>
-                <SnowfallChart snowfallData={snowfallData} />
+                {snowfallData ? <SnowfallChart snowfallData={snowfallData} /> : <SnowfallChartLoadingScreen />}
             </Box>
         </>
     );
 };
 
 const getFullMonthData = (snowfallData: any) => {
+    if (!snowfallData) {
+        return null;
+    }
     const transformData = snowfallData.SnowfallEvents.map((snowfallEvent: any) => ({
         SnowIn: snowfallEvent.SnowIn,
         time: DateTime.fromISO(snowfallEvent.CreateDate).toMillis()

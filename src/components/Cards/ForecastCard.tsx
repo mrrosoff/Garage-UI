@@ -6,6 +6,23 @@ import { DateTime } from "luxon";
 import callExternalAPIOnInterval from "../../hooks/callExternalAPIOnInterval";
 import { grey } from "@mui/material/colors";
 
+
+type WeatherForecast = {
+    avewind: {mph: string, kph: string, dir: string},
+    conditions: string,
+    date: string,
+    forecasted_snow_cm: number,
+    forecasted_snow_day_cm: string,
+    forecasted_snow_day_in: string,
+    forecasted_snow_in: number,
+    icon: string,
+    skies: string,
+    temp_high_c: string,
+    temp_high_f: string,
+    temp_low_c: string,
+    temp_low_f: string,
+}
+
 const ForecastCard = () => {
     const theme = useTheme();
     const { VITE_TIME_INTERVAL, VITE_SKI_RESORT_ID } = import.meta.env;
@@ -16,7 +33,7 @@ const ForecastCard = () => {
 
     const forecastData = resortData?.Forecast;
     const days = ["Two", "Three", "Four", "Five"];
-
+   
     return (
         <Box
             p={2}
@@ -41,7 +58,7 @@ const ForecastCard = () => {
             >
                 {forecastData ? (
                     <ForecastWeather
-                        weatherForecast={days.map((day) => forecastData[`${day}Day`])}
+                        weatherForecast={days.map((day) => forecastData[`${day}Day`] as WeatherForecast)}
                     />
                 ) : (
                     <LoadingScreen />
@@ -64,7 +81,7 @@ const LoadingScreen = () => {
     );
 };
 
-const ForecastWeather = (props: any) => {
+const ForecastWeather = (props: { weatherForecast: WeatherForecast[] }) => {
     const { weatherForecast } = props;
     return (
         <>
