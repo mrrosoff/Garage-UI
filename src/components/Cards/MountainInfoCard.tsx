@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
 import {
     Box,
@@ -6,11 +6,7 @@ import {
     Dialog,
     DialogActions,
     DialogContent,
-    DialogContentText,
-    DialogTitle,
-    Grid,
     IconButton,
-    Modal,
     Typography,
     useTheme,
     LinearProgress,
