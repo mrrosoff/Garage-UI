@@ -12,11 +12,13 @@ import {
     IconButton,
     Modal,
     Typography,
-    useTheme
+    useTheme,
+    LinearProgress
 } from "@mui/material";
 import { grey, blue } from "@mui/material/colors";
 import VideocamIcon from "@mui/icons-material/Videocam";
 import CloseIcon from "@mui/icons-material/Close";
+
 import {
     ComposedChart,
     Area,
@@ -24,8 +26,6 @@ import {
     XAxis,
     YAxis,
     CartesianGrid,
-    Tooltip,
-    Legend,
     ResponsiveContainer,
     LabelList,
     PieChart,
@@ -48,19 +48,6 @@ const MountainInfoCard = () => {
     const snowReport = resortData?.SnowReport;
     const mountainAreas = resortData?.MountainAreas;
 
-    // TODO: Replace with loading screen
-    if (!snowfallData || !snowReport || !mountainAreas) {
-        return null;
-    }
-
-    const fullMonthData = getFullMonthData(snowfallData);
-
-    const totalOpenLifts = snowReport.TotalOpenLifts;
-    const totalLifts = snowReport.TotalLifts;
-
-    const totalOpenTrails = snowReport.TotalOpenTrails;
-    const totalTrails = snowReport.TotalTrails;
-
     return (
         <Box
             p={2}
@@ -79,25 +66,53 @@ const MountainInfoCard = () => {
                 <LiveStreamModal />
             </Box>
             <Box pt={2} flexGrow={1} display={"flex"} flexDirection={"column"}>
-                <Box display={"flex"} justifyContent={"space-around"}>
-                    <Box display={"flex"} flexDirection={"column"} alignItems={"center"}>
-                        <Typography style={{ fontSize: 24, fontWeight: 500 }}>
-                            Trails Open
-                        </Typography>
-                        <TrailInfo totalOpenTrails={totalOpenTrails} totalTrails={totalTrails} />
-                    </Box>
-                    <Box display={"flex"} flexDirection={"column"} alignItems={"center"}>
-                        <Typography style={{ fontSize: 24, fontWeight: 500 }}>
-                            Lifts Open
-                        </Typography>
-                        <LiftsInfo totalOpenLifts={totalOpenLifts} totalLifts={totalLifts} />
-                    </Box>
-                </Box>
-                <Box width={"100%"} height={"100%"} mb={-1} ml={-3}>
-                    <SnowfallChart snowfallData={fullMonthData} />
-                </Box>
+                {snowfallData && snowReport && mountainAreas ? (
+                    <TrailsOpenAndSnowfallChart
+                        totalOpenLifts={snowReport.TotalOpenLifts}
+                        totalLifts={snowReport.TotalLifts}
+                        totalOpenTrails={snowReport.TotalOpenTrails}
+                        totalTrails={snowReport.TotalTrails}
+                        snowfallData={getFullMonthData(snowfallData)}
+                    />
+                ) : (
+                    <LoadingScreen />
+                )}
             </Box>
         </Box>
+    );
+};
+
+const LoadingScreen = () => {
+    return (
+        <Box
+            sx={{ width: "100%", height: "100%", display: "flex", flexDirection: "column", pb: 40 }}
+        >
+            <Box sx={{ flexGrow: 1 }} />
+            <Box>
+                <LinearProgress sx={{ height: 8 }} />
+            </Box>
+        </Box>
+    );
+};
+
+const TrailsOpenAndSnowfallChart = (props: any) => {
+    const { totalOpenLifts, totalLifts, totalOpenTrails, totalTrails, snowfallData } = props;
+    return (
+        <>
+            <Box display={"flex"} justifyContent={"space-around"}>
+                <Box display={"flex"} flexDirection={"column"} alignItems={"center"}>
+                    <Typography style={{ fontSize: 24, fontWeight: 500 }}>Trails Open</Typography>
+                    <TrailInfo totalOpenTrails={totalOpenTrails} totalTrails={totalTrails} />
+                </Box>
+                <Box display={"flex"} flexDirection={"column"} alignItems={"center"}>
+                    <Typography style={{ fontSize: 24, fontWeight: 500 }}>Lifts Open</Typography>
+                    <LiftsInfo totalOpenLifts={totalOpenLifts} totalLifts={totalLifts} />
+                </Box>
+            </Box>
+            <Box width={"100%"} height={"100%"} mb={-1} ml={-3}>
+                <SnowfallChart snowfallData={snowfallData} />
+            </Box>
+        </>
     );
 };
 

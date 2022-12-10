@@ -122,6 +122,9 @@
 .wi-day-snow-thunderstorm:before {
     content: "\f06b";
 }
+.wi-day-blizzard:before {
+    content: "\f076";
+}
 .wi-day-snow-wind:before {
     content: "\f065";
 }
@@ -262,6 +265,9 @@
 }
 .wi-night-snow-wind:before {
     content: "\f066";
+}
+.wi-night-blizzard:before {
+    content: "\f076";
 }
 .wi-night-sprinkle:before {
     content: "\f039";
@@ -1012,6 +1018,9 @@
 }
 .wi-forecast-io-partly-cloudy-day:before {
     content: "\f002";
+}
+.wi-forecast-io-mostly_sunny:before {
+    content: "\f00c";
 }
 .wi-forecast-io-partly_cloudy:before {
     content: "\f002";

@@ -1,16 +1,4 @@
-import React from "react";
-
-import { Box, Grid, Typography, useTheme } from "@mui/material";
-
-import {
-    CartesianGrid,
-    ResponsiveContainer,
-    XAxis,
-    YAxis,
-    BarChart,
-    Bar,
-    LabelList
-} from "recharts";
+import { Box, Grid, LinearProgress, Typography, useTheme } from "@mui/material";
 
 import { grey } from "@mui/material/colors";
 import { DateTime } from "luxon";
@@ -26,11 +14,6 @@ const TodayInfoCard = () => {
         `https://mtnpowder.com/feed?resortId=${VITE_SKI_RESORT_ID}`
     );
     const todaysWeather = resortData?.Forecast?.OneDay;
-
-    // TODO: Replace with loading screen
-    if (!todaysWeather) {
-        return null;
-    }
 
     return (
         <Box
@@ -51,24 +34,47 @@ const TodayInfoCard = () => {
                 </Grid>
             </Grid>
             <Box pt={5} flexGrow={1} display={"flex"}>
-                <span
-                    className={`wi wi-${dayOrNight}-${todaysWeather.conditions}`}
-                    style={{ fontSize: 80 }}
-                />
-                <Box pt={2} pl={10} flexGrow={1}>
-                    <Box>
-                        <Typography style={{ fontSize: 28 }}>
-                            {DateTime.fromISO(todaysWeather.date).toFormat("EEE MMM dd")}
-                        </Typography>
-                    </Box>
-                    <Box pt={2}>
-                        <Typography style={{ fontSize: 22 }}>
-                            {todaysWeather.temp_high_f} °F / {todaysWeather.temp_low_f} °F
-                        </Typography>
-                    </Box>
-                </Box>
+                {todaysWeather ? (
+                    <TodaysWeather todaysWeather={todaysWeather} dayOrNight={dayOrNight} />
+                ) : (
+                    <LoadingScreen />
+                )}
             </Box>
         </Box>
+    );
+};
+
+const LoadingScreen = () => {
+    return (
+        <Box sx={{ width: "100%", height: "100%", display: "flex", flexDirection: "column", p: 2 }}>
+            <Box sx={{ flexGrow: 1 }} />
+            <Box>
+                <LinearProgress sx={{ height: 8 }} />
+            </Box>
+        </Box>
+    );
+};
+
+const TodaysWeather = (props: any) => {
+    return (
+        <>
+            <span
+                className={`wi wi-${props.dayOrNight}-${props.todaysWeather.conditions}`}
+                style={{ fontSize: 80 }}
+            />
+            <Box pt={2} pl={10} flexGrow={1}>
+                <Box>
+                    <Typography style={{ fontSize: 28 }}>
+                        {DateTime.fromISO(props.todaysWeather.date).toFormat("EEE MMM dd")}
+                    </Typography>
+                </Box>
+                <Box pt={2}>
+                    <Typography style={{ fontSize: 22 }}>
+                        {props.todaysWeather.temp_high_f} °F / {props.todaysWeather.temp_low_f} °F
+                    </Typography>
+                </Box>
+            </Box>
+        </>
     );
 };
 
