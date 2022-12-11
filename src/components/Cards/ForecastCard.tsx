@@ -41,7 +41,6 @@ const ForecastCard = () => {
             display={"flex"}
             flexDirection={"column"}
             sx={{
-
                 height: "100%"
             }}
         >
