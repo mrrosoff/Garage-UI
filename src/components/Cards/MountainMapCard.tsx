@@ -12,7 +12,7 @@ import {
     SelectChangeEvent,
     useTheme
 } from "@mui/material";
-import { grey } from "@mui/material/colors";
+import { grey, red } from "@mui/material/colors";
 import VideocamIcon from "@mui/icons-material/Videocam";
 import CloseIcon from "@mui/icons-material/Close";
 
@@ -28,7 +28,7 @@ const MountainMapCard = () => {
             <Box pt={1} pl={1}>
                 <LiveStreams />
             </Box>
-            <Box pt={80} pl={1}>
+            <Box pt={81} pl={1}>
                 <LiftAndTrailStatus />
             </Box>
         </Box>
@@ -70,9 +70,7 @@ const LiftAndTrailStatus = () => {
                 borderWidth: 2,
                 borderStyle: "solid",
                 backgroundColor:
-                    theme.palette.mode === "dark"
-                        ? theme.palette.neutral.dark
-                        : theme.palette.neutral.light,
+                    theme.palette.mode === "dark" ? "#121212" : theme.palette.neutral.light,
                 borderRadius: 5,
                 position: "absolute",
                 width: "30%"
@@ -102,28 +100,30 @@ const LiftAndTrailStatus = () => {
 
 function CustomLabel(props: any) {
     const { cx, cy } = props.viewBox;
+    const theme = useTheme();
+    const textColor = theme.palette.mode === "dark" ? theme.palette.neutral.light : "#121212";
     return (
         <>
             <text
                 x={cx}
-                y={cy - 5}
-                fill="rgba(0, 0, 0, 0.87)"
-                className="recharts-text recharts-label"
+                y={cy - 10}
+                fill={textColor}
                 textAnchor="middle"
                 dominantBaseline="central"
+                fontSize={22}
+                fontWeight={500}
             >
-                <tspan alignmentBaseline="middle" fontSize="22px">
-                    {props.value2}
-                </tspan>
+                {props.value2}
             </text>
             <text
+                fill={textColor}
                 x={cx}
-                y={cy + 20}
-                className="recharts-text recharts-label"
+                y={cy + 15}
                 textAnchor="middle"
                 dominantBaseline="central"
+                fontSize={16}
             >
-                <tspan fontSize="16px">{props.value1}</tspan>
+                {props.value1}
             </text>
         </>
     );
@@ -186,9 +186,7 @@ const LiveStreams = (props: any) => {
                     }}
                     sx={{
                         backgroundColor:
-                            theme.palette.mode === "dark"
-                                ? theme.palette.neutral.dark
-                                : theme.palette.neutral.main,
+                            theme.palette.mode === "dark" ? "#121212" : theme.palette.neutral.main,
                         borderRadius: 5
                     }}
                     renderValue={() => {
