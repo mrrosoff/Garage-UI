@@ -44,7 +44,7 @@ const MountainInfoCard = () => {
     );
     const snowReport = resortData?.SnowReport;
     const mountainAreas = resortData?.MountainAreas;
-
+    console.log(mountainAreas)
     return (
         <Box
             p={2}
