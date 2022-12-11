@@ -15,11 +15,10 @@ const DashBoard = () => {
                     <Divider />
                 </Box>
                 <Box pt={3} flexGrow={1}>
-                    <ForecastCard />
+                   
                 </Box>
             </Box>
             <Box flexGrow={1} height={"100%"} >
-                {/* <MountainInfoCard /> */}
                 <iframe
                     id="Steamboat Map"
                     src="https://vicomap-cdn.resorts-interactive.com/map/1800?fullscreen=true&menu=3.7,3.10,3.14&openLiftAnimation=true&openLiftColor=green&liftHighlightOpacity=0.1&backgroundOpacity=0.5"

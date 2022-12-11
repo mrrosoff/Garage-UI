@@ -17,6 +17,14 @@ const WeatherCard = () => {
     const todaysWeather = resortData?.Forecast?.OneDay;
 
     const tomorrowsWeather = resortData?.Forecast?.TwoDay;
+
+    console.log(resortData?.Forecast);
+    const snowForecast = [
+        resortData?.Forecast?.TwoDay.forecasted_snow_day_in,
+        resortData?.Forecast?.ThreeDay.forecasted_snow_day_in,
+        resortData?.Forecast?.FourDay.forecasted_snow_day_in
+    ];
+
     return (
         <Box
             p={2}
@@ -26,17 +34,21 @@ const WeatherCard = () => {
             display={"flex"}
             flexDirection={"column"}
         >
-            <Grid item container justifyContent={"space-between"}>
-                <Grid item>
-                    <Typography style={{ fontSize: 32, fontWeight: 500 }}>Weather</Typography>
-                </Grid>
-            </Grid>
-            <Box pt={5} flexGrow={1} display={"flex"}>
+            <Typography style={{ fontSize: 32, fontWeight: 500 }}>Weather</Typography>
+
+            <Box pt={1} flexGrow={1} display={"flex"}>
                 {todaysWeather && tomorrowsWeather ? (
-                    <>
-                        <TodaysWeather todaysWeather={todaysWeather} dayOrNight={dayOrNight} />
-                        <TomorrowsWeather tomorrowsWeather={tomorrowsWeather} />
-                    </>
+                    <Box width={"100%"} flexDirection={"column"}>
+                        <Box display={"flex"} alignItems={"center"}>
+                            <TodaysWeather todaysWeather={todaysWeather} dayOrNight={dayOrNight} />
+                        </Box>
+                        <Box pt={4} display={"flex"}>
+                            <TomorrowsWeather tomorrowsWeather={tomorrowsWeather} />
+                        </Box>
+                        <Box pt={4}>
+                            <SnowForecast snowForecast={snowForecast} />
+                        </Box>
+                    </Box>
                 ) : (
                     <LoadingScreen />
                 )}
@@ -60,11 +72,15 @@ const TodaysWeather = (props: any) => {
     const todaysConditions = props.todaysWeather.conditions.replace("_", "-");
     return (
         <>
-            <span
-                className={`wi wi-${props.dayOrNight}-${todaysConditions}`}
-                style={{ fontSize: 80 }}
-            />
-            <Box pt={2} pl={10} flexGrow={1}>
+            <Box flexDirection={"column"}>
+                <Typography style={{ fontSize: 22 }}> Today </Typography>
+                <span
+                    className={`wi wi-${props.dayOrNight}-${todaysConditions}`}
+                    style={{ fontSize: 80 }}
+                />
+            </Box>
+
+            <Box pt={4} pl={10} flexGrow={1}>
                 <Box>
                     <Typography style={{ fontSize: 28 }}>
                         {DateTime.fromISO(props.todaysWeather.date).toFormat("EEE MMM dd")}
@@ -83,34 +99,58 @@ const TodaysWeather = (props: any) => {
 const TomorrowsWeather = (props: any) => {
     const tomorrowsInfo = props.tomorrowsWeather;
     return (
-        <Fragment>
-            <Box
-                mb={1}
-                pl={1}
-                pr={1}
-                display={"flex"}
-                justifyContent={"space-between"}
-                alignItems={"end"}
-            >
+        <Box flexDirection={"column"} width={"100%"}>
+            <Box>
+                <Typography style={{ fontSize: 22 }}> Tomorrow </Typography>
+            </Box>
+            <Fragment>
                 <Box
-                    className={`wi wi-forecast-io-${tomorrowsInfo.conditions}`}
-                    style={{ fontSize: 35 }}
-                />
-                <Box>
+                    display={"flex"}
+                    justifyContent={"space-between"}
+                    alignItems={"center"}
+                    width={"100%"}
+                >
+                    <Box
+                        className={`wi wi-forecast-io-${tomorrowsInfo.conditions}`}
+                        style={{ fontSize: 35 }}
+                    />
+                    <Box>
+                        <Typography>
+                            {DateTime.fromISO(tomorrowsInfo.date).toFormat("EEE MMM dd")}
+                        </Typography>
+                        <Typography>
+                            {tomorrowsInfo.temp_high_f} °F / {tomorrowsInfo.temp_low_f} °F
+                        </Typography>
+                    </Box>
+                    <Typography>{tomorrowsInfo.forecasted_snow_in} in</Typography>
                     <Typography>
-                        {DateTime.fromISO(tomorrowsInfo.date).toFormat("EEE MMM dd")}
-                    </Typography>
-                    <Typography>
-                        {tomorrowsInfo.temp_high_f} °F / {tomorrowsInfo.temp_low_f} °F
+                        {tomorrowsInfo.avewind ? tomorrowsInfo.avewind.dir : "N/A"}{" "}
+                        {tomorrowsInfo.avewind ? tomorrowsInfo.avewind.mph : "0mph"}
                     </Typography>
                 </Box>
-                <Typography>{tomorrowsInfo.forecasted_snow_in} in</Typography>
-                <Typography>
-                    {tomorrowsInfo.avewind ? tomorrowsInfo.avewind.dir : "N/A"}{" "}
-                    {tomorrowsInfo.avewind ? tomorrowsInfo.avewind.mph : "0mph"}
-                </Typography>
+            </Fragment>
+        </Box>
+    );
+};
+
+const SnowForecast = (props: any) => {
+    return (
+        <>
+            <Typography sx={{ fontSize: 22 }}> Forecasted Snowfall </Typography>
+            <Box
+                display={"flex"}
+                justifyContent={"space-around"}
+                marginRight={"auto"}
+                flexDirection={"row"}
+                pt={0.5}
+            >
+                <Typography> {props.snowForecast[0]} in </Typography>
+                <Divider orientation="vertical" flexItem />
+                <Typography> {props.snowForecast[1]} in </Typography>
+                <Divider orientation="vertical" flexItem />
+                <Typography> {props.snowForecast[2]} in </Typography>
             </Box>
-        </Fragment>
+        </>
     );
 };
 
