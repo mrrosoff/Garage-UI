@@ -18,7 +18,6 @@ const WeatherCard = () => {
 
     const tomorrowsWeather = resortData?.Forecast?.TwoDay;
 
-    console.log(resortData?.Forecast);
     const snowForecast = [
         resortData?.Forecast?.TwoDay.forecasted_snow_day_in,
         resortData?.Forecast?.ThreeDay.forecasted_snow_day_in,

@@ -1,6 +1,20 @@
 import { useState } from "react";
 
-import { Box, Button, Dialog, DialogActions, DialogContent, IconButton } from "@mui/material";
+import {
+    Box,
+    Button,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    FormControl,
+    IconButton,
+    InputLabel,
+    MenuItem,
+    Select,
+    SelectChangeEvent,
+    ThemeProvider,
+    useTheme
+} from "@mui/material";
 import { grey } from "@mui/material/colors";
 import VideocamIcon from "@mui/icons-material/Videocam";
 import CloseIcon from "@mui/icons-material/Close";
@@ -33,21 +47,61 @@ const SteamboatInteractiveMap = () => {
     );
 };
 
-const LiveStreams = (props: any) => {
-    const { VITE_YOUTUBE_LIVE_STREAM_LINK, VITE_LIVE_STREAM_BUTTON_TITLE } = import.meta.env;
-    const [open, setOpen] = useState(false);
 
+const LiveStreams = (props: any) => {
+    const { VITE_YOUTUBE_LIVE_STREAM_LINKS, VITE_LIVE_STREAM_BUTTON_TITLES } = import.meta.env;
+    const [open, setOpen] = useState(false);
+    const [liveStreamLink, setLiveStreamLink] = useState("");
+  
     return (
         <>
-            <Button
-                sx={{ borderRadius: 5 }}
-                startIcon={<VideocamIcon />}
-                variant={"contained"}
-                size={"medium"}
-                onClick={() => setOpen(true)}
-            >
-                {VITE_LIVE_STREAM_BUTTON_TITLE}
-            </Button>
+            <FormControl size="medium" sx={{ width: "13.5%" }}>
+                <Select
+                    displayEmpty
+                    disableUnderline
+                    value={liveStreamLink}
+                    onChange={(event: SelectChangeEvent) => {
+                        event.target.value;
+                        setLiveStreamLink(event.target.value);
+                        setOpen(true);
+                    }}
+                    sx={{
+                        backgroundColor: grey[900],
+                        borderRadius: 5
+                    }}
+                    renderValue={() => {
+                        return (
+                            <Box
+                                sx={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    flexDirection: "row",
+                                    width: "100%",
+                                    height: "100%"
+                                }}
+                            >
+                                <VideocamIcon />
+                                <Box sx={{ ml: 1 }}>Show Live Streams</Box>
+                            </Box>
+                        );
+                    }}
+                    variant={"standard"}
+                >
+                    {VITE_LIVE_STREAM_BUTTON_TITLES.split(",").map(
+                        (title: string, index: number) => {
+                            return (
+                                <MenuItem
+                                    key={index}
+                                    value={VITE_YOUTUBE_LIVE_STREAM_LINKS.split(",")[index]}
+                                >
+                                    {title}
+                                </MenuItem>
+                            );
+                        }
+                    )}
+                </Select>
+            </FormControl>
             <Dialog
                 fullScreen={true}
                 open={open}
@@ -63,7 +117,7 @@ const LiveStreams = (props: any) => {
                     <iframe
                         width="100%"
                         height="100%"
-                        src={VITE_YOUTUBE_LIVE_STREAM_LINK + "?autoplay=1"}
+                        src={liveStreamLink + "?autoplay=1"}
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                         allowFullScreen
                     />
