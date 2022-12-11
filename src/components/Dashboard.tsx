@@ -1,8 +1,7 @@
 import { Box, Divider } from "@mui/material";
 
 import WeatherCard from "./Cards/WeatherCard";
-import MountainInfoCard from "./Cards/MountainInfoCard";
-import ForecastCard from "./Cards/ForecastCard";
+import MountainMapCard from "./Cards/MountainMapCard";
 
 const DashBoard = () => {
     return (
@@ -19,14 +18,7 @@ const DashBoard = () => {
                 </Box>
             </Box>
             <Box flexGrow={1} height={"100%"} >
-                <iframe
-                    id="Steamboat Map"
-                    src="https://vicomap-cdn.resorts-interactive.com/map/1800?fullscreen=true&menu=3.7,3.10,3.14&openLiftAnimation=true&openLiftColor=green&liftHighlightOpacity=0.1&backgroundOpacity=0.5"
-                    width="100%"
-                    height="100%"
-                    allowFullScreen
-                    title="Vicomap"
-                />
+                <MountainMapCard />
             </Box>
         </Box>
     );
