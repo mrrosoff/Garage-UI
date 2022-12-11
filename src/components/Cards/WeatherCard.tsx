@@ -17,7 +17,6 @@ const WeatherCard = () => {
     const todaysWeather = resortData?.Forecast?.OneDay;
 
     const tomorrowsWeather = resortData?.Forecast?.TwoDay;
-
     const snowForecast = [
         resortData?.Forecast?.TwoDay.forecasted_snow_day_in,
         resortData?.Forecast?.ThreeDay.forecasted_snow_day_in,
@@ -121,7 +120,6 @@ const TomorrowsWeather = (props: any) => {
                             {tomorrowsInfo.temp_high_f} °F / {tomorrowsInfo.temp_low_f} °F
                         </Typography>
                     </Box>
-                    <Typography>{tomorrowsInfo.forecasted_snow_in} in</Typography>
                     <Typography>
                         {tomorrowsInfo.avewind ? tomorrowsInfo.avewind.dir : "N/A"}{" "}
                         {tomorrowsInfo.avewind ? tomorrowsInfo.avewind.mph : "0mph"}
