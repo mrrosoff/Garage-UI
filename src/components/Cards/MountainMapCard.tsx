@@ -12,7 +12,7 @@ import {
     SelectChangeEvent,
     useTheme
 } from "@mui/material";
-import { grey, red } from "@mui/material/colors";
+import { grey } from "@mui/material/colors";
 import VideocamIcon from "@mui/icons-material/Videocam";
 import CloseIcon from "@mui/icons-material/Close";
 
@@ -28,7 +28,12 @@ const MountainMapCard = () => {
             <Box pt={1} pl={1}>
                 <LiveStreams />
             </Box>
-            <Box pt={81} pl={1}>
+            <Box
+                pl={1}
+                width={"100%"}
+                height={"17%"}
+                sx={{ position: "absolute", bottom: 0 }}
+            >
                 <LiftAndTrailStatus />
             </Box>
         </Box>
