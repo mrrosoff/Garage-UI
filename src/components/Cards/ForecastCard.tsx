@@ -32,7 +32,7 @@ const ForecastCard = () => {
     );
 
     const forecastData = resortData?.Forecast;
-    const days = ["Two", "Three", "Four", "Five"];
+    const days = ["Two"];
    
     return (
         <Box
@@ -41,10 +41,7 @@ const ForecastCard = () => {
             display={"flex"}
             flexDirection={"column"}
             sx={{
-                borderWidth: 2,
-                borderStyle: "solid",
-                borderColor: grey[300],
-                borderRadius: 5,
+
                 height: "100%"
             }}
         >

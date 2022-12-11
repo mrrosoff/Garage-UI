@@ -1,10 +1,11 @@
-import { Box, Grid, LinearProgress, Typography, useTheme } from "@mui/material";
+import { Box, Divider, Grid, LinearProgress, Typography, useTheme } from "@mui/material";
 
 import { grey } from "@mui/material/colors";
 import { DateTime } from "luxon";
+import { Fragment } from "react";
 import callExternalAPIOnInterval from "../../hooks/callExternalAPIOnInterval";
 
-const TodayInfoCard = () => {
+const WeatherCard = () => {
     const theme = useTheme();
     let dayOrNight = theme.palette.mode === "dark" ? "night" : "day";
 
@@ -15,14 +16,11 @@ const TodayInfoCard = () => {
     );
     const todaysWeather = resortData?.Forecast?.OneDay;
 
+    const tomorrowsWeather = resortData?.Forecast?.TwoDay;
     return (
         <Box
             p={2}
             sx={{
-                borderWidth: 2,
-                borderStyle: "solid",
-                borderColor: grey[300],
-                borderRadius: 5,
                 height: "100%"
             }}
             display={"flex"}
@@ -30,12 +28,15 @@ const TodayInfoCard = () => {
         >
             <Grid item container justifyContent={"space-between"}>
                 <Grid item>
-                    <Typography style={{ fontSize: 32, fontWeight: 500 }}>Today</Typography>
+                    <Typography style={{ fontSize: 32, fontWeight: 500 }}>Weather</Typography>
                 </Grid>
             </Grid>
             <Box pt={5} flexGrow={1} display={"flex"}>
-                {todaysWeather ? (
-                    <TodaysWeather todaysWeather={todaysWeather} dayOrNight={dayOrNight} />
+                {todaysWeather && tomorrowsWeather ? (
+                    <>
+                        <TodaysWeather todaysWeather={todaysWeather} dayOrNight={dayOrNight} />
+                        <TomorrowsWeather tomorrowsWeather={tomorrowsWeather} />
+                    </>
                 ) : (
                     <LoadingScreen />
                 )}
@@ -56,7 +57,7 @@ const LoadingScreen = () => {
 };
 
 const TodaysWeather = (props: any) => {
-    const todaysConditions = props.todaysWeather.conditions.replace('_', '-');
+    const todaysConditions = props.todaysWeather.conditions.replace("_", "-");
     return (
         <>
             <span
@@ -79,4 +80,38 @@ const TodaysWeather = (props: any) => {
     );
 };
 
-export default TodayInfoCard;
+const TomorrowsWeather = (props: any) => {
+    const tomorrowsInfo = props.tomorrowsWeather;
+    return (
+        <Fragment>
+            <Box
+                mb={1}
+                pl={1}
+                pr={1}
+                display={"flex"}
+                justifyContent={"space-between"}
+                alignItems={"end"}
+            >
+                <Box
+                    className={`wi wi-forecast-io-${tomorrowsInfo.conditions}`}
+                    style={{ fontSize: 35 }}
+                />
+                <Box>
+                    <Typography>
+                        {DateTime.fromISO(tomorrowsInfo.date).toFormat("EEE MMM dd")}
+                    </Typography>
+                    <Typography>
+                        {tomorrowsInfo.temp_high_f} °F / {tomorrowsInfo.temp_low_f} °F
+                    </Typography>
+                </Box>
+                <Typography>{tomorrowsInfo.forecasted_snow_in} in</Typography>
+                <Typography>
+                    {tomorrowsInfo.avewind ? tomorrowsInfo.avewind.dir : "N/A"}{" "}
+                    {tomorrowsInfo.avewind ? tomorrowsInfo.avewind.mph : "0mph"}
+                </Typography>
+            </Box>
+        </Fragment>
+    );
+};
+
+export default WeatherCard;
