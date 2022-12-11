@@ -6,7 +6,7 @@ import MountainMapCard from "./Cards/MountainMapCard";
 const DashBoard = () => {
     return (
         <Box height={"100%"} display={"flex"} flexDirection={"row"} p={0}>
-            <Box width={"22%"} height={"100%"} display={"flex"} flexDirection={"column"} p={2}>
+            <Box width={"25%"} height={"100%"} display={"flex"} flexDirection={"column"} p={2}>
                 <Box width={"100%"} minHeight={"33%"}>
                     <WeatherCard />
                 </Box>

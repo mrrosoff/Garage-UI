@@ -15,7 +15,7 @@ import {
     ThemeProvider,
     useTheme
 } from "@mui/material";
-import { grey } from "@mui/material/colors";
+import { grey, blue, green } from "@mui/material/colors";
 import VideocamIcon from "@mui/icons-material/Videocam";
 import CloseIcon from "@mui/icons-material/Close";
 
@@ -39,7 +39,7 @@ const SteamboatInteractiveMap = () => {
         <iframe
             id="Steamboat Map"
             src="https://vicomap-cdn.resorts-interactive.com/map/1800?fullscreen=true&menu=3.7,3.10,3.14&openLiftAnimation=true&openLiftColor=green&liftHighlightOpacity=0.1&backgroundOpacity=0.5"
-            width="100%"
+            width="77%"
             height="100%"
             allowFullScreen
             title="Vicomap"
@@ -47,15 +47,14 @@ const SteamboatInteractiveMap = () => {
     );
 };
 
-
 const LiveStreams = (props: any) => {
     const { VITE_YOUTUBE_LIVE_STREAM_LINKS, VITE_LIVE_STREAM_BUTTON_TITLES } = import.meta.env;
     const [open, setOpen] = useState(false);
     const [liveStreamLink, setLiveStreamLink] = useState("");
-  
+    const theme = useTheme();
     return (
         <>
-            <FormControl size="medium" sx={{ width: "13.5%" }}>
+            <FormControl size="medium" sx={{ width: "18%" }}>
                 <Select
                     displayEmpty
                     disableUnderline
@@ -66,7 +65,10 @@ const LiveStreams = (props: any) => {
                         setOpen(true);
                     }}
                     sx={{
-                        backgroundColor: grey[900],
+                        backgroundColor:
+                            theme.palette.mode === "dark"
+                                ? theme.palette.neutral.dark
+                                : theme.palette.neutral.main,
                         borderRadius: 5
                     }}
                     renderValue={() => {
