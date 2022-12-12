@@ -60,15 +60,14 @@ const LiftAndTrailStatus = () => {
         VITE_TIME_INTERVAL,
         `https://mtnpowder.com/feed?resortId=${VITE_SKI_RESORT_ID}`
     )?.SnowReport;
-    console.log(snowReport);
+    
     const totalOpenLifts = snowReport?.TotalOpenLifts;
     const totalLifts = snowReport?.TotalLifts;
     const totalOpenTrails = snowReport?.TotalOpenTrails;
     const totalTrails = snowReport?.TotalTrails;
     const totalOpenNightTrails = snowReport?.OpenNightTrails;
     const totalNightTrails = snowReport?.TotalNightTrails;
-    console.log(totalOpenNightTrails);
-    console.log(totalNightTrails);
+
     return (
         <Box
             sx={{
@@ -141,7 +140,7 @@ const MountainPieChart = (props: any) => {
         { name: "All Available", value: totalAmount }
     ];
     const theme = useTheme();
-    console.log(data);
+    
     const COLORS = [theme.palette.primary.light, grey[300]];
 
     return (

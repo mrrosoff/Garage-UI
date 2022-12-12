@@ -15,8 +15,8 @@ const WeatherCard = () => {
         `https://mtnpowder.com/feed?resortId=${VITE_SKI_RESORT_ID}`
     );
     const todaysWeather = resortData?.Forecast?.OneDay;
-
     const tomorrowsWeather = resortData?.Forecast?.TwoDay;
+
     const snowForecast = [
         resortData?.Forecast?.TwoDay.forecasted_snow_day_in,
         resortData?.Forecast?.ThreeDay.forecasted_snow_day_in,
@@ -32,7 +32,7 @@ const WeatherCard = () => {
             display={"flex"}
             flexDirection={"column"}
         >
-            <Typography style={{ fontSize: 32, fontWeight: 500 }}>Weather</Typography>
+            <Typography style={{ fontSize: 28, fontWeight: 500 }}>Weather</Typography>
 
             <Box pt={1} flexGrow={1} display={"flex"}>
                 {todaysWeather && tomorrowsWeather ? (
