@@ -137,6 +137,9 @@
 .wi-day-sunny-overcast:before {
     content: "\f00c";
 }
+.wi-day-mostly-sunny:before {
+    content: "\f00d";
+}
 .wi-day-thunderstorm:before {
     content: "\f010";
 }
@@ -154,6 +157,9 @@
 }
 .wi-day-mostly-cloudy:before {
     content: "\f013";
+}
+.wi-day-clear:before {
+    content: "\f00d";
 }
 .wi-day-partly-cloudy:before {
     content: "\f083";
@@ -1842,6 +1848,9 @@
     content: "\f002";
 }
 .wi-wu-mostlysunny:before {
+    content: "\f00d";
+}
+.wi-wu-mostly-sunny:before {
     content: "\f00d";
 }
 .wi-wu-partlycloudy:before {

@@ -74,7 +74,7 @@ const LiftAndTrailStatus = () => {
                 borderWidth: 2,
                 borderStyle: "solid",
                 backgroundColor:
-                    theme.palette.mode === "dark" ? "#121212" : theme.palette.neutral.light,
+                    theme.palette.mode === "dark" ? "#121212" : theme.palette.neutral.mediumDark,
                 borderRadius: 5,
                 position: "absolute",
                 width: "30%"
