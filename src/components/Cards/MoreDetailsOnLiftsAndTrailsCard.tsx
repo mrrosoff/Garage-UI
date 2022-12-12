@@ -102,10 +102,11 @@ const MoreDetailsOnLiftsAndTrailsCard = () => {
                         width: "100%",
                         maxWidth: 360,
                         overflow: "auto",
-                        maxHeight: 300,
+                        maxHeight: 360,
                         bgcolor:
                             theme.palette.mode === "dark" ? theme.palette.neutral.light : "#121212",
-                        padding: 0
+                        padding: 0,
+                        borderRadius: 5
                     }}
                 >
                     {dataToList.map((data: any, index: number) => (
