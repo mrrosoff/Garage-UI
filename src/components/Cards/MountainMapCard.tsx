@@ -141,7 +141,7 @@ const MountainPieChart = (props: any) => {
     ];
     const theme = useTheme();
     
-    const COLORS = [theme.palette.primary.light, grey[300]];
+    const COLORS = [theme.palette.secondary.light, grey[300]];
 
     return (
         <ResponsiveContainer width={"95%"} height={130}>
@@ -171,7 +171,7 @@ const MountainPieChart = (props: any) => {
     );
 };
 
-const LiveStreams = (props: any) => {
+const LiveStreams = () => {
     const { VITE_YOUTUBE_LIVE_STREAM_LINKS, VITE_LIVE_STREAM_BUTTON_TITLES } = import.meta.env;
     const [open, setOpen] = useState(false);
     const [liveStreamLink, setLiveStreamLink] = useState("");

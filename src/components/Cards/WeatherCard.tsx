@@ -6,6 +6,8 @@ import AirIcon from "@mui/icons-material/Air";
 import WbTwilightIcon from "@mui/icons-material/WbTwilight";
 import callExternalAPIOnInterval from "../../hooks/callExternalAPIOnInterval";
 import AcUnitIcon from "@mui/icons-material/AcUnit";
+import { DateTime } from "luxon";
+import { Fragment } from "react";
 const WeatherCard = () => {
     const theme = useTheme();
     let dayOrNight = theme.palette.mode === "dark" ? "night" : "day";
@@ -15,14 +17,14 @@ const WeatherCard = () => {
         VITE_TIME_INTERVAL,
         `https://mtnpowder.com/feed?resortId=${VITE_SKI_RESORT_ID}`
     );
-    
+
     const todaysWeather = resortData?.CurrentConditions?.Base;
     const tomorrowsWeather = resortData?.Forecast?.TwoDay;
-    
+    console.log(resortData);
     const snowForecast = [
-        resortData?.Forecast?.TwoDay.forecasted_snow_day_in,
-        resortData?.Forecast?.ThreeDay.forecasted_snow_day_in,
-        resortData?.Forecast?.FourDay.forecasted_snow_day_in
+        resortData?.Forecast?.TwoDay,
+        resortData?.Forecast?.ThreeDay,
+        resortData?.Forecast?.FourDay
     ];
 
     return (
@@ -115,7 +117,7 @@ const TodaysWeatherAttributes = (props: any) => {
                 </Box>
                 <Box display={"flex"} flexDirection={"row"} alignItems={"center"}>
                     <ScaleIcon style={{ fontSize: "15", verticalAlign: "middle" }} />
-                    <Typography sx={{ pl: 1 }}>{props.todaysWeather.PressureIN}in</Typography>
+                    <Typography sx={{ pl: 1 }}>{props.todaysWeather.PressureIN} inHg</Typography>
                 </Box>
             </Box>
             <Box>
@@ -186,10 +188,7 @@ const SnowForecast = (props: any) => {
         <>
             <Box display={"flex"} flexDirection={"row"} alignItems={"center"}>
                 <AcUnitIcon style={{ fontSize: 18, verticalAlign: "middle" }} />
-                <Typography sx={{ fontSize: 18, paddingLeft: 0.5 }}>
-                    {" "}
-                    Forecasted Snowfall{" "}
-                </Typography>
+                <Typography sx={{ fontSize: 18, paddingLeft: 0.5 }}>Forecasted Snowfall</Typography>
             </Box>
             <Box
                 display={"flex"}
@@ -198,11 +197,23 @@ const SnowForecast = (props: any) => {
                 flexDirection={"row"}
                 pt={0.5}
             >
-                <Typography> {props.snowForecast[0]} in </Typography>
-                <Divider orientation="vertical" flexItem />
-                <Typography> {props.snowForecast[1]} in </Typography>
-                <Divider orientation="vertical" flexItem />
-                <Typography> {props.snowForecast[2]} in </Typography>
+                {props.snowForecast.map((day: any, index: number) => {
+                    return (
+                        <Fragment key={index}>
+                            <Box flexDirection={"row"} alignContent={"space-evenly"}>
+                                <Typography>
+                                    {" "}
+                                    {DateTime.fromISO(day.date).toFormat("EEE")}
+                                </Typography>
+                                <Typography>{day.forecasted_snow_day_in}"</Typography>
+                            </Box>
+
+                            {index !== props.snowForecast.length - 1 ? (
+                                <Divider orientation="vertical" flexItem />
+                            ) : null}
+                        </Fragment>
+                    );
+                })}
             </Box>
         </>
     );
