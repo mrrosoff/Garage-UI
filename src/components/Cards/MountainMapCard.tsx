@@ -26,10 +26,6 @@ const MountainMapCard = () => {
             <Box height={"100%"} width={"100%"} sx={{ position: "absolute" }}>
                 <SteamboatInteractiveMap />
             </Box>
-            <Box pt={1} pl={1} sx={{ position: "absolute" }}>
-                <LiveStreams />
-            </Box>
-
             <Box
                 width={"80%"}
                 height={"100%"}
@@ -43,7 +39,9 @@ const MountainMapCard = () => {
             >
                 <SnowPatrolInfoCard />
             </Box>
-
+            <Box pt={1} pl={1}>
+                <LiveStreams />
+            </Box>
             <Box pl={1} width={"100%"} height={"17%"} sx={{ position: "absolute", bottom: 0 }}>
                 <LiftAndTrailStatus />
             </Box>
@@ -215,9 +213,6 @@ const LiveStreams = () => {
                 aria-labelledby="responsive-dialog-title"
             >
                 <DialogActions style={{ justifyContent: "space-between" }}>
-                    <IconButton onClick={() => setOpen(false)}>
-                        <CloseIcon />
-                    </IconButton>
                     <FormControl size="medium" sx={{ display: "flex" }}>
                         <Select
                             displayEmpty
@@ -253,6 +248,9 @@ const LiveStreams = () => {
                             )}
                         </Select>
                     </FormControl>
+                    <IconButton onClick={() => setOpen(false)}>
+                        <CloseIcon />
+                    </IconButton>
                 </DialogActions>
                 <DialogContent sx={{ pt: 0 }}>
                     <iframe
