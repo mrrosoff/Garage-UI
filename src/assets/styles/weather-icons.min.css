@@ -164,6 +164,9 @@
 .wi-day-partly-cloudy:before {
     content: "\f083";
 }
+.wi-day-partlycloudy:before {
+    content: "\f083";
+}
 .wi-day-light-wind:before {
     content: "\f0c4";
 }

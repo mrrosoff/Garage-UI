@@ -100,9 +100,9 @@ const MoreDetailsOnLiftsAndTrailsCard = () => {
                     dense
                     sx={{
                         width: "100%",
-                        maxWidth: 360,
+
                         overflow: "auto",
-                        maxHeight: 360,
+                        maxHeight: 300,
                         bgcolor:
                             theme.palette.mode === "dark" ? theme.palette.neutral.light : "#121212",
                         padding: 0,
@@ -156,8 +156,8 @@ const getListItemText = (data: any) => {
         }
 
         return (
-            <ListItemText>
-                <Card variant="outlined">
+            <ListItemText >
+                <Card variant="outlined" sx={{borderRadius: 5}}>
                     <CardContent>
                         <Box
                             flexDirection={"row"}
@@ -198,7 +198,7 @@ const getListItemText = (data: any) => {
 
     return (
         <ListItemText>
-            <Card variant="outlined">
+            <Card variant="outlined" sx={{borderRadius: 5}}>
                 <CardContent>
                     <Typography>{data.Name}</Typography>
                     <Typography sx={{ fontSize: 12 }}>

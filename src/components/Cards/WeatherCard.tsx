@@ -20,7 +20,7 @@ const WeatherCard = () => {
 
     const todaysWeather = resortData?.CurrentConditions?.Base;
     const tomorrowsWeather = resortData?.Forecast?.TwoDay;
-    
+
     const snowForecast = [
         resortData?.Forecast?.TwoDay,
         resortData?.Forecast?.ThreeDay,
@@ -42,10 +42,10 @@ const WeatherCard = () => {
                         <Box display={"flex"} alignItems={"center"}>
                             <TodaysWeather todaysWeather={todaysWeather} dayOrNight={dayOrNight} />
                         </Box>
-                        <Box pt={4} display={"flex"}>
+                        <Box pt={3} display={"flex"}>
                             <TomorrowsWeather tomorrowsWeather={tomorrowsWeather} />
                         </Box>
-                        <Box pt={4} pb={1}>
+                        <Box pt={3} pb={1}>
                             <SnowForecast snowForecast={snowForecast} />
                         </Box>
                     </Box>
@@ -70,6 +70,7 @@ const LoadingScreen = () => {
 
 const TodaysWeather = (props: any) => {
     const todaysConditions = props.todaysWeather.Conditions.replace("_", "-");
+
     return (
         <>
             <Box
@@ -78,9 +79,11 @@ const TodaysWeather = (props: any) => {
                 alignItems={"center"}
                 justifyContent={"center"}
             >
+                <Typography align={"center"} style={{ fontSize: 24 }}>
+                    Steamboat Springs
+                </Typography>
                 <Typography align={"center"} style={{ fontSize: 22, paddingBottom: 2 }}>
-                    {" "}
-                    Steamboat Springs{" "}
+                    {getConditionsInHumanReadableFormat(todaysConditions)}
                 </Typography>
                 <Box flexDirection={"row"} width={"100%"} height={"100%"}>
                     <span
@@ -135,6 +138,15 @@ const TodaysWeatherAttributes = (props: any) => {
 };
 
 function getConditionsInHumanReadableFormat(condition: string) {
+    if (condition.includes("partly") && !condition.includes("-")) {
+        return (
+            condition.substring(0, 1).toUpperCase() +
+            condition.substring(1, condition.indexOf("y") + 1) +
+            " " +
+            condition.charAt(condition.indexOf("y") + 1).toUpperCase() +
+            condition.substring(condition.indexOf("y") + 2, condition.length)
+        );
+    }
     let conditions = condition.split("-");
     for (let i = 0; i < conditions.length; i++) {
         conditions[i] = conditions[i].charAt(0).toUpperCase() + conditions[i].slice(1);
@@ -200,12 +212,18 @@ const SnowForecast = (props: any) => {
                 {props.snowForecast.map((day: any, index: number) => {
                     return (
                         <Fragment key={index}>
-                            <Box flexDirection={"row"} alignContent={"space-evenly"}>
+                            <Box
+                                display={"flex"}
+                                flexDirection={"row"}
+                                alignContent={"space-around"}
+                            >
                                 <Typography>
                                     {" "}
-                                    {DateTime.fromISO(day.date).toFormat("EEE")}
+                                    {DateTime.fromISO(day.date).toFormat("EEE")}:
                                 </Typography>
-                                <Typography>{day.forecasted_snow_day_in}"</Typography>
+                                <Typography style={{ paddingLeft: 4 }}>
+                                    {day.forecasted_snow_day_in}"
+                                </Typography>
                             </Box>
 
                             {index !== props.snowForecast.length - 1 ? (
