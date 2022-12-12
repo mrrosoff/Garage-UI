@@ -80,14 +80,14 @@ const LiftAndTrailStatus = () => {
             justifyContent={"space-around"}
         >
             <MountainPieChart
-                chartting={"Lifts"}
-                totalOpen={totalOpenLifts}
-                totalAmount={totalLifts - totalOpenLifts}
-            />
-            <MountainPieChart
                 chartting={"Trails"}
                 totalOpen={totalOpenTrails}
                 totalAmount={totalTrails - totalOpenTrails}
+            />
+            <MountainPieChart
+                chartting={"Lifts"}
+                totalOpen={totalOpenLifts}
+                totalAmount={totalLifts - totalOpenLifts}
             />
             <MountainPieChart
                 chartting={"Night Trails"}
@@ -137,7 +137,7 @@ const MountainPieChart = (props: any) => {
     ];
     const theme = useTheme();
 
-    const COLORS = [theme.palette.secondary.light, grey[300]];
+    const COLORS = [theme.palette.primary.light, grey[300]];
 
     return (
         <ResponsiveContainer width={"95%"} height={130}>
