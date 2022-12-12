@@ -243,7 +243,7 @@ const LiveStreams = () => {
                     <iframe
                         width="100%"
                         height="100%"
-                        src={liveStreamLink + "?autoplay=1"}
+                        src={liveStreamLink + "?autoplay=1&vq=hd1080"}
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                         allowFullScreen
                     />
