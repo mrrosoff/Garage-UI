@@ -2,6 +2,7 @@ import { useState } from "react";
 
 import {
     Box,
+    Button,
     Dialog,
     DialogActions,
     DialogContent,
@@ -12,7 +13,7 @@ import {
     SelectChangeEvent,
     useTheme
 } from "@mui/material";
-import { grey } from "@mui/material/colors";
+import { grey, red } from "@mui/material/colors";
 import VideocamIcon from "@mui/icons-material/Videocam";
 import CloseIcon from "@mui/icons-material/Close";
 
@@ -28,12 +29,7 @@ const MountainMapCard = () => {
             <Box pt={1} pl={1}>
                 <LiveStreams />
             </Box>
-            <Box
-                pl={1}
-                width={"100%"}
-                height={"17%"}
-                sx={{ position: "absolute", bottom: 0 }}
-            >
+            <Box pl={1} width={"100%"} height={"17%"} sx={{ position: "absolute", bottom: 0 }}>
                 <LiftAndTrailStatus />
             </Box>
         </Box>
@@ -60,7 +56,7 @@ const LiftAndTrailStatus = () => {
         VITE_TIME_INTERVAL,
         `https://mtnpowder.com/feed?resortId=${VITE_SKI_RESORT_ID}`
     )?.SnowReport;
-    
+
     const totalOpenLifts = snowReport?.TotalOpenLifts;
     const totalLifts = snowReport?.TotalLifts;
     const totalOpenTrails = snowReport?.TotalOpenTrails;
@@ -140,7 +136,7 @@ const MountainPieChart = (props: any) => {
         { name: "All Available", value: totalAmount }
     ];
     const theme = useTheme();
-    
+
     const COLORS = [theme.palette.secondary.light, grey[300]];
 
     return (
@@ -174,59 +170,29 @@ const MountainPieChart = (props: any) => {
 const LiveStreams = () => {
     const { VITE_YOUTUBE_LIVE_STREAM_LINKS, VITE_LIVE_STREAM_BUTTON_TITLES } = import.meta.env;
     const [open, setOpen] = useState(false);
-    const [liveStreamLink, setLiveStreamLink] = useState("");
+    const [liveStreamLink, setLiveStreamLink] = useState(
+        VITE_YOUTUBE_LIVE_STREAM_LINKS.split(",")[0]
+    );
     const theme = useTheme();
     return (
         <>
-            <FormControl size="medium" sx={{ width: "18%" }}>
-                <Select
-                    displayEmpty
-                    disableUnderline
-                    value={liveStreamLink}
-                    onChange={(event: SelectChangeEvent) => {
-                        event.target.value;
-                        setLiveStreamLink(event.target.value);
-                        setOpen(true);
-                    }}
-                    sx={{
-                        backgroundColor:
-                            theme.palette.mode === "dark" ? "#121212" : theme.palette.neutral.main,
-                        borderRadius: 5
-                    }}
-                    renderValue={() => {
-                        return (
-                            <Box
-                                sx={{
-                                    display: "flex",
-                                    alignItems: "center",
-                                    justifyContent: "center",
-                                    flexDirection: "row",
-                                    width: "100%",
-                                    height: "100%"
-                                }}
-                            >
-                                <VideocamIcon />
-                                <Box sx={{ ml: 1 }}>Show Live Streams</Box>
-                            </Box>
-                        );
-                    }}
-                    variant={"standard"}
-                >
-                    {VITE_LIVE_STREAM_BUTTON_TITLES.split(",").map(
-                        (title: string, index: number) => {
-                            return (
-                                <MenuItem
-                                    key={index}
-                                    value={VITE_YOUTUBE_LIVE_STREAM_LINKS.split(",")[index]}
-                                    sx={{ borderRadius: 5 }}
-                                >
-                                    {title}
-                                </MenuItem>
-                            );
-                        }
-                    )}
-                </Select>
-            </FormControl>
+            <Button
+                sx={{
+                    borderRadius: 5,
+                    backgroundColor: theme.palette.secondary.main,
+                    "&:hover": {
+                        backgroundColor: theme.palette.secondary.dark
+                    }
+                }}
+                variant={"contained"}
+                size={"medium"}
+                onClick={() => {
+                    setOpen(true);
+                }}
+            >
+                <VideocamIcon />
+            </Button>
+
             <Dialog
                 fullScreen={true}
                 open={open}
@@ -237,6 +203,41 @@ const LiveStreams = () => {
                     <IconButton onClick={() => setOpen(false)}>
                         <CloseIcon />
                     </IconButton>
+                    <FormControl size="medium" sx={{ display: "flex" }}>
+                        <Select
+                            displayEmpty
+                            disableUnderline
+                            value={liveStreamLink}
+                            onChange={(event: SelectChangeEvent) => {
+                                event.target.value;
+                                setLiveStreamLink(event.target.value);
+                                setOpen(true);
+                            }}
+                            sx={{
+                                backgroundColor:
+                                    theme.palette.mode === "dark"
+                                        ? "#121212"
+                                        : theme.palette.neutral.main,
+                                borderRadius: 5,
+                                width: "100%"
+                            }}
+                            variant={"standard"}
+                        >
+                            {VITE_LIVE_STREAM_BUTTON_TITLES.split(",").map(
+                                (title: string, index: number) => {
+                                    return (
+                                        <MenuItem
+                                            key={index}
+                                            value={VITE_YOUTUBE_LIVE_STREAM_LINKS.split(",")[index]}
+                                            sx={{ borderRadius: 5 }}
+                                        >
+                                            {title}
+                                        </MenuItem>
+                                    );
+                                }
+                            )}
+                        </Select>
+                    </FormControl>
                 </DialogActions>
                 <DialogContent sx={{ pt: 0 }}>
                     <iframe

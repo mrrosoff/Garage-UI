@@ -1,5 +1,5 @@
 import { CssBaseline, PaletteMode } from "@mui/material";
-import { blue, green, grey } from "@mui/material/colors";
+import { blue, green, grey, red } from "@mui/material/colors";
 import {
     createTheme,
     responsiveFontSizes,
@@ -60,7 +60,7 @@ const App = () => {
             palette: {
                 mode,
                 primary: { main: blue[500] },
-                secondary: { main: green[500] },
+                secondary: { main: red[600], dark: red[800] },
                 neutral: {
                     main: "#FFFFFF",
                     light: grey[100],

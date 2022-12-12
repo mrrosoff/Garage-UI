@@ -20,7 +20,7 @@ const WeatherCard = () => {
 
     const todaysWeather = resortData?.CurrentConditions?.Base;
     const tomorrowsWeather = resortData?.Forecast?.TwoDay;
-    console.log(resortData);
+    
     const snowForecast = [
         resortData?.Forecast?.TwoDay,
         resortData?.Forecast?.ThreeDay,
