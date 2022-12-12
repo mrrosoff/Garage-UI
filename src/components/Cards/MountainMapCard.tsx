@@ -13,26 +13,41 @@ import {
     SelectChangeEvent,
     useTheme
 } from "@mui/material";
-import { grey, red } from "@mui/material/colors";
+import { grey } from "@mui/material/colors";
 import VideocamIcon from "@mui/icons-material/Videocam";
 import CloseIcon from "@mui/icons-material/Close";
-
+import SnowPatrolInfoCard from "./SnowPatrolInfoCard";
 import callExternalAPIOnInterval from "../../hooks/callExternalAPIOnInterval";
 import { Cell, Label, Pie, PieChart, ResponsiveContainer } from "recharts";
 
 const MountainMapCard = () => {
     return (
-        <Box height={"100%"}>
+        <>
             <Box height={"100%"} width={"100%"} sx={{ position: "absolute" }}>
                 <SteamboatInteractiveMap />
             </Box>
-            <Box pt={1} pl={1}>
+            <Box pt={1} pl={1} sx={{ position: "absolute" }}>
                 <LiveStreams />
             </Box>
+
+            <Box
+                width={"80%"}
+                height={"100%"}
+                sx={{
+                    pt: 1,
+                    position: "absolute",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "start-flex"
+                }}
+            >
+                <SnowPatrolInfoCard />
+            </Box>
+
             <Box pl={1} width={"100%"} height={"17%"} sx={{ position: "absolute", bottom: 0 }}>
                 <LiftAndTrailStatus />
             </Box>
-        </Box>
+        </>
     );
 };
 

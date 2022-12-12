@@ -16,7 +16,7 @@ const SnowPatrolInfoCard = () => {
     }
 
     return (
-        <Box height={"100%"} width={"100%"}>
+        <Box width={"30%"}>
             {snowPatrolAlert === "--" ? (
                 <Alert severity="info">
                     <AlertTitle>Snow Patrol Information</AlertTitle>
