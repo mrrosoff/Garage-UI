@@ -15,7 +15,10 @@ export default defineConfig({
             entry: ["electron/main.ts", "electron/preload.ts"],
             vite: {
                 build: {
-                    outDir: "dist/electron"
+                    outDir: "dist/electron",
+                    rollupOptions: {
+                        external: ["epoll"]
+                    }
                 }
             }
         }),
