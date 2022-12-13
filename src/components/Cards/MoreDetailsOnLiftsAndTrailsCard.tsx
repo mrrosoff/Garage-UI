@@ -111,7 +111,7 @@ const MoreDetailsOnLiftsAndTrailsCard = () => {
                 >
                     {dataToList.map((data: any, index: number) => (
                         <Fragment key={index}>
-                            <ListItem>{getListItemText(data)}</ListItem>
+                            <ListItem>{getListItemText(data, theme)}</ListItem>
                         </Fragment>
                     ))}
                 </List>
@@ -120,8 +120,7 @@ const MoreDetailsOnLiftsAndTrailsCard = () => {
     );
 };
 
-const getListItemText = (data: any) => {
-    const theme = useTheme();
+const getListItemText = (data: any, theme: any) => {
     if (data.Difficulty) {
         let trailIcon = null;
         switch (data.TrailIcon) {
@@ -156,8 +155,8 @@ const getListItemText = (data: any) => {
         }
 
         return (
-            <ListItemText >
-                <Card variant="outlined" sx={{borderRadius: 5}}>
+            <ListItemText>
+                <Card variant="outlined" sx={{ borderRadius: 5 }}>
                     <CardContent>
                         <Box
                             flexDirection={"row"}
@@ -198,7 +197,7 @@ const getListItemText = (data: any) => {
 
     return (
         <ListItemText>
-            <Card variant="outlined" sx={{borderRadius: 5}}>
+            <Card variant="outlined" sx={{ borderRadius: 5 }}>
                 <CardContent>
                     <Typography>{data.Name}</Typography>
                     <Typography sx={{ fontSize: 12 }}>
