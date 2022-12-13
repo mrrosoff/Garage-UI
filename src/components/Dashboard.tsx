@@ -6,21 +6,19 @@ import MountainMapCard from "./Cards/MountainMapCard";
 
 const DashBoard = () => {
     return (
-        <Box height={"100%"} display={"flex"} flexDirection={"row"} p={0}>
-            <Box width={"25%"} height={"100%"} display={"flex"} flexDirection={"column"} p={2}>
-                <Box width={"100%"} minHeight={"33%"}>
+        <Box height={"100%"} display={"flex"} flexDirection={"row"}>
+            <Box width={"25%"} height={"100%"} display={"flex"} flexDirection={"column"} p={3} >
+                <Box width={"100%"} pb={3}>
                     <WeatherCard />
                 </Box>
-
                 <Divider />
-
-                <Box width={"100%"}>
+                <Box flexGrow={1} width={"100%"} pt={3}>
                     <MoreDetailsOnLiftsAndTrailsCard />
                 </Box>
             </Box>
             <Box flexGrow={1} height={"100%"}>
                 <MountainMapCard />
-            </Box>
+            </Box> 
         </Box>
     );
 };

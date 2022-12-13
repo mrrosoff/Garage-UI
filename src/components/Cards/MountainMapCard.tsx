@@ -22,30 +22,26 @@ import { Cell, Label, Pie, PieChart, ResponsiveContainer } from "recharts";
 
 const MountainMapCard = () => {
     return (
-        <>
-            <Box height={"100%"} width={"100%"} sx={{ position: "absolute" }}>
-                <SteamboatInteractiveMap />
-            </Box>
+        <Box position={"relative"} width={"100%"} height={"100%"} sx={{ pointerEvents: "none" }}>
             <Box
-                width={"80%"}
+                position={"absolute"}
+                top={0}
+                left={0}
+                width={"100%"}
                 height={"100%"}
-                sx={{
-                    pt: 1,
-                    position: "absolute",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "start-flex"
-                }}
+                display={"flex"}
+                flexDirection={"column"}
+                justifyContent={"space-between"}
             >
-                <SnowPatrolInfoCard />
+                <Box pt={3} pl={3} >
+                    <LiveStreams />
+                </Box>
+                <Box pb={3} pl={3}>
+                    <LiftAndTrailStatus />
+                </Box>
             </Box>
-            <Box pt={1} pl={1}>
-                <LiveStreams />
-            </Box>
-            <Box pl={1} width={"100%"} height={"17%"} sx={{ position: "absolute", bottom: 0 }}>
-                <LiftAndTrailStatus />
-            </Box>
-        </>
+            <SteamboatInteractiveMap />
+        </Box>
     );
 };
 
@@ -54,10 +50,11 @@ const SteamboatInteractiveMap = () => {
         <iframe
             id="Steamboat Map"
             src="https://vicomap-cdn.resorts-interactive.com/map/1800?fullscreen=true&menu=3.7,3.10,3.14&openLiftAnimation=true&openLiftColor=green&liftHighlightOpacity=0.1&backgroundOpacity=0.5"
-            width="77%"
+            width="100%"
             height="100%"
             allowFullScreen
             title="Vicomap"
+            style={{ pointerEvents: "auto" }}
         />
     );
 };
@@ -80,13 +77,12 @@ const LiftAndTrailStatus = () => {
     return (
         <Box
             sx={{
+                width: "40%",
                 borderWidth: 2,
                 borderStyle: "solid",
                 backgroundColor:
                     theme.palette.mode === "dark" ? "#121212" : theme.palette.neutral.light,
-                borderRadius: 5,
-                position: "absolute",
-                width: "30%"
+                borderRadius: 5
             }}
             display={"flex"}
             flexDirection={"row"}
@@ -153,30 +149,28 @@ const MountainPieChart = (props: any) => {
     const COLORS = [theme.palette.primary.light, grey[300]];
 
     return (
-        <ResponsiveContainer width={"95%"} height={130}>
-            <PieChart>
-                <Pie
-                    data={data}
-                    cx={"50%"}
-                    cy={"50%"}
-                    startAngle={90}
-                    endAngle={450}
-                    innerRadius={50}
-                    outerRadius={60}
-                    paddingAngle={0}
-                    dataKey="value"
-                >
-                    {data.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                    ))}
-                    <Label
-                        width={30}
-                        position="center"
-                        content={<CustomLabel value1={chartting} value2={totalOpen} />}
-                    ></Label>
-                </Pie>
-            </PieChart>
-        </ResponsiveContainer>
+        <PieChart width={120} height={200}>
+            <Pie
+                data={data}
+                cx={"50%"}
+                cy={"50%"}
+                startAngle={90}
+                endAngle={450}
+                innerRadius={50}
+                outerRadius={60}
+                paddingAngle={0}
+                dataKey="value"
+            >
+                {data.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                ))}
+                <Label
+                    width={30}
+                    position="center"
+                    content={<CustomLabel value1={chartting} value2={totalOpen} />}
+                ></Label>
+            </Pie>
+        </PieChart>
     );
 };
 
@@ -192,11 +186,9 @@ const LiveStreams = () => {
             <Button
                 sx={{
                     borderRadius: 5,
-                    backgroundColor: theme.palette.secondary.main,
-                    "&:hover": {
-                        backgroundColor: theme.palette.secondary.dark
-                    }
+                    pointerEvents: "auto"
                 }}
+                color={"secondary"}
                 variant={"contained"}
                 size={"medium"}
                 onClick={() => {

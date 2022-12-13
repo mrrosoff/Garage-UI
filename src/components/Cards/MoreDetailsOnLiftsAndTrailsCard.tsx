@@ -4,9 +4,7 @@ import {
     Card,
     CardContent,
     LinearProgress,
-    List,
-    ListItem,
-    ListItemText,
+    Paper,
     Typography,
     useTheme
 } from "@mui/material";
@@ -40,10 +38,9 @@ const MoreDetailsOnLiftsAndTrailsCard = () => {
     const liftsOpen = mountainAreas ? getOnlyOpenData(mountainAreas.Lifts) : [];
 
     return (
-        <Box flexDirection={"column"}>
+        <Box display={"flex"} flexDirection={"column"} height={"100%"}>
             <Box
                 p={2}
-                height={"100%"}
                 width={"100%"}
                 display={"flex"}
                 flexDirection={"row"}
@@ -76,8 +73,8 @@ const MoreDetailsOnLiftsAndTrailsCard = () => {
             </Box>
             {!dataToList ? (
                 <Box
+                    flexGrow={1}
                     flexDirection={"column"}
-                    height={300}
                     display={"flex"}
                     justifyContent={"center"}
                     alignItems={"center"}
@@ -86,8 +83,8 @@ const MoreDetailsOnLiftsAndTrailsCard = () => {
                 </Box>
             ) : dataToList.length === 0 ? (
                 <Box
+                    flexGrow={1}
                     flexDirection={"column"}
-                    height={300}
                     display={"flex"}
                     justifyContent={"center"}
                     alignItems={"center"}
@@ -96,34 +93,23 @@ const MoreDetailsOnLiftsAndTrailsCard = () => {
                     <Typography align={"center"}>Please try again later.</Typography>
                 </Box>
             ) : (
-                <List
-                    dense
-                    sx={{
-                        width: "100%",
-
-                        overflow: "auto",
-                        maxHeight: 300,
-                        bgcolor:
-                            theme.palette.mode === "dark" ? theme.palette.neutral.light : "#121212",
-                        padding: 0,
-                        borderRadius: 5
-                    }}
-                >
+                <Box flexGrow={1} overflow={"hidden"}>
                     {dataToList.map((data: any, index: number) => (
                         <Fragment key={index}>
-                            <ListItem>{getListItemText(data, theme)}</ListItem>
+                            <ListItemText data={data} />
                         </Fragment>
                     ))}
-                </List>
+                </Box>
             )}
         </Box>
     );
 };
 
-const getListItemText = (data: any, theme: any) => {
-    if (data.Difficulty) {
+const ListItemText = (props: { data: any }) => {
+    const theme = useTheme();
+    if (props.data.Difficulty) {
         let trailIcon = null;
-        switch (data.TrailIcon) {
+        switch (props.data.TrailIcon) {
             case "BlackDiamond":
                 trailIcon = <img src={BlackDiamond} alt="BlackDiamond" />;
                 break;
@@ -155,58 +141,48 @@ const getListItemText = (data: any, theme: any) => {
         }
 
         return (
-            <ListItemText>
-                <Card variant="outlined" sx={{ borderRadius: 5 }}>
-                    <CardContent>
-                        <Box
-                            flexDirection={"row"}
-                            sx={{
-                                display: "flex",
-                                justifyContent: "space-between",
-                                alignItems: "center",
-                                height: "10%"
-                            }}
-                        >
-                            <Typography>{data.Name}</Typography>
-                            <Box flexDirection={"row"} justifyContent={"space-evenly"}>
-                                {trailIcon}
-                                {data.Grooming === "Yes" ? (
-                                    theme.palette.mode === "dark" ? (
-                                        <img
-                                            src={GroomingLight}
-                                            alt="GroomingLight"
-                                            style={{ paddingLeft: 8 }}
-                                        />
-                                    ) : (
-                                        <img
-                                            src={Grooming}
-                                            alt="Grooming"
-                                            style={{ paddingLeft: 8 }}
-                                        />
-                                    )
-                                ) : null}
-                            </Box>
-                        </Box>
-                    </CardContent>
-                </Card>
-            </ListItemText>
+            <Paper sx={{ p: 2, mt: 2 }}>
+                <Box
+                    flexDirection={"row"}
+                    sx={{
+                        height: "100%",
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center"
+                    }}
+                >
+                    <Typography>{props.data.Name}</Typography>
+                    <Box flexDirection={"row"} justifyContent={"space-evenly"}>
+                        {trailIcon}
+                        {props.data.Grooming === "Yes" ? (
+                            theme.palette.mode === "dark" ? (
+                                <img
+                                    src={GroomingLight}
+                                    alt="GroomingLight"
+                                    style={{ paddingLeft: 8 }}
+                                />
+                            ) : (
+                                <img src={Grooming} alt="Grooming" style={{ paddingLeft: 8 }} />
+                            )
+                        ) : null}
+                    </Box>
+                </Box>
+            </Paper>
         );
     }
 
     const todaysDayOfTheWeek = new Date().toLocaleString("en-us", { weekday: "long" });
 
     return (
-        <ListItemText>
-            <Card variant="outlined" sx={{ borderRadius: 5 }}>
-                <CardContent>
-                    <Typography>{data.Name}</Typography>
-                    <Typography sx={{ fontSize: 12 }}>
-                        {data.Hours[todaysDayOfTheWeek].Open} -{" "}
-                        {data.Hours[todaysDayOfTheWeek].Close}
-                    </Typography>
-                </CardContent>
-            </Card>
-        </ListItemText>
+        <Card variant="outlined" sx={{ borderRadius: 5 }}>
+            <CardContent>
+                <Typography>{props.data.Name}</Typography>
+                <Typography sx={{ fontSize: 12 }}>
+                    {props.data.Hours[todaysDayOfTheWeek].Open} -{" "}
+                    {props.data.Hours[todaysDayOfTheWeek].Close}
+                </Typography>
+            </CardContent>
+        </Card>
     );
 };
 

@@ -12,7 +12,7 @@ export default defineConfig({
     },
     plugins: [
         electron({
-            entry: ["electron/main.ts", "electron/preload.ts"],
+            entry: ["electron/main.ts"],
             vite: {
                 build: {
                     outDir: "dist/electron",
