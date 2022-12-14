@@ -1,20 +1,28 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 import {
     Box,
     Button,
+    ButtonGroup,
+    ClickAwayListener,
     Dialog,
     DialogActions,
     DialogContent,
     FormControl,
+    Grow,
     IconButton,
     MenuItem,
+    MenuList,
+    Paper,
+    Popper,
     Select,
     SelectChangeEvent,
     useTheme
 } from "@mui/material";
+
 import { grey } from "@mui/material/colors";
 import VideocamIcon from "@mui/icons-material/Videocam";
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import CloseIcon from "@mui/icons-material/Close";
 import callExternalAPIOnInterval from "../../hooks/callExternalAPIOnInterval";
 import { Cell, Label, Pie, PieChart } from "recharts";
@@ -175,11 +183,29 @@ const MountainPieChart = (props: any) => {
 
 const LiveStreams = () => {
     const { VITE_YOUTUBE_LIVE_STREAM_LINKS, VITE_LIVE_STREAM_BUTTON_TITLES } = import.meta.env;
-    const [open, setOpen] = useState(false);
-    const [liveStreamLink, setLiveStreamLink] = useState(
-        VITE_YOUTUBE_LIVE_STREAM_LINKS.split(",")[0]
-    );
     const theme = useTheme();
+    const [dialogOpen, setDialogOpen] = useState(false);
+    const [popperOpen, setPopperOpen] = useState(false);
+    const anchorRef = useRef<HTMLDivElement>(null);
+    const [selectedIndex, setSelectedIndex] = useState(0);
+    const liveStreamLinks = VITE_YOUTUBE_LIVE_STREAM_LINKS.split(",");
+    const liveStreamTitles = VITE_LIVE_STREAM_BUTTON_TITLES.split(",");
+    const handleMenuItemClick = (
+        _event: React.MouseEvent<HTMLLIElement, MouseEvent>,
+        index: number
+    ) => {
+        setSelectedIndex(index);
+        setPopperOpen(false);
+    };
+
+    const handleToggle = () => {
+        setPopperOpen((prevOpen) => !prevOpen);
+    };
+
+    const handleClose = (event: Event) => {
+        setPopperOpen(false);
+    };
+
     return (
         <>
             <Button
@@ -191,55 +217,87 @@ const LiveStreams = () => {
                 variant={"contained"}
                 size={"medium"}
                 onClick={() => {
-                    setOpen(true);
+                    setDialogOpen(true);
                 }}
             >
                 <VideocamIcon />
             </Button>
 
-            <Dialog
-                fullScreen={true}
-                open={open}
-                onClose={() => setOpen(false)}
-                aria-labelledby="responsive-dialog-title"
-            >
+            <Dialog fullScreen={true} open={dialogOpen} onClose={() => setDialogOpen(false)}>
                 <DialogActions style={{ justifyContent: "space-between" }}>
-                    <FormControl size="medium" sx={{ display: "flex" }}>
-                        <Select
-                            displayEmpty
-                            disableUnderline
-                            value={liveStreamLink}
-                            onChange={(event: SelectChangeEvent) => {
-                                event.target.value;
-                                setLiveStreamLink(event.target.value);
-                                setOpen(true);
-                            }}
+                    <ButtonGroup
+                        sx={{ borderRadius: 5 }}
+                        variant="contained"
+                        ref={anchorRef}
+                        color="primary"
+                    >
+                        <Button
                             sx={{
-                                backgroundColor:
-                                    theme.palette.mode === "dark"
-                                        ? "#121212"
-                                        : theme.palette.neutral.main,
-                                borderRadius: 5,
-                                width: "100%"
+                                borderRadius: 5
                             }}
-                            variant={"standard"}
+                            onClick={handleToggle}
                         >
-                            {VITE_LIVE_STREAM_BUTTON_TITLES.split(",").map(
-                                (title: string, index: number) => {
-                                    return (
-                                        <MenuItem
-                                            key={index}
-                                            value={VITE_YOUTUBE_LIVE_STREAM_LINKS.split(",")[index]}
-                                            sx={{ borderRadius: 5 }}
-                                        >
-                                            {title}
-                                        </MenuItem>
-                                    );
+                            {liveStreamTitles[selectedIndex]}
+                            <ArrowDropDownIcon />
+                        </Button>
+                    </ButtonGroup>
+                    <Popper
+                        sx={{
+                            zIndex: 1
+                        }}
+                        popperOptions={{
+                            modifiers: [
+                                {
+                                    name: "preventOverflow",
+                                    options: {
+                                        padding: 2
+                                    }
                                 }
-                            )}
-                        </Select>
-                    </FormControl>
-                    <IconButton onClick={() => setOpen(false)}>
+                            ]
+                        }}
+                        open={popperOpen}
+                        anchorEl={anchorRef.current}
+                        role={undefined}
+                        transition
+                        disablePortal
+                    >
+                        {({ TransitionProps, placement }) => (
+                            <Grow
+                                {...TransitionProps}
+                                style={{
+                                    transformOrigin:
+                                        placement === "bottom" ? "center top" : "center bottom"
+                                }}
+                            >
+                                <Paper>
+                                    <ClickAwayListener onClickAway={handleClose}>
+                                        <MenuList autoFocusItem>
+                                            {liveStreamTitles.map(
+                                                (title: string, index: number) => (
+                                                    <MenuItem
+                                                        key={index}
+                                                        selected={index === selectedIndex}
+                                                        value={
+                                                            VITE_YOUTUBE_LIVE_STREAM_LINKS.split(
+                                                                ","
+                                                            )[index]
+                                                        }
+                                                        onClick={(event) =>
+                                                            handleMenuItemClick(event, index)
+                                                        }
+                                                        sx={{ borderRadius: 5 }}
+                                                    >
+                                                        {title}
+                                                    </MenuItem>
+                                                )
+                                            )}
+                                        </MenuList>
+                                    </ClickAwayListener>
+                                </Paper>
+                            </Grow>
+                        )}
+                    </Popper>
+                    <IconButton onClick={() => setDialogOpen(false)}>
                         <CloseIcon />
                     </IconButton>
                 </DialogActions>
@@ -247,7 +305,7 @@ const LiveStreams = () => {
                     <iframe
                         width="100%"
                         height="100%"
-                        src={liveStreamLink + "?autoplay=1&vq=hd1080"}
+                        src={liveStreamLinks[selectedIndex] + "?autoplay=1&vq=hd1080"}
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                         allowFullScreen
                     />
