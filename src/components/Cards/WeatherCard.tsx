@@ -65,7 +65,7 @@ const TodaysWeather = (props: any) => {
             <Typography align={"center"} sx={{ fontSize: 24 }}>
                 Steamboat Springs
             </Typography>
-            <Typography align={"center"} sx={{ fontSize: 22, pb: 3 }}>
+            <Typography align={"center"} sx={{ fontSize: 22, pb: 2 }}>
                 {getConditionsInHumanReadableFormat(todaysConditions)}
             </Typography>
             <span

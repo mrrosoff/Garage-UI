@@ -51,7 +51,7 @@ const App = () => {
         const sunriseHour = DateTime.fromISO(sunData.results.sunrise).hour;
 
         if (nowHour < sunriseHour + 1 || nowHour > sunsetHour + 1) {
-            mode = "light";
+            mode = "dark";
         }
     }
 

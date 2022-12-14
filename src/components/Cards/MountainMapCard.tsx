@@ -16,9 +16,8 @@ import {
 import { grey } from "@mui/material/colors";
 import VideocamIcon from "@mui/icons-material/Videocam";
 import CloseIcon from "@mui/icons-material/Close";
-import SnowPatrolInfoCard from "./SnowPatrolInfoCard";
 import callExternalAPIOnInterval from "../../hooks/callExternalAPIOnInterval";
-import { Cell, Label, Pie, PieChart, ResponsiveContainer } from "recharts";
+import { Cell, Label, Pie, PieChart } from "recharts";
 
 const MountainMapCard = () => {
     return (
@@ -33,10 +32,10 @@ const MountainMapCard = () => {
                 flexDirection={"column"}
                 justifyContent={"space-between"}
             >
-                <Box pt={3} pl={3} >
+                <Box pt={2} pl={2}>
                     <LiveStreams />
                 </Box>
-                <Box pb={3} pl={3}>
+                <Box pb={2} pl={2}>
                     <LiftAndTrailStatus />
                 </Box>
             </Box>

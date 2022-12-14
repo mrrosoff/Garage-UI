@@ -7,12 +7,12 @@ import MountainMapCard from "./Cards/MountainMapCard";
 const DashBoard = () => {
     return (
         <Box height={"100%"} display={"flex"} flexDirection={"row"}>
-            <Box width={"25%"} height={"100%"} display={"flex"} flexDirection={"column"} p={3} >
-                <Box width={"100%"} pb={3}>
+            <Box width={"25%"} height={"100%"} display={"flex"} flexDirection={"column"} p={2} >
+                <Box width={"100%"} pb={2}>
                     <WeatherCard />
                 </Box>
                 <Divider />
-                <Box flexGrow={1} width={"100%"} pt={3}>
+                <Box flexGrow={1} width={"100%"}>
                     <MoreDetailsOnLiftsAndTrailsCard />
                 </Box>
             </Box>

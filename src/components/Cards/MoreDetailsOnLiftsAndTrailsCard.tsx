@@ -1,13 +1,14 @@
 import {
+    AppBar,
     Box,
-    Button,
-    Card,
-    CardContent,
     LinearProgress,
     Paper,
+    Tab,
+    Tabs,
     Typography,
     useTheme
 } from "@mui/material";
+import SwipeableViews from "react-swipeable-views";
 import callExternalAPIOnInterval from "../../hooks/callExternalAPIOnInterval";
 import BlackDiamond from "../../assets/difficulty-icons/blackdiamond.svg";
 import BlueBlackSquare from "../../assets/difficulty-icons/blueblacksquare.svg";
@@ -22,10 +23,41 @@ import TerrainPark from "../../assets/difficulty-icons/terrain_park_large.svg";
 
 import { Fragment, useState } from "react";
 
+interface TabPanelProps {
+    children?: React.ReactNode;
+    dir?: string;
+    index: number;
+    value: number;
+}
+
+function a11yProps(index: number) {
+    return {
+        id: `full-width-tab-${index}`,
+        "aria-controls": `full-width-tabpanel-${index}`,
+    };
+}
+
+function TabPanel(props: TabPanelProps) {
+    const { children, value, index, ...other } = props;
+
+    return (
+        <div
+            role="tabpanel"
+            hidden={value !== index}
+            id={`full-width-tabpanel-${index}`}
+            aria-labelledby={`full-width-tab-${index}`}
+            {...other}
+            style={{ overflow: "auto", maxHeight: 300}}
+        >
+            {value === index && <Box sx={{ p: 1 }}>{children}</Box>}
+        </div>
+    );
+}
+
 const MoreDetailsOnLiftsAndTrailsCard = () => {
     const { VITE_TIME_INTERVAL, VITE_SKI_RESORT_ID } = import.meta.env;
     const theme = useTheme();
-    const [dataToList, setDataToList] = useState<[] | null>(null);
+    const [value, setValue] = useState(0);
     const mountainAreas = callExternalAPIOnInterval(
         VITE_TIME_INTERVAL,
         `https://mtnpowder.com/feed?resortId=${VITE_SKI_RESORT_ID}`
@@ -33,156 +65,162 @@ const MoreDetailsOnLiftsAndTrailsCard = () => {
 
     if (!mountainAreas) return <LoadingScreen />;
 
-    const trailsOpen = mountainAreas ? getOnlyOpenData(mountainAreas.Trails) : [];
-    const activitiesOpen = mountainAreas ? getOnlyOpenData(mountainAreas.Activities) : [];
-    const liftsOpen = mountainAreas ? getOnlyOpenData(mountainAreas.Lifts) : [];
+    const trailsOpen = getOnlyOpenData(mountainAreas?.Trails);
+    const liftsOpen = getOnlyOpenData(mountainAreas?.Lifts);
+
+    const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
+        setValue(newValue);
+    };
+
+    const handleChangeIndex = (index: number) => {
+        setValue(index);
+    };
 
     return (
-        <Box display={"flex"} flexDirection={"column"} height={"100%"}>
-            <Box
-                p={2}
-                width={"100%"}
-                display={"flex"}
-                flexDirection={"row"}
-                justifyContent={"space-between"}
+        <Box
+            sx={{
+                width: "100%",
+                height: "100%"
+            }}
+        >
+            <AppBar position="static" color="transparent" elevation={0}>
+                <Tabs
+                    value={value}
+                    onChange={handleChange}
+                    indicatorColor="primary"
+                    variant="fullWidth"
+                    sx={{
+                        backgroundColor:
+                            theme.palette.mode === "light" ? theme.palette.neutral.light : "#121212"
+                    }}
+                >
+                    <Tab
+                        label="Trails"
+                        {...a11yProps(0)}
+                        sx={{
+                            backgroundColor: theme.palette.mode === "light" ? "#ffffff" : "#121212"
+                        }}
+                    />
+                    <Tab
+                        label="Lifts"
+                        {...a11yProps(1)}
+                        sx={{
+                            backgroundColor: theme.palette.mode === "light" ? "#ffffff" : "#121212"
+                        }}
+                    />
+                </Tabs>
+            </AppBar>
+            <SwipeableViews
+                axis={theme.direction === "rtl" ? "x-reverse" : "x"}
+                index={value}
+                onChangeIndex={handleChangeIndex}
             >
-                <Button
-                    variant={"contained"}
-                    onClick={() => {
-                        setDataToList(trailsOpen);
-                    }}
-                >
-                    Trails
-                </Button>
-                <Button
-                    variant={"contained"}
-                    onClick={() => {
-                        setDataToList(activitiesOpen);
-                    }}
-                >
-                    Activities
-                </Button>
-                <Button
-                    variant={"contained"}
-                    onClick={() => {
-                        setDataToList(liftsOpen);
-                    }}
-                >
-                    Lifts
-                </Button>
-            </Box>
-            {!dataToList ? (
-                <Box
-                    flexGrow={1}
-                    flexDirection={"column"}
-                    display={"flex"}
-                    justifyContent={"center"}
-                    alignItems={"center"}
-                >
-                    <Typography align={"center"}>Select an attribute to see more data.</Typography>
-                </Box>
-            ) : dataToList.length === 0 ? (
-                <Box
-                    flexGrow={1}
-                    flexDirection={"column"}
-                    display={"flex"}
-                    justifyContent={"center"}
-                    alignItems={"center"}
-                >
-                    <Typography align={"center"}>No data available for this attribute.</Typography>
-                    <Typography align={"center"}>Please try again later.</Typography>
-                </Box>
-            ) : (
-                <Box flexGrow={1} overflow={"hidden"}>
-                    {dataToList.map((data: any, index: number) => (
+                <TabPanel value={value} index={0} dir={theme.direction}>
+                    {trailsOpen.map((data: any, index: number) => (
                         <Fragment key={index}>
-                            <ListItemText data={data} />
+                            <ListOpenTrails data={data} />
                         </Fragment>
                     ))}
-                </Box>
-            )}
+                </TabPanel>
+                <TabPanel value={value} index={1} dir={theme.direction}>
+                    {liftsOpen.map((data: any, index: number) => (
+                        <Fragment key={index}>
+                            <ListOpenLifts data={data} />
+                        </Fragment>
+                    ))}
+                </TabPanel>
+            </SwipeableViews>
         </Box>
     );
 };
 
-const ListItemText = (props: { data: any }) => {
+const ListOpenTrails = (props: { data: any }) => {
     const theme = useTheme();
-    if (props.data.Difficulty) {
-        let trailIcon = null;
-        switch (props.data.TrailIcon) {
-            case "BlackDiamond":
-                trailIcon = <img src={BlackDiamond} alt="BlackDiamond" />;
-                break;
-            case "GreenCircle":
-                trailIcon = <img src={GreenCircle} alt="GreenCircle" />;
-                break;
-            case "BlueSquare":
-                trailIcon = <img src={BlueSquare} alt="BlueSquare" />;
-                break;
-            case "DoubleBlackDiamond":
-                trailIcon = <img src={DoubleBlackDiamond} alt="DoubleBlackDiamond" />;
-                break;
-            case "Snowshoe":
-                if (theme.palette.mode === "dark") {
-                    trailIcon = <img src={SnowShoeingLight} alt="SnowShoe" />;
-                } else {
-                    trailIcon = <img src={SnowShoeing} alt="SnowShoe" />;
-                }
-                break;
-            case "TerrainPark":
-                trailIcon = <img src={TerrainPark} alt="TerrainPark" />;
-                break;
-            case "BlueBlackSquare":
-                trailIcon = <img src={BlueBlackSquare} alt="BlueBlackSquare" />;
-                break;
 
-            default:
-                trailIcon = "";
-        }
+    let trailIcon = null;
+    switch (props.data.TrailIcon) {
+        case "BlackDiamond":
+            trailIcon = <img src={BlackDiamond} alt="BlackDiamond" />;
+            break;
+        case "GreenCircle":
+            trailIcon = <img src={GreenCircle} alt="GreenCircle" />;
+            break;
+        case "BlueSquare":
+            trailIcon = <img src={BlueSquare} alt="BlueSquare" />;
+            break;
+        case "DoubleBlackDiamond":
+            trailIcon = <img src={DoubleBlackDiamond} alt="DoubleBlackDiamond" />;
+            break;
+        case "Snowshoe":
+            if (theme.palette.mode === "dark") {
+                trailIcon = <img src={SnowShoeingLight} alt="SnowShoe" />;
+            } else {
+                trailIcon = <img src={SnowShoeing} alt="SnowShoe" />;
+            }
+            break;
+        case "TerrainPark":
+            trailIcon = <img src={TerrainPark} alt="TerrainPark" />;
+            break;
+        case "BlueBlackSquare":
+            trailIcon = <img src={BlueBlackSquare} alt="BlueBlackSquare" />;
+            break;
 
-        return (
-            <Paper sx={{ p: 2, mt: 2 }}>
-                <Box
-                    flexDirection={"row"}
-                    sx={{
-                        height: "100%",
-                        display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "center"
-                    }}
-                >
-                    <Typography>{props.data.Name}</Typography>
-                    <Box flexDirection={"row"} justifyContent={"space-evenly"}>
-                        {trailIcon}
-                        {props.data.Grooming === "Yes" ? (
-                            theme.palette.mode === "dark" ? (
-                                <img
-                                    src={GroomingLight}
-                                    alt="GroomingLight"
-                                    style={{ paddingLeft: 8 }}
-                                />
-                            ) : (
-                                <img src={Grooming} alt="Grooming" style={{ paddingLeft: 8 }} />
-                            )
-                        ) : null}
-                    </Box>
-                </Box>
-            </Paper>
-        );
+        default:
+            trailIcon = "";
     }
 
+    return (
+        <Paper sx={{ p: 2, mt: 2, mr: 1, ml: 1, borderRadius: 2 }}>
+            <Box
+                flexDirection={"row"}
+                sx={{
+                    height: "100%",
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center"
+                }}
+            >
+                <Typography>{props.data.Name}</Typography>
+                <Box flexDirection={"row"} justifyContent={"space-evenly"}>
+                    {trailIcon}
+                    {props.data.Grooming === "Yes" ? (
+                        theme.palette.mode === "dark" ? (
+                            <img
+                                src={GroomingLight}
+                                alt="GroomingLight"
+                                style={{ paddingLeft: 8 }}
+                            />
+                        ) : (
+                            <img src={Grooming} alt="Grooming" style={{ paddingLeft: 8 }} />
+                        )
+                    ) : null}
+                </Box>
+            </Box>
+        </Paper>
+    );
+};
+
+const ListOpenLifts = (props: { data: any }) => {
     const todaysDayOfTheWeek = new Date().toLocaleString("en-us", { weekday: "long" });
 
     return (
-        <Card variant="outlined" sx={{ borderRadius: 5 }}>
-            <CardContent>
+        <Paper sx={{ p: 2, mt: 2, mr: 1, ml: 1, borderRadius: 2 }}>
+            <Box
+                flexDirection={"row"}
+                sx={{
+                    height: "100%",
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center"
+                }}
+            >
                 <Typography>{props.data.Name}</Typography>
-                <Typography sx={{ fontSize: 12 }}>
+                <Typography sx={{ fontSize: 14 }}>
                     {props.data.Hours[todaysDayOfTheWeek].Open} -{" "}
                     {props.data.Hours[todaysDayOfTheWeek].Close}
                 </Typography>
-            </CardContent>
-        </Card>
+            </Box>
+        </Paper>
     );
 };
 
