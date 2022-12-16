@@ -8,15 +8,12 @@ import {
     Dialog,
     DialogActions,
     DialogContent,
-    FormControl,
     Grow,
     IconButton,
     MenuItem,
     MenuList,
     Paper,
     Popper,
-    Select,
-    SelectChangeEvent,
     useTheme
 } from "@mui/material";
 
@@ -78,8 +75,6 @@ const LiftAndTrailStatus = () => {
     const totalLifts = snowReport?.TotalLifts;
     const totalOpenTrails = snowReport?.TotalOpenTrails;
     const totalTrails = snowReport?.TotalTrails;
-    const totalOpenNightTrails = snowReport?.OpenNightTrails;
-    const totalNightTrails = snowReport?.TotalNightTrails;
 
     return (
         <Box
@@ -104,11 +99,6 @@ const LiftAndTrailStatus = () => {
                 chartting={"Lifts"}
                 totalOpen={totalOpenLifts}
                 totalAmount={totalLifts - totalOpenLifts}
-            />
-            <MountainPieChart
-                chartting={"Night Trails"}
-                totalOpen={totalOpenNightTrails}
-                totalAmount={totalNightTrails - totalOpenNightTrails}
             />
         </Box>
     );

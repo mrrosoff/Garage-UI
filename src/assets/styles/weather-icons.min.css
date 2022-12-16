@@ -1007,6 +1007,9 @@
 .wi-forecast-io-snow:before {
     content: "\f01b";
 }
+.wi-forecast-io-cold:before{
+    content: "\f076";
+}
 .wi-forecast-io-blizzard:before {
     content: "\f076";
 }
