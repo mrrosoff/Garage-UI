@@ -146,7 +146,7 @@ const MountainPieChart = (props: any) => {
     const COLORS = [theme.palette.primary.light, grey[300]];
 
     return (
-        <PieChart width={120} height={200}>
+        <PieChart width={120} height={150}>
             <Pie
                 data={data}
                 cx={"50%"}

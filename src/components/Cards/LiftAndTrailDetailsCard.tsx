@@ -54,7 +54,7 @@ function TabPanel(props: TabPanelProps) {
     );
 }
 
-const MoreDetailsOnLiftsAndTrailsCard = () => {
+const LiftAndTrailDetailsCard = () => {
     const { VITE_TIME_INTERVAL, VITE_SKI_RESORT_ID } = import.meta.env;
     const theme = useTheme();
     const [value, setValue] = useState(0);
@@ -241,4 +241,4 @@ const getOnlyOpenData = (data: any) => {
         .sort((a: any, b: any) => a.Name.localeCompare(b.Name));
 };
 
-export default MoreDetailsOnLiftsAndTrailsCard;
+export default LiftAndTrailDetailsCard;

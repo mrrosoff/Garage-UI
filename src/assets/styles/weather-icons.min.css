@@ -1034,6 +1034,9 @@
 .wi-forecast-io-mostly-sunny:before {
     content: "\f00c";
 }
+.wi-forecast-io-sunny:before {
+    content: "\f00d";
+}
 .wi-forecast-io-partly-cloudy:before {
     content: "\f002";
 }

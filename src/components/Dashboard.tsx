@@ -1,7 +1,7 @@
 import { Box, Divider } from "@mui/material";
 
 import WeatherCard from "./Cards/WeatherCard";
-import MoreDetailsOnLiftsAndTrailsCard from "./Cards/MoreDetailsOnLiftsAndTrailsCard";
+import LiftAndTrailDetailsCard from "./Cards/LiftAndTrailDetailsCard";
 import MountainMapCard from "./Cards/MountainMapCard";
 
 const DashBoard = () => {
@@ -13,7 +13,7 @@ const DashBoard = () => {
                 </Box>
                 <Divider />
                 <Box flexGrow={1} width={"100%"}>
-                    <MoreDetailsOnLiftsAndTrailsCard />
+                    <LiftAndTrailDetailsCard />
                 </Box>
             </Box>
             <Box flexGrow={1} height={"100%"}>
