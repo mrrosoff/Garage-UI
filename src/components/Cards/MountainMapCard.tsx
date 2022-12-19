@@ -75,6 +75,8 @@ const LiftAndTrailStatus = () => {
     const totalLifts = snowReport?.TotalLifts;
     const totalOpenTrails = snowReport?.TotalOpenTrails;
     const totalTrails = snowReport?.TotalTrails;
+    const totalOpenAcres = parseInt(snowReport?.OpenTerrainAcres);
+    const totalAcres = parseInt(snowReport?.TotalTerrainAcres);
 
     return (
         <Box
@@ -99,6 +101,11 @@ const LiftAndTrailStatus = () => {
                 chartting={"Lifts"}
                 totalOpen={totalOpenLifts}
                 totalAmount={totalLifts - totalOpenLifts}
+            />
+            <MountainPieChart
+                chartting={"Acres"}
+                totalOpen={totalOpenAcres}
+                totalAmount={totalAcres - totalOpenAcres}
             />
         </Box>
     );
