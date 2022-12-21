@@ -43,7 +43,7 @@ const MountainInfoCard = () => {
         `https://mtnpowder.com/feed?resortId=${VITE_SKI_RESORT_ID}`
     );
     const snowReport = resortData?.SnowReport;
-    const mountainAreas = resortData?.MountainAreas;
+
     return (
         <Box
             p={2}
@@ -77,7 +77,14 @@ const MountainInfoCard = () => {
 const SnowfallChartLoadingScreen = () => {
     return (
         <Box
-            sx={{ width: "100%", height: "100%", display: "flex", flexDirection: "column", pb: 10, pl: 5}}
+            sx={{
+                width: "100%",
+                height: "100%",
+                display: "flex",
+                flexDirection: "column",
+                pb: 10,
+                pl: 5
+            }}
         >
             <Box sx={{ flexGrow: 1 }} />
             <Box>
@@ -90,7 +97,14 @@ const SnowfallChartLoadingScreen = () => {
 const TrailLiftInfoLoadingScreen = () => {
     return (
         <Box
-            sx={{ width: "100%", height: "100%", display: "flex", flexDirection: "column", pt: 5, pl: 5}}
+            sx={{
+                width: "100%",
+                height: "100%",
+                display: "flex",
+                flexDirection: "column",
+                pt: 5,
+                pl: 5
+            }}
         >
             <Box sx={{ flexGrow: 1 }} />
             <Box>
@@ -123,7 +137,11 @@ const TrailsOpenAndSnowfallChart = (props: any) => {
                 </Box>
             </Box>
             <Box width={"100%"} height={"100%"} mb={-1} ml={-3}>
-                {snowfallData ? <SnowfallChart snowfallData={snowfallData} /> : <SnowfallChartLoadingScreen />}
+                {snowfallData ? (
+                    <SnowfallChart snowfallData={snowfallData} />
+                ) : (
+                    <SnowfallChartLoadingScreen />
+                )}
             </Box>
         </>
     );

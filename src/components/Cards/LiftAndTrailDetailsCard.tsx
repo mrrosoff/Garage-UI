@@ -1,13 +1,4 @@
-import {
-    AppBar,
-    Box,
-    LinearProgress,
-    Paper,
-    Tab,
-    Tabs,
-    Typography,
-    useTheme
-} from "@mui/material";
+import { AppBar, Box, LinearProgress, Paper, Tab, Tabs, Typography, useTheme } from "@mui/material";
 import SwipeableViews from "react-swipeable-views";
 import callExternalAPIOnInterval from "../../hooks/callExternalAPIOnInterval";
 import BlackDiamond from "../../assets/difficulty-icons/blackdiamond.svg";
@@ -33,7 +24,7 @@ interface TabPanelProps {
 function a11yProps(index: number) {
     return {
         id: `full-width-tab-${index}`,
-        "aria-controls": `full-width-tabpanel-${index}`,
+        "aria-controls": `full-width-tabpanel-${index}`
     };
 }
 
@@ -47,7 +38,7 @@ function TabPanel(props: TabPanelProps) {
             id={`full-width-tabpanel-${index}`}
             aria-labelledby={`full-width-tab-${index}`}
             {...other}
-            style={{ overflow: "auto", maxHeight: 300}}
+            style={{ overflow: "auto", maxHeight: 300 }}
         >
             {value === index && <Box sx={{ p: 1 }}>{children}</Box>}
         </div>
