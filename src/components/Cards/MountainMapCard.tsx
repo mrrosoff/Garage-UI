@@ -160,8 +160,8 @@ const MountainPieChart = (props: any) => {
                 cy={"50%"}
                 startAngle={90}
                 endAngle={450}
-                innerRadius={50}
-                outerRadius={60}
+                innerRadius={48}
+                outerRadius={55}
                 paddingAngle={0}
                 dataKey="value"
             >
