@@ -8,6 +8,7 @@ import callExternalAPIOnInterval from "../../hooks/callExternalAPIOnInterval";
 import AcUnitIcon from "@mui/icons-material/AcUnit";
 import { DateTime } from "luxon";
 import { Fragment } from "react";
+import SnowPatrolInfoCard from "./SnowPatrolInfoCard";
 const WeatherCard = () => {
     const theme = useTheme();
     let dayOrNight = theme.palette.mode === "dark" ? "night" : "day";
@@ -29,6 +30,9 @@ const WeatherCard = () => {
 
     return (
         <Box display={"flex"} flexDirection={"column"}>
+            <Box width={"75%"} height={"100%"} position={"absolute"}>
+                <SnowPatrolInfoCard />
+            </Box>
             {todaysWeather && tomorrowsWeather ? (
                 <>
                     <TodaysWeather todaysWeather={todaysWeather} dayOrNight={dayOrNight} />
