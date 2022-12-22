@@ -21,7 +21,7 @@ const WeatherCard = () => {
 
     const todaysWeather = resortData?.CurrentConditions?.Base;
     const tomorrowsWeather = resortData?.Forecast?.TwoDay;
-
+    console.log(todaysWeather);
     const snowForecast = [
         resortData?.Forecast?.TwoDay,
         resortData?.Forecast?.ThreeDay,
@@ -119,7 +119,10 @@ const TodaysWeatherAttributes = (props: any) => {
 };
 
 function getConditionsInHumanReadableFormat(condition: string) {
-    if (condition.includes("partly") && !condition.includes("-")) {
+    if (
+        (condition.includes("partly") || condition.includes("mostly")) &&
+        !condition.includes("-")
+    ) {
         return (
             condition.substring(0, 1).toUpperCase() +
             condition.substring(1, condition.indexOf("y") + 1) +
