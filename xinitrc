@@ -31,7 +31,7 @@ else
 	printf "${GREEN}Done.${NC}\n\n" >> $LOG_PATH
 
 	printf "$dt -- Installing dependecies...\n" >> $LOG_PATH
-	npm install --legacy-peer-deps &>> $LOG_PATH
+	npm install &>> $LOG_PATH
 	$(npm bin)/electron-rebuild &>> $LOG_PATH
 	printf "${GREEN}Done.${NC}\n\n" >> $LOG_PATH
 fi
