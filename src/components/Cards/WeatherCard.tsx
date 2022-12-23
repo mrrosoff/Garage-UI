@@ -31,7 +31,7 @@ const WeatherCard = () => {
 
     return (
         <Box display={"flex"} flexDirection={"column"}>
-            <Box width={"75%"} style={{overflow: "auto", maxHeight: 250}} position={"absolute"}>
+            <Box width={"75%"} style={{ overflow: "auto", maxHeight: 250 }} position={"absolute"}>
                 <SnowPatrolInfoCard />
             </Box>
             {todaysWeather && tomorrowsWeather ? (
