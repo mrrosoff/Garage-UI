@@ -237,7 +237,7 @@ const PercentLabel = (props: { percentOpen: number; chartUnit: string } & any) =
     const { cx, cy } = props.viewBox;
     const theme = useTheme();
     const textColor = theme.palette.mode === "dark" ? theme.palette.neutral.light : "#121212";
-    console.log(props);
+
     return (
         <>
             <text

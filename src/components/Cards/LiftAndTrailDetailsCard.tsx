@@ -37,7 +37,6 @@ function TabPanel(props: TabPanelProps) {
             id={`full-width-tabpanel-${index}`}
             aria-labelledby={`full-width-tab-${index}`}
             {...other}
-            style={{ overflow: "auto", maxHeight: 300 }}
         >
             {value === index && <Box sx={{ p: 1 }}>{children}</Box>}
         </div>
@@ -73,20 +72,22 @@ const LiftAndTrailDetailsCard = () => {
                 <Tab label="Trails" {...a11yProps(0)} />
                 <Tab label="Lifts" {...a11yProps(1)} />
             </Tabs>
-            <TabPanel value={value} index={0} dir={theme.direction}>
-                {trailsOpen.map((data: any, index: number) => (
-                    <Fragment key={index}>
-                        <ListOpenTrails data={data} />
-                    </Fragment>
-                ))}
-            </TabPanel>
-            <TabPanel value={value} index={1} dir={theme.direction}>
-                {liftsOpen.map((data: any, index: number) => (
-                    <Fragment key={index}>
-                        <ListOpenLifts data={data} />
-                    </Fragment>
-                ))}
-            </TabPanel>
+            <Box style={{overflow: "auto", maxHeight: 300}}>
+                <TabPanel value={value} index={0} dir={theme.direction}>
+                    {trailsOpen.map((data: any, index: number) => (
+                        <Fragment key={index}>
+                            <ListOpenTrails data={data} />
+                        </Fragment>
+                    ))}
+                </TabPanel>
+                <TabPanel value={value} index={1} dir={theme.direction}>
+                    {liftsOpen.map((data: any, index: number) => (
+                        <Fragment key={index}>
+                            <ListOpenLifts data={data} />
+                        </Fragment>
+                    ))}
+                </TabPanel>
+            </Box>
         </Box>
     );
 };
