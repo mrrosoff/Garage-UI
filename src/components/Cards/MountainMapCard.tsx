@@ -16,13 +16,14 @@ import {
     Popper,
     useTheme
 } from "@mui/material";
-
 import { grey } from "@mui/material/colors";
 import VideocamIcon from "@mui/icons-material/Videocam";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import CloseIcon from "@mui/icons-material/Close";
-import callExternalAPIOnInterval from "../../hooks/callExternalAPIOnInterval";
+
 import { Cell, Label, Pie, PieChart } from "recharts";
+
+import callExternalAPIOnInterval from "../../hooks/callExternalAPIOnInterval";
 
 const MountainMapCard = () => {
     return (
@@ -37,10 +38,12 @@ const MountainMapCard = () => {
                 flexDirection={"column"}
                 justifyContent={"space-between"}
             >
-                <Box pt={2} pl={2}>
-                    <LiveStreams />
+                <Box display={"flex"} justifyContent={"end"}>
+                    <Box pt={2} pr={2}>
+                        <LiveStreams />
+                    </Box>
                 </Box>
-                <Box pb={2} pl={2}>
+                <Box pb={1} pl={1}>
                     <LiftAndTrailStatus />
                 </Box>
             </Box>
@@ -67,7 +70,7 @@ const SteamboatInteractiveMap = () => {
                     ].forEach((element) => element?.remove());
                 }
             }
-        }, 1000);
+        }, 2000);
         return () => clearTimeout(iframeReactLoadDelayTimeout);
     }, [mapRef]);
 
@@ -102,15 +105,16 @@ const LiftAndTrailStatus = () => {
         `https://mtnpowder.com/feed?resortId=${VITE_SKI_RESORT_ID}`
     )?.SnowReport;
 
-    const totalOpenLifts = snowReport?.TotalOpenLifts;
-    const totalLifts = snowReport?.TotalLifts;
-    const totalOpenTrails = snowReport?.TotalOpenTrails;
-    const totalTrails = snowReport?.TotalTrails;
+    const totalOpenLifts = parseInt(snowReport?.TotalOpenLifts);
+    const totalLifts = parseInt(snowReport?.TotalLifts);
+    const totalOpenTrails = parseInt(snowReport?.TotalOpenTrails);
+    const totalTrails = parseInt(snowReport?.TotalTrails);
     const totalOpenAcres = parseInt(snowReport?.OpenTerrainAcres);
     const totalAcres = parseInt(snowReport?.TotalTerrainAcres);
 
     return (
         <Box
+            p={1}
             sx={{
                 width: "40%",
                 borderWidth: 2,
@@ -124,88 +128,142 @@ const LiftAndTrailStatus = () => {
             justifyContent={"space-around"}
         >
             <MountainPieChart
-                chartting={"Trails"}
+                chartUnit={"Trails"}
                 totalOpen={totalOpenTrails}
-                totalAmount={totalTrails - totalOpenTrails}
+                totalAmount={totalTrails}
             />
             <MountainPieChart
-                chartting={"Lifts"}
+                chartUnit={"Lifts"}
                 totalOpen={totalOpenLifts}
-                totalAmount={totalLifts - totalOpenLifts}
+                totalAmount={totalLifts}
             />
             <MountainPieChart
-                chartting={"Acres"}
+                type={"Percent"}
+                chartUnit={"Acres"}
                 totalOpen={totalOpenAcres}
-                totalAmount={totalAcres - totalOpenAcres}
+                totalAmount={totalAcres}
             />
         </Box>
     );
 };
 
-function CustomLabel(props: any) {
-    const { cx, cy } = props.viewBox;
-    const theme = useTheme();
-    const textColor = theme.palette.mode === "dark" ? theme.palette.neutral.light : "#121212";
-    return (
-        <>
-            <text
-                x={cx}
-                y={cy - 10}
-                fill={textColor}
-                textAnchor="middle"
-                dominantBaseline="central"
-                fontSize={22}
-                fontWeight={500}
-            >
-                {props.value2}
-            </text>
-            <text
-                fill={textColor}
-                x={cx}
-                y={cy + 15}
-                textAnchor="middle"
-                dominantBaseline="central"
-                fontSize={16}
-            >
-                {props.value1}
-            </text>
-        </>
-    );
-}
-
-const MountainPieChart = (props: any) => {
-    const { chartting, totalOpen, totalAmount } = props;
+const MountainPieChart = (props: {
+    totalOpen: number;
+    totalAmount: number;
+    chartUnit: string;
+    type?: "Fraction" | "Percent";
+}) => {
+    const percentOpen = (props.totalOpen / props.totalAmount) * 100;
     const data = [
-        { name: "Open", value: totalOpen },
-        { name: "All Available", value: totalAmount }
+        { name: "open", value: props.totalOpen },
+        { name: "not open", value: props.totalAmount - props.totalOpen }
     ];
-    const theme = useTheme();
 
+    const theme = useTheme();
     const COLORS = [theme.palette.primary.light, grey[300]];
 
+    const labelType = props.type || "Fraction";
     return (
-        <PieChart width={120} height={150}>
+        <PieChart width={100} height={120}>
             <Pie
                 data={data}
                 cx={"50%"}
                 cy={"50%"}
                 startAngle={90}
                 endAngle={450}
-                innerRadius={48}
-                outerRadius={55}
-                paddingAngle={0}
+                innerRadius={42}
+                outerRadius={50}
                 dataKey="value"
             >
-                {data.map((entry, index) => (
+                {data.map((_entry, index) => (
                     <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                 ))}
                 <Label
                     width={30}
                     position="center"
-                    content={<CustomLabel value1={chartting} value2={totalOpen} />}
+                    content={
+                        labelType === "Fraction" ? (
+                            <FractionLabel
+                                totalOpen={props.totalOpen}
+                                totalAmount={props.totalAmount}
+                                chartUnit={props.chartUnit}
+                            />
+                        ) : (
+                            <PercentLabel percentOpen={percentOpen} chartUnit={props.chartUnit} />
+                        )
+                    }
                 ></Label>
             </Pie>
         </PieChart>
+    );
+};
+
+const FractionLabel = (
+    props: { totalOpen: number; totalAmount: number; chartUnit: string } & any
+) => {
+    const { cx, cy } = props.viewBox;
+    const theme = useTheme();
+    const textColor = theme.palette.mode === "dark" ? theme.palette.neutral.light : "#121212";
+    return (
+        <>
+            <text
+                x={cx - 15}
+                y={cy - 2}
+                fill={textColor}
+                textAnchor="middle"
+                fontSize={18}
+                fontWeight={700}
+            >
+                {props.totalOpen}
+            </text>
+            <text
+                x={cx + 15}
+                y={cy - 2}
+                fill={textColor}
+                textAnchor="middle"
+                fontSize={10}
+                fontWeight={500}
+            >
+                / {props.totalAmount}
+            </text>
+            <text fill={textColor} x={cx + 1} y={cy + 18} textAnchor="middle" fontSize={14}>
+                {props.chartUnit}
+            </text>
+        </>
+    );
+};
+
+const PercentLabel = (props: { percentOpen: number; chartUnit: string } & any) => {
+    const { cx, cy } = props.viewBox;
+    const theme = useTheme();
+    const textColor = theme.palette.mode === "dark" ? theme.palette.neutral.light : "#121212";
+    console.log(props);
+    return (
+        <>
+            <text
+                x={cx - 5}
+                y={cy - 2}
+                fill={textColor}
+                textAnchor="middle"
+                fontSize={22}
+                fontWeight={700}
+            >
+                {props.percentOpen.toFixed(0)}
+            </text>
+            <text
+                x={cx + 15}
+                y={cy - 2}
+                fill={textColor}
+                textAnchor="middle"
+                fontSize={14}
+                fontWeight={500}
+            >
+                %
+            </text>
+            <text fill={textColor} x={cx + 1} y={cy + 18} textAnchor="middle" fontSize={14}>
+                {props.chartUnit}
+            </text>
+        </>
     );
 };
 
@@ -243,14 +301,11 @@ const LiveStreams = () => {
                 }}
                 color={"secondary"}
                 variant={"contained"}
-                size={"medium"}
-                onClick={() => {
-                    setDialogOpen(true);
-                }}
+                size={"large"}
+                onClick={() => setDialogOpen(true)}
             >
                 <VideocamIcon />
             </Button>
-
             <Dialog fullScreen={true} open={dialogOpen} onClose={() => setDialogOpen(false)}>
                 <DialogActions style={{ justifyContent: "space-between" }}>
                     <ButtonGroup
