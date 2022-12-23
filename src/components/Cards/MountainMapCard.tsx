@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import {
     Box,
@@ -50,15 +50,46 @@ const MountainMapCard = () => {
 };
 
 const SteamboatInteractiveMap = () => {
+    const mapRef = useRef<HTMLIFrameElement>(null);
+
+    useEffect(() => {
+        const iframeReactLoadDelayTimeout = setTimeout(() => {
+            if (mapRef.current) {
+                const iframeWindow = mapRef.current.contentWindow;
+                setUserAgent(iframeWindow, "Mozilla/5.0");
+
+                const iframeDocument = iframeWindow?.document;
+                if (iframeDocument) {
+                    [
+                        iframeDocument.getElementById("fullscreen"),
+                        iframeDocument.getElementById("zoomControls"),
+                        iframeDocument.getElementById("menu")
+                    ].forEach((element) => element?.remove());
+                }
+            }
+        }, 1000);
+        return () => clearTimeout(iframeReactLoadDelayTimeout);
+    }, [mapRef]);
+
+    const setUserAgent = (window: Window | null, userAgent: string) => {
+        if (window && window.navigator.userAgent != userAgent) {
+            const userAgentProp = { get: () => userAgent };
+            try {
+                Object.defineProperty(window.navigator, "userAgent", userAgentProp);
+            } catch (e) {
+                (window as any).navigator = Object.create(navigator, { userAgent: userAgentProp });
+            }
+        }
+    };
+
     return (
         <iframe
-            id="Steamboat Map"
-            src="https://vicomap-cdn.resorts-interactive.com/map/1800?fullscreen=true&menu=3.7,3.10,3.14&openLiftAnimation=true&openLiftColor=green&liftHighlightOpacity=0.1&backgroundOpacity=0.5"
+            src="https://vicomap-cdn.resorts-interactive.com/map/1800?fullscreen=true&menu=3.7,3.10,3.14&openLiftAnimation=false&openLiftColor=green&liftHighlightOpacity=0.1&backgroundOpacity=0.5"
             width="100%"
             height="100%"
             allowFullScreen
-            title="Vicomap"
-            style={{ pointerEvents: "auto" }}
+            style={{ border: "none", pointerEvents: "auto" }}
+            ref={mapRef}
         />
     );
 };

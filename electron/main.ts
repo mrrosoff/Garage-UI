@@ -11,6 +11,9 @@ function createWindow() {
         darkTheme: true,
         fullscreen: process.env.NODE_ENV === "production",
         autoHideMenuBar: true,
+        webPreferences: {
+            webSecurity: false
+        }
     });
 
     let indexPath = "http://localhost:3000";
@@ -23,11 +26,11 @@ function createWindow() {
     mainWindow.on("closed", () => (mainWindow = null));
 }
 
-app.on("ready", () => {
-    createWindow();
-});
-// For sunrise and sunset times API. No SSL Certificate error.
+app.on("ready", () => createWindow());
+
+app.commandLine.appendSwitch("disable-site-isolation-trials");
 app.commandLine.appendSwitch("ignore-certificate-errors");
+
 app.on("window-all-closed", () => app.quit());
 app.on("activate", () => {
     if (mainWindow === null) createWindow();
