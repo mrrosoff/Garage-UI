@@ -9,6 +9,7 @@ import AcUnitIcon from "@mui/icons-material/AcUnit";
 import { DateTime } from "luxon";
 import { Fragment } from "react";
 import SnowPatrolInfoCard from "./SnowPatrolInfoCard";
+
 const WeatherCard = () => {
     const theme = useTheme();
     let dayOrNight = theme.palette.mode === "dark" ? "night" : "day";
@@ -21,7 +22,7 @@ const WeatherCard = () => {
 
     const todaysWeather = resortData?.CurrentConditions?.Base;
     const tomorrowsWeather = resortData?.Forecast?.TwoDay;
-    console.log(todaysWeather);
+
     const snowForecast = [
         resortData?.Forecast?.TwoDay,
         resortData?.Forecast?.ThreeDay,

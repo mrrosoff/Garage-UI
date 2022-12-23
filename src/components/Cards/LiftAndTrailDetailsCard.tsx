@@ -1,5 +1,4 @@
-import { AppBar, Box, LinearProgress, Paper, Tab, Tabs, Typography, useTheme } from "@mui/material";
-import SwipeableViews from "react-swipeable-views";
+import { Box, LinearProgress, Paper, Tab, Tabs, Typography, useTheme } from "@mui/material";
 import callExternalAPIOnInterval from "../../hooks/callExternalAPIOnInterval";
 import BlackDiamond from "../../assets/difficulty-icons/blackdiamond.svg";
 import BlueBlackSquare from "../../assets/difficulty-icons/blueblacksquare.svg";
@@ -63,10 +62,6 @@ const LiftAndTrailDetailsCard = () => {
         setValue(newValue);
     };
 
-    const handleChangeIndex = (index: number) => {
-        setValue(index);
-    };
-
     return (
         <Box
             sx={{
@@ -74,53 +69,24 @@ const LiftAndTrailDetailsCard = () => {
                 height: "100%"
             }}
         >
-            <AppBar position="static" color="transparent" elevation={0}>
-                <Tabs
-                    value={value}
-                    onChange={handleChange}
-                    indicatorColor="primary"
-                    variant="fullWidth"
-                    sx={{
-                        backgroundColor:
-                            theme.palette.mode === "light" ? theme.palette.neutral.light : "#121212"
-                    }}
-                >
-                    <Tab
-                        label="Trails"
-                        {...a11yProps(0)}
-                        sx={{
-                            backgroundColor: theme.palette.mode === "light" ? "#ffffff" : "#121212"
-                        }}
-                    />
-                    <Tab
-                        label="Lifts"
-                        {...a11yProps(1)}
-                        sx={{
-                            backgroundColor: theme.palette.mode === "light" ? "#ffffff" : "#121212"
-                        }}
-                    />
-                </Tabs>
-            </AppBar>
-            <SwipeableViews
-                axis={theme.direction === "rtl" ? "x-reverse" : "x"}
-                index={value}
-                onChangeIndex={handleChangeIndex}
-            >
-                <TabPanel value={value} index={0} dir={theme.direction}>
-                    {trailsOpen.map((data: any, index: number) => (
-                        <Fragment key={index}>
-                            <ListOpenTrails data={data} />
-                        </Fragment>
-                    ))}
-                </TabPanel>
-                <TabPanel value={value} index={1} dir={theme.direction}>
-                    {liftsOpen.map((data: any, index: number) => (
-                        <Fragment key={index}>
-                            <ListOpenLifts data={data} />
-                        </Fragment>
-                    ))}
-                </TabPanel>
-            </SwipeableViews>
+            <Tabs value={value} onChange={handleChange} variant={"fullWidth"}>
+                <Tab label="Trails" {...a11yProps(0)} />
+                <Tab label="Lifts" {...a11yProps(1)} />
+            </Tabs>
+            <TabPanel value={value} index={0} dir={theme.direction}>
+                {trailsOpen.map((data: any, index: number) => (
+                    <Fragment key={index}>
+                        <ListOpenTrails data={data} />
+                    </Fragment>
+                ))}
+            </TabPanel>
+            <TabPanel value={value} index={1} dir={theme.direction}>
+                {liftsOpen.map((data: any, index: number) => (
+                    <Fragment key={index}>
+                        <ListOpenLifts data={data} />
+                    </Fragment>
+                ))}
+            </TabPanel>
         </Box>
     );
 };
