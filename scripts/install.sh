@@ -5,11 +5,11 @@ GREEN='\033[0;32m'
 YELLOW='\033[0;33m'
 NC='\033[0m'
 
-printf "${YELLOW}About to install Garage-UI-Mountain-Edition (Make sure to run ONLY on a Raspberry Pi)${NC}\n"
+printf "${YELLOW}About to install Mountain-UI (Make sure to run ONLY on a Raspberry Pi)${NC}\n"
 read -p "Continue? (Y/N): " confirm && [[ $confirm == [yY] || $confirm == [yY][eE][sS] ]] || exit 1
 
-if [ $(pwd | sed 's#.*/##') != "Garage-UI-Mountain-Edition" ]; then
-    printf "${RED}ERROR: Not in Garage-UI-Mountain-Edition directory. Exiting...${NC}\n"
+if [ $(pwd | sed 's#.*/##') != "Mountain-UI" ]; then
+    printf "${RED}ERROR: Not in Mountain-UI directory. Exiting...${NC}\n"
     exit 1
 fi
 
@@ -64,7 +64,7 @@ GREEN='\033[1;32m'
 NC='\033[0m'
 
 if [[ -z \$SSH_CONNECTION ]]; then
-    echo -e \"\${GREEN}About to launch Garage-UI-Mountain-Edition... \${RED}press Ctrl+C to exit to terminal.\${NC}\"
+    echo -e \"\${GREEN}About to launch Mountain-UI... \${RED}press Ctrl+C to exit to terminal.\${NC}\"
     sleep 4s
     startx -- -nocursor 
 fi

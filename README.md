@@ -1,17 +1,17 @@
-# Garage-UI-Mountain-Edition
+# Mountain-UI
 
-## A Custom UI For A Garage Door Opener
+## A Custom UI For Mountain Stats
 
-![Garage-UI](src/assets/example.png)
+![Mountain-UI](src/assets/Mountain-UI.gif)
 
 ## About Project
-This project is an another flavor of the original Garage-UI available [here](https://github.com/mrrosoff/Garage-UI). This Garage-UI is the Mountain Edition. It allows users to see the current/forecasted weather, ski conditions, total snowfall, and show live feeds from a ski resort of their choice, all at a glance. Currently, this project does ***not*** open or close a garage door.
+This project is an another flavor of the original Garage-UI available [here](https://github.com/mrrosoff/Garage-UI). This project, however, does not open a garage and instead shows stats on a specific mountain. It allows users to see the current/forecasted weather, ski conditions, show live feeds from a ski resort of their choice, and a fully interactive map, all at a glance.
 
-This project is an Electron app that runs on a Raspberry Pi. The app is designed to be used with a 10"/12" touch screen. For a suggested list of hardware for this project visit this link.
+This project is an Electron app that runs on a Raspberry Pi. The app is designed to be used with a 10"/12" touch screen. For a suggested list of hardware for this project visit this [link](https://www.amazon.com/hz/wishlist/ls/38NBC7T3TDLGV?ref_=wl_share).
 
 ### Installation
 
-Clone the repository and run the [install script](scripts/install.sh). This will install the dependencies, build the app, and change your Raspberry Pi to auto update itself and auto launch to Garage-UI-Mountatin-Edition. ⚠️ ***Make sure to run the script in the Garage-UI-Mountatin-Edition directory.***
+Clone the repository and run the [install script](scripts/install.sh). This will install the dependencies, build the app, and change your Raspberry Pi to auto update itself and auto launch to Mountain-UI. ⚠️ ***Make sure to run the script in the Mountain-UI directory.***
 
 ### Environment Variables
 
@@ -21,6 +21,9 @@ The project uses environment variables to store API keys and other sensitive inf
 // Coordinates for the weather API
 VITE_LATITUDE=40.4850 
 VITE_LONGITUDE=-106.8317
+
+// National Weather Serivce Zone
+VITE_NATIONAL_WEATHER_SERVICE_ZONE= // Your zone
 
 // For quick start, use ski id 6 for Steamboat Springs, CO
 VITE_SKI_RESORT_ID= // Your ski resort id
@@ -32,3 +35,6 @@ VITE_TIME_INTERVAL=60000
 VITE_YOUTUBE_LIVE_STREAM_LINK= // Your live stream link
 VITE_LIVE_STREAM_BUTTON_TITLE= // Your live stream title
 ```
+
+## Contributing
+Please feel free to use this however you'd like. If you'd like to contribute, please open a pull request and I'll review it as soon as I can. If you have any questions, please open an issue and I'll get back to you as soon as I can.
