@@ -4,6 +4,7 @@ export type RelayWiring = "forward" | "backward" | undefined;
 interface ImportMetaEnv {
     readonly VITE_LATITUDE: number;
     readonly VITE_LONGITUDE: number;
+    readonly VITE_NATIONAL_WEATHER_SERVICE_ZONE: string;
     readonly VITE_NOAA_STATION: number;
     readonly VITE_TIME_INTERVAL: number;
     readonly VITE_SKI_RESORT_ID: number;
