@@ -62,7 +62,7 @@ const SteamboatInteractiveMap = () => {
                         map.setAttributeNS(
                             "http://www.w3.org/1999/xlink",
                             "xlink:href",
-                            "https://github.com/matthewfernst/Mountain-UI/blob/refactor/src/assets/images/vectorized_mountain.png"
+                            "https://raw.githubusercontent.com/matthewfernst/Mountain-UI/refactor/src/assets/images/vectorized_mountain.png"
                         );
                     }
                 }
