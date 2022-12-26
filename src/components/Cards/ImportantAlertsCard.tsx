@@ -1,4 +1,4 @@
-import { Alert, AlertTitle, Box, Collapse, IconButton, Typography } from "@mui/material";
+import { Alert, AlertTitle, Box, Collapse, Divider, IconButton, Typography } from "@mui/material";
 import { useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import callExternalAPIOnInterval from "../../hooks/callExternalAPIOnInterval";
@@ -25,26 +25,31 @@ const ImportantAlertsCard = () => {
     }
 
     return (
-        <Box width={"30%"}>
-            {nationalWeatherServiceAlert && (
-                <CustomAlert
-                    severity={"warning"}
-                    showAlert={showNationalWeatherAlert}
-                    setShowAlert={setShowNationalWeatherAlert}
-                    title={"National Weather Service Alert"}
-                    message={nationalWeatherServiceAlert}
-                />
+        <>
+            <Box width={"30%"}>
+                {nationalWeatherServiceAlert && (
+                    <CustomAlert
+                        severity={"warning"}
+                        showAlert={showNationalWeatherAlert}
+                        setShowAlert={setShowNationalWeatherAlert}
+                        title={"National Weather Service Alert"}
+                        message={nationalWeatherServiceAlert}
+                    />
+                )}
+                {snowPatrolAlert && snowPatrolAlert !== "--" && (
+                    <CustomAlert
+                        severity={"warning"}
+                        showAlert={showSnowPatrolAlert}
+                        setShowAlert={setShowSnowPatrolAlert}
+                        title={"Snow Patrol Alert"}
+                        message={snowPatrolAlert}
+                    />
+                )}
+            </Box>
+            {(nationalWeatherServiceAlert || (snowPatrolAlert && snowPatrolAlert !== "--")) && (
+                <Divider sx={{ mt: 2, mb: 2 }} />
             )}
-            {snowPatrolAlert && snowPatrolAlert !== "--" && (
-                <CustomAlert
-                    severity={"warning"}
-                    showAlert={showSnowPatrolAlert}
-                    setShowAlert={setShowSnowPatrolAlert}
-                    title={"Snow Patrol Alert"}
-                    message={snowPatrolAlert}
-                />
-            )}
-        </Box>
+        </>
     );
 };
 
