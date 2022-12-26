@@ -72,7 +72,7 @@ const LiftAndTrailDetailsCard = () => {
                 <Tab label="Trails" {...a11yProps(0)} />
                 <Tab label="Lifts" {...a11yProps(1)} />
             </Tabs>
-            <Box style={{ overflow: "auto", maxHeight: 300 }}>
+            <Box style={{ overflow: "auto", maxHeight: 260 }}>
                 <TabPanel value={value} index={0} dir={theme.direction}>
                     {trailsOpen.map((data: any, index: number) => (
                         <Fragment key={index}>

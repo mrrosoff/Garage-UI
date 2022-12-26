@@ -14,11 +14,23 @@ const WeatherCard = () => {
     const theme = useTheme();
     let dayOrNight = theme.palette.mode === "dark" ? "night" : "day";
 
-    const { VITE_TIME_INTERVAL, VITE_SKI_RESORT_ID } = import.meta.env;
+    const { VITE_TIME_INTERVAL, VITE_SKI_RESORT_ID, VITE_ZIP_CODE } = import.meta.env;
     const resortData = callExternalAPIOnInterval(
         VITE_TIME_INTERVAL,
         `https://mtnpowder.com/feed?resortId=${VITE_SKI_RESORT_ID}`
     );
+
+    let uvIndexData: any | undefined = callExternalAPIOnInterval(
+        VITE_TIME_INTERVAL,
+        `https://data.epa.gov/efservice/getEnvirofactsUVHOURLY/ZIP/${VITE_ZIP_CODE}/JSON`
+    );
+    uvIndexData = Array.isArray(uvIndexData) ? uvIndexData : [];
+    const currentHour = DateTime.now().toFormat("hh a");
+
+    let uvIndex = uvIndexData?.find((data: { DATE_TIME: string }) =>
+        data.DATE_TIME.includes(currentHour)
+    )?.UV_VALUE;
+    uvIndex = uvIndex || uvIndex === 0 ? uvIndex : "--";
 
     const todaysWeather = resortData?.CurrentConditions?.Base;
     const tomorrowsWeather = resortData?.Forecast?.TwoDay;
@@ -34,9 +46,13 @@ const WeatherCard = () => {
             <Box width={"78%"} style={{ overflow: "auto", maxHeight: 250 }} position={"absolute"}>
                 <ImportantAlertsCard />
             </Box>
-            {todaysWeather && tomorrowsWeather ? (
+            {todaysWeather && tomorrowsWeather && snowForecast ? (
                 <>
-                    <TodaysWeather todaysWeather={todaysWeather} dayOrNight={dayOrNight} />
+                    <TodaysWeather
+                        todaysWeather={todaysWeather}
+                        dayOrNight={dayOrNight}
+                        uvIndex={uvIndex}
+                    />
                     <Box pt={3} display={"flex"}>
                         <TomorrowsWeather tomorrowsWeather={tomorrowsWeather} />
                     </Box>
@@ -84,7 +100,7 @@ const TodaysWeather = (props: any) => {
                 H:{parseInt(props.todaysWeather.TemperatureHighF)}° L:
                 {parseInt(props.todaysWeather.TemperatureLowF)}°
             </Typography>
-            <TodaysWeatherAttributes todaysWeather={props.todaysWeather} />
+            <TodaysWeatherAttributes todaysWeather={props.todaysWeather} uvIndex={props.uvIndex} />
         </Box>
     );
 };
@@ -97,7 +113,8 @@ const TodaysWeatherAttributes = (props: any) => {
                     <AirIcon style={{ fontSize: "15", verticalAlign: "middle" }} />
                     <Typography sx={{ pl: 1 }}>
                         {" "}
-                        {props.todaysWeather.WindGustsMph} mph {props.todaysWeather.WindDirection}
+                        {props.todaysWeather.WindStrengthMph} mph{" "}
+                        {props.todaysWeather.WindDirection}
                     </Typography>
                 </Box>
                 <Box display={"flex"} alignItems={"center"}>
@@ -108,7 +125,7 @@ const TodaysWeatherAttributes = (props: any) => {
             <Box>
                 <Box display={"flex"} alignItems={"center"}>
                     <LightModeIcon style={{ fontSize: "15", verticalAlign: "middle" }} />
-                    <Typography sx={{ pl: 1 }}>{props.todaysWeather.UvIndex}</Typography>
+                    <Typography sx={{ pl: 1 }}>{props.uvIndex}</Typography>
                 </Box>
                 <Box display={"flex"} alignItems={"center"}>
                     <WavesIcon style={{ fontSize: "15", verticalAlign: "middle" }} />
