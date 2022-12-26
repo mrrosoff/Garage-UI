@@ -2,12 +2,12 @@ import { Fragment } from "react";
 
 import { DateTime } from "luxon";
 
-import { Avatar, Box, Divider, List, ListItem, ListItemAvatar, ListItemText, Typography, useTheme } from "@mui/material";
+import { Avatar, Box, Divider, Typography, useTheme } from "@mui/material";
 import ScaleIcon from "@mui/icons-material/Scale";
 import LightModeIcon from "@mui/icons-material/LightMode";
 import WavesIcon from "@mui/icons-material/Waves";
 import AirIcon from "@mui/icons-material/Air";
-import WbTwilightIcon from "@mui/icons-material/WbTwilight";
+import LeaderboardIcon from "@mui/icons-material/Leaderboard";
 import AcUnitIcon from "@mui/icons-material/AcUnit";
 import { grey } from "@mui/material/colors";
 
@@ -34,60 +34,66 @@ const SideBar = () => {
         resortData.Forecast.FourDay
     ];
 
+    console.log(resortData);
+
     return (
         <Box display={"flex"} flexDirection={"column"} height={"100%"} pt={2} pl={3} pr={3} pb={2}>
             <ImportantAlertsCard />
             <Typography sx={{ fontSize: 40, fontWeight: 600 }}>Steamboat Springs</Typography>
-            <Divider sx={{ mt: 2, mb: 3 }} />
-            {todaysWeather && <TodaysWeather todaysWeather={todaysWeather} />}
-            <Divider sx={{ mt: 3, mb: 2 }} />
+            <Divider sx={{ borderBottomWidth: "medium", mt: 2, mb: 3 }} />
+            {todaysWeather && (
+                <TodaysWeather
+                    todaysWeather={todaysWeather}
+                    todaysSnow={resortData.Forecast.OneDay}
+                />
+            )}
+            <Divider sx={{ borderBottomWidth: "medium", mt: 2, mb: 2 }} />
             {snowForecast && <SnowForecast snowForecast={snowForecast} />}
-            <Divider sx={{ mt: 2, mb: 2 }} />
+            <Divider sx={{ borderBottomWidth: "medium", mt: 2, mb: 2 }} />
             <LiftAndTrailStatus />
-            <Divider sx={{ mt: 2, mb: 2 }} />
+            <Divider sx={{ borderBottomWidth: "medium", mt: 2, mb: 2 }} />
             <VerticalFeetLeaderboard />
         </Box>
     );
 };
 
-const TodaysWeather = (props: { todaysWeather: any }) => {
+const TodaysWeather = (props: { todaysWeather: any; todaysSnow: any }) => {
     const theme = useTheme();
     const todaysConditions = props.todaysWeather.Conditions.replace("_", "-");
 
     return (
-        <Box display={"flex"} justifyContent={"space-between"} alignItems={"center"}>
-            <span
-                className={`wi wi-${
-                    theme.palette.mode === "dark" ? "night" : "day"
-                }-${todaysConditions}`}
-                style={{ fontSize: 65 }}
-            />
-            <Box display={"flex"} flexDirection={"column"}>
-                <Typography style={{ fontSize: 25 }}>
-                    {parseInt(props.todaysWeather.TemperatureF)} °F
-                </Typography>
-                <Typography sx={{ fontSize: 18, pb: 2 }}>
-                    {getConditionsInHumanReadableFormat(todaysConditions)}
-                </Typography>
+        <Box display={"flex"} flexDirection={"column"}>
+            <Box display={"flex"} justifyContent={"center"} alignItems={"center"}>
+                <span
+                    className={`wi wi-${
+                        theme.palette.mode === "dark" ? "night" : "day"
+                    }-${todaysConditions}`}
+                    style={{ fontSize: 80 }}
+                />
+                <Box ml={4} display={"flex"} flexDirection={"column"}>
+                    <Typography style={{ fontSize: 25 }}>
+                        {parseInt(props.todaysWeather.TemperatureF)} °F
+                    </Typography>
+                    <Typography sx={{ fontSize: 14, mt: -0.5 }}>
+                        {getConditionsInHumanReadableFormat(todaysConditions)}
+                    </Typography>
+                    <Typography>{props.todaysSnow.forecasted_snow_day_in}"</Typography>
+                </Box>
             </Box>
-            <Box display={"flex"} flexDirection={"column"}>
+            <Box mt={3} pl={2} pr={2} display={"flex"} justifyContent={"space-between"}>
                 <Box display={"flex"} alignItems={"center"}>
                     <AirIcon style={{ fontSize: "15", verticalAlign: "middle" }} />
-                    <Typography sx={{ pl: 1 }}>
+                    <Typography sx={{ pl: 2 }}>
                         {props.todaysWeather.WindGustsMph} mph {props.todaysWeather.WindDirection}
                     </Typography>
                 </Box>
                 <Box display={"flex"} alignItems={"center"}>
-                    <ScaleIcon style={{ fontSize: "15", verticalAlign: "middle" }} />
-                    <Typography sx={{ pl: 1 }}>{props.todaysWeather.PressureIN} Hg</Typography>
-                </Box>
-                <Box display={"flex"} alignItems={"center"}>
                     <LightModeIcon style={{ fontSize: "15", verticalAlign: "middle" }} />
-                    <Typography sx={{ pl: 1 }}>{props.todaysWeather.UvIndex}</Typography>
+                    <Typography sx={{ pl: 2 }}>{props.todaysWeather.UvIndex}</Typography>
                 </Box>
                 <Box display={"flex"} alignItems={"center"}>
                     <WavesIcon style={{ fontSize: "15", verticalAlign: "middle" }} />
-                    <Typography sx={{ pl: 1 }}>{props.todaysWeather.Humidity}%</Typography>
+                    <Typography sx={{ pl: 2 }}>{props.todaysWeather.Humidity}%</Typography>
                 </Box>
             </Box>
         </Box>
@@ -116,32 +122,26 @@ function getConditionsInHumanReadableFormat(condition: string) {
 
 const SnowForecast = (props: any) => {
     return (
-        <>
-            <Box display={"flex"} flexDirection={"row"} alignItems={"center"}>
-                <AcUnitIcon style={{ fontSize: 18, verticalAlign: "middle" }} />
-                <Typography sx={{ fontSize: 18, paddingLeft: 0.5 }}>Forecasted Snowfall</Typography>
-            </Box>
-            <Box display={"flex"} justifyContent={"space-around"} pt={1}>
-                {props.snowForecast.map((day: any, index: number) => {
-                    return (
-                        <Fragment key={index}>
-                            <Box display={"flex"}>
-                                <Typography>
-                                    {day.date && DateTime.fromISO(day.date).toFormat("EEE")}:
-                                </Typography>
-                                <Typography style={{ paddingLeft: 4 }}>
-                                    {day.forecasted_snow_day_in}"
-                                </Typography>
-                            </Box>
+        <Box mt={1} display={"flex"} justifyContent={"space-around"}>
+            {props.snowForecast.map((day: any, index: number) => {
+                return (
+                    <Fragment key={index}>
+                        <Box display={"flex"}>
+                            <Typography>
+                                {day.date && DateTime.fromISO(day.date).toFormat("EEE")}:
+                            </Typography>
+                            <Typography style={{ paddingLeft: 4 }}>
+                                {day.forecasted_snow_day_in}"
+                            </Typography>
+                        </Box>
 
-                            {index !== props.snowForecast.length - 1 && (
-                                <Divider orientation="vertical" flexItem />
-                            )}
-                        </Fragment>
-                    );
-                })}
-            </Box>
-        </>
+                        {index !== props.snowForecast.length - 1 && (
+                            <Divider orientation="vertical" flexItem />
+                        )}
+                    </Fragment>
+                );
+            })}
+        </Box>
     );
 };
 
@@ -301,39 +301,37 @@ const PercentLabel = (props: { percentOpen: number; chartUnit: string } & any) =
 
 const VerticalFeetLeaderboard = () => {
     return (
-        <>
-            <Box display={"flex"} flexDirection={"row"} alignItems={"center"}>
-                <Typography sx={{ fontSize: 24, fontWeight: 800 }}>Top Vertical Feet</Typography>
-            </Box>
-            <Box mt={2} display={"flex"} flexDirection={"column"}>
+        <Box display={"flex"} flexDirection={"column"}>
+            <LeaderboardIcon sx={{ fontSize: 30, alignSelf: "end" }} />
+            <Box mt={-3} display={"flex"} flexDirection={"column"}>
                 <Box display={"flex"} alignItems={"center"}>
                     <Avatar alt="Matthew Ernst" src="/static/images/avatar/1.jpg" />
                     <Box ml={2} display={"flex"} flexDirection={"column"}>
-                        <Typography sx={{ fontSize: 20, fontWeight: 500 }}>
+                        <Typography sx={{ fontSize: 20, fontWeight: 400 }}>
                             Matthew Ernst
                         </Typography>
-                        <Typography sx={{ fontSize: 15, fontWeight: 400 }}>10,200 ft</Typography>
+                        <Typography sx={{ fontSize: 15, fontWeight: 300 }}>10,200 ft</Typography>
                     </Box>
                 </Box>
                 <Divider sx={{ m: 1 }} />
                 <Box display={"flex"} alignItems={"center"}>
                     <Avatar alt="Max Rosoff" src="/static/images/avatar/1.jpg" />
                     <Box ml={2} display={"flex"} flexDirection={"column"}>
-                        <Typography sx={{ fontSize: 20, fontWeight: 500 }}>Max Rosoff</Typography>
-                        <Typography sx={{ fontSize: 15, fontWeight: 400 }}>8,400 ft</Typography>
+                        <Typography sx={{ fontSize: 20, fontWeight: 400 }}>Max Rosoff</Typography>
+                        <Typography sx={{ fontSize: 15, fontWeight: 300 }}>8,400 ft</Typography>
                     </Box>
                 </Box>
                 <Divider sx={{ m: 1 }} />
                 <Box display={"flex"} alignItems={"center"}>
                     <Avatar alt="Dante Delee" src="/static/images/avatar/1.jpg" />
                     <Box ml={2} display={"flex"} flexDirection={"column"}>
-                        <Typography sx={{ fontSize: 20, fontWeight: 500 }}>Dante Delee</Typography>
-                        <Typography sx={{ fontSize: 15, fontWeight: 400 }}>6,920 ft</Typography>
+                        <Typography sx={{ fontSize: 20, fontWeight: 400 }}>Dante Delee</Typography>
+                        <Typography sx={{ fontSize: 15, fontWeight: 300 }}>6,920 ft</Typography>
                     </Box>
                 </Box>
             </Box>
-        </>
+        </Box>
     );
-}
+};
 
 export default SideBar;
