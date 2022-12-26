@@ -38,9 +38,9 @@ const SideBar = () => {
         <Box display={"flex"} flexDirection={"column"} height={"100%"} pt={2} pl={3} pr={3} pb={2}>
             <ImportantAlertsCard />
             <Typography sx={{ fontSize: 40, fontWeight: 600 }}>Steamboat Springs</Typography>
-            <Divider sx={{ mt: 2, mb: 2 }} />
+            <Divider sx={{ mt: 2, mb: 3 }} />
             {todaysWeather && <TodaysWeather todaysWeather={todaysWeather} />}
-            <Divider sx={{ mt: 2, mb: 2 }} />
+            <Divider sx={{ mt: 3, mb: 2 }} />
             {snowForecast && <SnowForecast snowForecast={snowForecast} />}
             <Divider sx={{ mt: 2, mb: 2 }} />
             <LiftAndTrailStatus />
@@ -55,7 +55,7 @@ const TodaysWeather = (props: { todaysWeather: any }) => {
     const todaysConditions = props.todaysWeather.Conditions.replace("_", "-");
 
     return (
-        <Box display={"flex"} justifyContent={"space-between"} mt={2} p={2}>
+        <Box display={"flex"} justifyContent={"space-between"} alignItems={"center"}>
             <span
                 className={`wi wi-${
                     theme.palette.mode === "dark" ? "night" : "day"
@@ -192,7 +192,7 @@ const MountainPieChart = (props: {
     const labelType = props.type || "Fraction";
     return (
         <Box p={1}>
-            <PieChart width={105} height={100}>
+            <PieChart width={100} height={100}>
                 <Pie
                     data={data}
                     cx={"50%"}
