@@ -13,8 +13,7 @@ import {
     MenuItem,
     MenuList,
     Paper,
-    Popper,
-    useTheme
+    Popper
 } from "@mui/material";
 import VideocamIcon from "@mui/icons-material/Videocam";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
@@ -28,11 +27,11 @@ const MountainMapCard = () => {
             <Box position={"absolute"} bottom={0} left={0}>
                 <Box pb={2} pl={2} display={"flex"}>
                     <LiveStreams />
-                    <Button variant={"contained"} sx={{ ml: 4 }}>
-                        <ZoomInIcon />
+                    <Button variant={"contained"} size={"large"} sx={{ ml: 2, borderRadius: 5 }}>
+                        <ZoomInIcon sx={{ fontSize: 30 }} />
                     </Button>
-                    <Button variant={"contained"} sx={{ ml: 4 }}>
-                        <ZoomOutIcon />
+                    <Button variant={"contained"} size={"large"} sx={{ ml: 2, borderRadius: 5 }}>
+                        <ZoomOutIcon sx={{ fontSize: 30 }} />
                     </Button>
                 </Box>
             </Box>
@@ -57,6 +56,15 @@ const SteamboatInteractiveMap = () => {
                         iframeDocument.getElementById("zoomControls"),
                         iframeDocument.getElementById("menu")
                     ].forEach((element) => element?.remove());
+
+                    const map = iframeDocument.getElementById("_Image1");
+                    if (map) {
+                        map.setAttributeNS(
+                            "http://www.w3.org/1999/xlink",
+                            "xlink:href",
+                            "https://https://github.com/matthewfernst/Mountain-UI/tree/main/src/assets/images/vectorized_mountain.png"
+                        );
+                    }
                 }
             }
         }, 5000);
@@ -76,7 +84,7 @@ const SteamboatInteractiveMap = () => {
 
     return (
         <iframe
-            src="https://vicomap-cdn.resorts-interactive.com/map/1800?fullscreen=true&menu=3.7,3.10,3.14&openLiftAnimation=false&openLiftColor=green&liftHighlightOpacity=0.1&backgroundOpacity=0.5"
+            src="https://vicomap-cdn.resorts-interactive.com/map/1800?fullscreen=true&menu=3.7,3.10,3.14&openLiftAnimation=false&openLiftColor=green&liftHighlightOpacity=0.1&backgroundOpacity=0.4"
             width="100%"
             height="100%"
             allowFullScreen
@@ -88,28 +96,15 @@ const SteamboatInteractiveMap = () => {
 
 const LiveStreams = () => {
     const { VITE_YOUTUBE_LIVE_STREAM_LINKS, VITE_LIVE_STREAM_BUTTON_TITLES } = import.meta.env;
-    const theme = useTheme();
-    const [dialogOpen, setDialogOpen] = useState(false);
-    const [popperOpen, setPopperOpen] = useState(false);
-    const anchorRef = useRef<HTMLDivElement>(null);
-    const [selectedIndex, setSelectedIndex] = useState(0);
+
     const liveStreamLinks = VITE_YOUTUBE_LIVE_STREAM_LINKS.split(",");
     const liveStreamTitles = VITE_LIVE_STREAM_BUTTON_TITLES.split(",");
-    const handleMenuItemClick = (
-        _event: React.MouseEvent<HTMLLIElement, MouseEvent>,
-        index: number
-    ) => {
-        setSelectedIndex(index);
-        setPopperOpen(false);
-    };
 
-    const handleToggle = () => {
-        setPopperOpen((prevOpen) => !prevOpen);
-    };
+    const [dialogOpen, setDialogOpen] = useState(false);
+    const [popperOpen, setPopperOpen] = useState(false);
+    const [selectedIndex, setSelectedIndex] = useState(0);
 
-    const handleClose = (event: Event) => {
-        setPopperOpen(false);
-    };
+    const anchorRef = useRef<HTMLDivElement>(null);
 
     return (
         <>
@@ -123,7 +118,7 @@ const LiveStreams = () => {
                 size={"large"}
                 onClick={() => setDialogOpen(true)}
             >
-                <VideocamIcon />
+                <VideocamIcon sx={{ fontSize: 30 }} />
             </Button>
             <Dialog fullScreen={true} open={dialogOpen} onClose={() => setDialogOpen(false)}>
                 <DialogActions style={{ justifyContent: "space-between" }}>
@@ -137,7 +132,7 @@ const LiveStreams = () => {
                             sx={{
                                 borderRadius: 5
                             }}
-                            onClick={handleToggle}
+                            onClick={() => setPopperOpen((prevOpen) => !prevOpen)}
                         >
                             {liveStreamTitles[selectedIndex]}
                             <ArrowDropDownIcon />
@@ -172,7 +167,7 @@ const LiveStreams = () => {
                                 }}
                             >
                                 <Paper>
-                                    <ClickAwayListener onClickAway={handleClose}>
+                                    <ClickAwayListener onClickAway={() => setPopperOpen(false)}>
                                         <MenuList autoFocusItem>
                                             {liveStreamTitles.map(
                                                 (title: string, index: number) => (
@@ -184,9 +179,10 @@ const LiveStreams = () => {
                                                                 ","
                                                             )[index]
                                                         }
-                                                        onClick={(event) =>
-                                                            handleMenuItemClick(event, index)
-                                                        }
+                                                        onClick={(event) => {
+                                                            setSelectedIndex(index);
+                                                            setPopperOpen(false);
+                                                        }}
                                                         sx={{ borderRadius: 5 }}
                                                     >
                                                         {title}

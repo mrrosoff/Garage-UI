@@ -2,7 +2,7 @@
 
 ## A Custom UI For Mountain Stats
 
-![Mountain-UI](src/assets/Mountain-UI.gif)
+![Mountain-UI](src/assets/images/Mountain-UI.gif)
 
 ## About Project
 This project is an another flavor of the original Garage-UI available [here](https://github.com/mrrosoff/Garage-UI). This project, however, does not open a garage and instead shows stats on a specific mountain. It allows users to see the current/forecasted weather, ski conditions, show live feeds from a ski resort of their choice, and a fully interactive map, all at a glance.

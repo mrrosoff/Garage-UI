@@ -62,7 +62,7 @@ const TodaysWeather = (props: { todaysWeather: any }) => {
     const todaysConditions = props.todaysWeather.Conditions.replace("_", "-");
 
     return (
-        <Box display={"flex"} pt={4}>
+        <Box display={"flex"} pt={6} p={2}>
             <span
                 className={`wi wi-${
                     theme.palette.mode === "dark" ? "night" : "day"
