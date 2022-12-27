@@ -2,6 +2,7 @@ import { Box, Typography, useTheme } from "@mui/material";
 import LightModeIcon from "@mui/icons-material/LightMode";
 import WavesIcon from "@mui/icons-material/Waves";
 import AirIcon from "@mui/icons-material/Air";
+import ScaleIcon from "@mui/icons-material/Scale";
 
 const TodaysWeather = (props: { todaysWeather: any; todaysSnow: any }) => {
     const theme = useTheme();
@@ -54,8 +55,8 @@ const TodaysWeather = (props: { todaysWeather: any; todaysSnow: any }) => {
                     </Typography>
                 </Box>
                 <Box display={"flex"} alignItems={"center"}>
-                    <LightModeIcon style={{ fontSize: "15", verticalAlign: "middle" }} />
-                    <Typography sx={{ pl: 2 }}>{props.todaysWeather.UvIndex}</Typography>
+                    <ScaleIcon style={{ fontSize: "15", verticalAlign: "middle" }} />
+                    <Typography sx={{ pl: 1 }}>{props.todaysWeather.PressureIN} Hg</Typography>
                 </Box>
                 <Box display={"flex"} alignItems={"center"}>
                     <WavesIcon style={{ fontSize: "15", verticalAlign: "middle" }} />

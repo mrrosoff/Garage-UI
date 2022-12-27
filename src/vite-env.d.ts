@@ -10,8 +10,7 @@ interface ImportMetaEnv {
     readonly VITE_SKI_RESORT_ID: number;
     readonly VITE_YOUTUBE_LIVE_STREAM_LINKS: string[];
     readonly VITE_YOUTUBE_LIVE_STREAM_TITLES: string[];
-    readonly VITE_RELAY_DIRECTION: RelayWiring;
-    readonly VITE_RELAY_PIN: number;
+    readonly VITE_MAP_ANIMATIONS: boolean;
 }
 
 interface ImportMeta {

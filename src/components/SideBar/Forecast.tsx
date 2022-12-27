@@ -11,7 +11,6 @@ interface ForecastDay {
 }
 
 const Forecast = (props: { forecast: ForecastDay[] }) => {
-    console.log(props.forecast);
     return (
         <Box display={"flex"} justifyContent={"space-around"}>
             {props.forecast.map((day: any, index: number) => {

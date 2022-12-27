@@ -44,10 +44,10 @@ const Map = () => {
                 <Box pb={2} pl={2} display={"flex"}>
                     <LiveStreams />
                     <Button variant={"contained"} size={"large"} sx={{ ml: 2, borderRadius: 5 }}>
-                        <ZoomInIcon sx={{ fontSize: 30 }} />
+                        <ZoomInIcon sx={{ fontSize: 30, pointerEvents: "auto" }} />
                     </Button>
                     <Button variant={"contained"} size={"large"} sx={{ ml: 2, borderRadius: 5 }}>
-                        <ZoomOutIcon sx={{ fontSize: 30 }} />
+                        <ZoomOutIcon sx={{ fontSize: 30, pointerEvents: "auto" }} />
                     </Button>
                 </Box>
             </Box>
@@ -57,6 +57,7 @@ const Map = () => {
 };
 
 const SteamboatInteractiveMap = () => {
+    const { VITE_MAP_ANIMATIONS } = import.meta.env;
     const mapRef = useRef<HTMLIFrameElement>(null);
 
     useEffect(() => {
@@ -100,7 +101,7 @@ const SteamboatInteractiveMap = () => {
 
     return (
         <iframe
-            src="https://vicomap-cdn.resorts-interactive.com/map/1800?fullscreen=true&menu=3.7,3.10,3.14&openLiftAnimation=false&openLiftColor=green&liftHighlightOpacity=0.1&backgroundOpacity=0.5"
+            src={`https://vicomap-cdn.resorts-interactive.com/map/1800?fullscreen=true&menu=3.7,3.10,3.14&openLiftAnimation=${VITE_MAP_ANIMATIONS}&openLiftColor=green&liftHighlightOpacity=0.1&backgroundOpacity=0.5`}
             width="100%"
             height="100%"
             allowFullScreen
