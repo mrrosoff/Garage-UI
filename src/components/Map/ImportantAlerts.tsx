@@ -3,16 +3,17 @@ import { useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import callExternalAPIOnInterval from "../../hooks/callExternalAPIOnInterval";
 
-const ImportantAlertsCard = () => {
+const ImportantAlerts = () => {
     const { VITE_TIME_INTERVAL, VITE_SKI_RESORT_ID, VITE_NATIONAL_WEATHER_SERVICE_ZONE } =
         import.meta.env;
-    const [showNationalWeatherAlert, setShowNationalWeatherAlert] = useState(true);
-    const [showSnowPatrolAlert, setShowSnowPatrolAlert] = useState(true);
+
+    const [showNationalWeatherAlert, setShowNationalWeatherAlert] = useState<boolean>(true);
+    const [showSnowPatrolAlert, setShowSnowPatrolAlert] = useState<boolean>(true);
+
     const resortData = callExternalAPIOnInterval(
         VITE_TIME_INTERVAL,
         `https://mtnpowder.com/feed?resortId=${VITE_SKI_RESORT_ID}`
     );
-
     const nationalWeatherServiceAlert = callExternalAPIOnInterval(
         VITE_TIME_INTERVAL,
         `https://api.weather.gov/alerts/active?zone=${VITE_NATIONAL_WEATHER_SERVICE_ZONE}`
@@ -46,9 +47,6 @@ const ImportantAlertsCard = () => {
                     />
                 )}
             </Box>
-            {(nationalWeatherServiceAlert || (snowPatrolAlert && snowPatrolAlert !== "--")) && (
-                <Divider sx={{ mt: 2, mb: 2 }} />
-            )}
         </>
     );
 };
@@ -89,4 +87,4 @@ const CustomAlert = (props: any) => {
     );
 };
 
-export default ImportantAlertsCard;
+export default ImportantAlerts;

@@ -21,10 +21,26 @@ import CloseIcon from "@mui/icons-material/Close";
 import ZoomInIcon from "@mui/icons-material/ZoomIn";
 import ZoomOutIcon from "@mui/icons-material/ZoomOut";
 
-const MountainMapCard = () => {
+import ImportantAlertsCard from "./Map/ImportantAlerts";
+import SpecialDays from "./Map/SpecialDays";
+
+const Map = () => {
     return (
         <Box position={"relative"} width={"100%"} height={"100%"} sx={{ pointerEvents: "none" }}>
-            <Box position={"absolute"} bottom={0} left={0}>
+            <Box
+                position={"absolute"}
+                top={0}
+                left={0}
+                display={"flex"}
+                flexDirection={"column"}
+                justifyContent={"space-between"}
+                width={"100%"}
+                height={"100%"}
+            >
+                <Box pt={2} pr={2} alignSelf={"end"}>
+                    <ImportantAlertsCard />
+                    <SpecialDays />
+                </Box>
                 <Box pb={2} pl={2} display={"flex"}>
                     <LiveStreams />
                     <Button variant={"contained"} size={"large"} sx={{ ml: 2, borderRadius: 5 }}>
@@ -213,4 +229,4 @@ const LiveStreams = () => {
     );
 };
 
-export default MountainMapCard;
+export default Map;

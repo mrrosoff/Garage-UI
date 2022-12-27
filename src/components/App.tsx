@@ -1,4 +1,4 @@
-import { CssBaseline } from "@mui/material";
+import { Box, CssBaseline } from "@mui/material";
 import { blue, grey, red } from "@mui/material/colors";
 import {
     createTheme,
@@ -7,7 +7,8 @@ import {
     StyledEngineProvider
 } from "@mui/material/styles";
 
-import DashBoard from "./Dashboard";
+import SideBar from "./SideBar";
+import MountainMapCard from "./Map";
 
 /* eslint-disable no-unused-vars */
 declare module "@mui/material/styles" {
@@ -50,7 +51,14 @@ const App = () => {
         <StyledEngineProvider injectFirst>
             <ThemeProvider theme={theme}>
                 <CssBaseline />
-                <DashBoard />
+                <Box height={"100%"} display={"flex"} flexDirection={"row"}>
+                    <Box width={400} height={"100%"}>
+                        <SideBar />
+                    </Box>
+                    <Box flexGrow={1} height={"100%"}>
+                        <MountainMapCard />
+                    </Box>
+                </Box>
             </ThemeProvider>
         </StyledEngineProvider>
     );

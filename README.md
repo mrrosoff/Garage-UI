@@ -31,10 +31,11 @@ VITE_SKI_RESORT_ID= // Your ski resort id
 // How often to hit the API's in milliseconds
 VITE_TIME_INTERVAL=60000
 
-// Youtube Button Link and Title
+// Youtube Button Link and Title (Each link and title should be separated by a comma)
 VITE_YOUTUBE_LIVE_STREAM_LINK= // Your live stream link
 VITE_LIVE_STREAM_BUTTON_TITLE= // Your live stream title
 ```
 
 ## Contributing
+
 Please feel free to use this however you'd like. If you'd like to contribute, please open a pull request and I'll review it as soon as I can. If you have any questions, please open an issue and I'll get back to you as soon as I can.
