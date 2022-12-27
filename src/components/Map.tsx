@@ -43,11 +43,29 @@ const Map = () => {
                 </Box>
                 <Box pb={2} pl={2} display={"flex"}>
                     <LiveStreams />
-                    <Button variant={"contained"} size={"large"} sx={{ ml: 2, borderRadius: 5 }}>
-                        <ZoomInIcon sx={{ fontSize: 30, pointerEvents: "auto" }} />
+                    <Button
+                        variant={"contained"}
+                        sx={{
+                            ml: 2,
+                            borderRadius: "50%",
+                            height: 55,
+                            minWidth: 40,
+                            pointerEvents: "auto"
+                        }}
+                    >
+                        <ZoomInIcon sx={{ fontSize: 30 }} />
                     </Button>
-                    <Button variant={"contained"} size={"large"} sx={{ ml: 2, borderRadius: 5 }}>
-                        <ZoomOutIcon sx={{ fontSize: 30, pointerEvents: "auto" }} />
+                    <Button
+                        variant={"contained"}
+                        sx={{
+                            ml: 2,
+                            borderRadius: "50%",
+                            height: 55,
+                            minWidth: 40,
+                            pointerEvents: "auto"
+                        }}
+                    >
+                        <ZoomOutIcon sx={{ fontSize: 30 }} />
                     </Button>
                 </Box>
             </Box>
@@ -127,12 +145,13 @@ const LiveStreams = () => {
         <>
             <Button
                 sx={{
-                    borderRadius: 5,
+                    borderRadius: "50%",
+                    height: 55,
+                    minWidth: 40,
                     pointerEvents: "auto"
                 }}
                 color={"secondary"}
                 variant={"contained"}
-                size={"large"}
                 onClick={() => setDialogOpen(true)}
             >
                 <VideocamIcon sx={{ fontSize: 30 }} />

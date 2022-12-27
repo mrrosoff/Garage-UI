@@ -59,7 +59,7 @@ const CollapsableAlert = (props: any) => {
                 variant={"contained"}
                 color={"secondary"}
                 onClick={() => props.setShowAlert(true)}
-                sx={{ minWidth: 40, height: 50, borderRadius: "50%", pointerEvents: "auto" }}
+                sx={{ height: 50, minWidth: 40, borderRadius: "50%", pointerEvents: "auto" }}
             >
                 <ErrorIcon />
             </Button>
