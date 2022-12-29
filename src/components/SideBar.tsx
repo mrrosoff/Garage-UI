@@ -1,4 +1,4 @@
-import { Box, Divider, Typography } from "@mui/material";
+import { Box, Divider } from "@mui/material";
 
 import callExternalAPIOnInterval from "../hooks/callExternalAPIOnInterval";
 import TodaysWeather from "./SideBar/TodaysWeather";
@@ -25,9 +25,7 @@ const SideBar = () => {
     ];
 
     return (
-        <Box display={"flex"} flexDirection={"column"} height={"100%"} pt={2} pl={3} pr={3} pb={2}>
-            <Typography sx={{ fontSize: 40, fontWeight: 600 }}>Steamboat Springs</Typography>
-            <Divider sx={{ borderBottomWidth: "medium", mt: 2, mb: 3 }} />
+        <Box display={"flex"} flexDirection={"column"} height={"100%"} pt={2} pl={3} pr={3}>
             {todaysWeather && (
                 <TodaysWeather
                     todaysWeather={todaysWeather}
@@ -43,11 +41,5 @@ const SideBar = () => {
         </Box>
     );
 };
-
-
-
-
-
-
 
 export default SideBar;

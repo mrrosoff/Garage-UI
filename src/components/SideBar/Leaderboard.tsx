@@ -4,8 +4,8 @@ import LeaderboardIcon from "@mui/icons-material/Leaderboard";
 const Leaderboard = () => {
     return (
         <Box display={"flex"} flexDirection={"column"}>
-            <LeaderboardIcon sx={{ fontSize: 30, alignSelf: "end" }} />
-            <Box mt={-3} display={"flex"} flexDirection={"column"}>
+            <LeaderboardIcon sx={{ fontSize: 30 }} />
+            <Box  display={"flex"} flexDirection={"column"}>
                 <Box display={"flex"} alignItems={"center"}>
                     <Avatar alt="Matthew Ernst" src="/static/images/avatar/1.jpg" />
                     <Box ml={2} display={"flex"} flexDirection={"column"}>

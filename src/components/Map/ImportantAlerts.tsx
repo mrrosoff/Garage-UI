@@ -1,7 +1,15 @@
 import { useState } from "react";
 
-import { Alert, AlertTitle, Button, Collapse, IconButton, Typography } from "@mui/material";
-import ErrorIcon from "@mui/icons-material/Error";
+import {
+    Alert,
+    AlertTitle,
+    Badge,
+    Collapse,
+    IconButton,
+    Popover,
+    Typography
+} from "@mui/material";
+import ReportProblemIcon from "@mui/icons-material/ReportProblem";
 import CloseIcon from "@mui/icons-material/Close";
 
 import callExternalAPIOnInterval from "../../hooks/callExternalAPIOnInterval";
@@ -53,51 +61,61 @@ const ImportantAlerts = () => {
 };
 
 const CollapsableAlert = (props: any) => {
+    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     if (!props.showAlert) {
         return (
-            <Button
-                variant={"contained"}
-                color={"secondary"}
-                onClick={() => props.setShowAlert(true)}
-                sx={{ height: 50, minWidth: 40, borderRadius: "50%", pointerEvents: "auto" }}
-            >
-                <ErrorIcon />
-            </Button>
+            <IconButton edge={"end"} color={"inherit"} onClick={() => props.setShowAlert(true)}>
+                <Badge badgeContent={1} color={"error"}>
+                    <ReportProblemIcon sx={{ fontSize: 24 }} />
+                </Badge>
+            </IconButton>
         );
     }
 
     return (
-        <Collapse in={props.showAlert} sx={{ width: 500, pointerEvents: "auto" }}>
-            <Alert
-                severity={props.severity}
-                onChange={() => {
-                    props.setShowAlert(true);
-                }}
-                color={props.severity === "warning" ? "error" : "info"}
-                action={
-                    <IconButton
-                        aria-label="close"
-                        color="inherit"
-                        size="small"
-                        onClick={() => {
-                            props.setShowAlert(false);
-                        }}
-                    >
-                        <CloseIcon fontSize="inherit" />
-                    </IconButton>
-                }
-            >
-                <AlertTitle>{props.title}</AlertTitle>
-                {props.message.split("*").map((i: string) => {
-                    return (
-                        <>
-                            <Typography fontSize={14}>{i}</Typography>
-                            <br />
-                        </>
-                    );
-                })}
-            </Alert>
-        </Collapse>
+        <Popover
+            open={props.showAlert}
+            anchorEl={anchorEl}
+            onClose={() => {
+                setAnchorEl(null);
+            }}
+            anchorOrigin={{
+                vertical: "top",
+                horizontal: "right"
+            }}
+        >
+            <Collapse in={props.showAlert} sx={{ width: 500, pointerEvents: "auto" }}>
+                <Alert
+                    severity={props.severity}
+                    onChange={() => {
+                        props.setShowAlert(true);
+                    }}
+                    color={props.severity === "warning" ? "error" : "info"}
+                    action={
+                        <IconButton
+                            aria-label="close"
+                            color="inherit"
+                            size="small"
+                            onClick={() => {
+                                props.setShowAlert(false);
+                            }}
+                        >
+                            <CloseIcon fontSize="inherit" />
+                        </IconButton>
+                    }
+                >
+                    <AlertTitle>{props.title}</AlertTitle>
+                    {props.message.split("*").map((i: string) => {
+                        return (
+                            <>
+                                <Typography fontSize={14}>{i}</Typography>
+                                <br />
+                            </>
+                        );
+                    })}
+                </Alert>
+            </Collapse>
+        </Popover>
     );
 };
 

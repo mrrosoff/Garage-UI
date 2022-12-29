@@ -71,7 +71,6 @@ const SpecialDays = () => {
         return () => clearInterval(interval);
     }, []);
 
-    console.log(specialDay);
     if (!specialDay) return null;
     return (
         <Box display={"flex"} alignItems={"center"} style={{ width: "100%" }} mb={2}>
