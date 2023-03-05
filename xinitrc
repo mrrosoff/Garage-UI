@@ -32,10 +32,10 @@ else
 
 	printf "$dt -- Installing dependecies...\n" >> $LOG_PATH
 	npm install &>> $LOG_PATH
-	$(npm bin)/electron-rebuild &>> $LOG_PATH
 	printf "${GREEN}Done.${NC}\n\n" >> $LOG_PATH
 fi
 
+$(npm bin)/electron-rebuild &>> $LOG_PATH
 printf "$dt -- ${GREEN}Success! Starting Garage-UI...${NC}\n" >> $LOG_PATH
 
 xset -dpms 
