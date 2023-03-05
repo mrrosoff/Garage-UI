@@ -107,7 +107,7 @@ const TideCard = () => {
                 </Grid>
                 <Grid item>
                     {graphData && (
-                        <TideTimes graphData={graphData} tideActualData={tideActualData.data} />
+                        <TideTimes graphData={graphData} tideActualData={tideActualData?.data} />
                     )}
                 </Grid>
             </Grid>
