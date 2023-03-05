@@ -23,9 +23,9 @@ export NVM_DIR="$HOME/.config/nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
-nvm install v18.0.0
+nvm install v18.13.0
 nvm use
-nvm alias default 18.0.0
+nvm alias default 18.13.0
 printf "${GREEN}Done.${NC}\n"
 
 printf "${YELLOW}Installing Dependencies...${NC}\n"
@@ -56,20 +56,23 @@ sudo chmod 757 /etc/X11/xinit/xinitrc
 sed -i "2 i cd $GARAGE_UI_DIR" xinitrc
 cat xinitrc > /etc/X11/xinit/xinitrc
 
-printf "${YELLOW}Appending Startup Script to Shell${NC}\n"
-printf "
-export GARAGE_UI_DIR=\"${GARAGE_UI_DIR}\"
-RED='\033[1;31m'
-GREEN='\033[1;32m'
-NC='\033[0m'
+# Check if not already appended
+if ! grep -q "export GARAGE_UI_DIR" ~/.bashrc; then
+    printf "${YELLOW}Appending Startup Script to Shell${NC}\n"
+    printf "
+    export GARAGE_UI_DIR=\"${GARAGE_UI_DIR}\"
+    RED='\033[1;31m'
+    GREEN='\033[1;32m'
+    NC='\033[0m'
 
-if [[ -z \$SSH_CONNECTION ]]; then
-    echo -e \"\${GREEN}About to launch Garage-UI... \${RED}press Ctrl+C to exit to terminal.\${NC}\"
-    sleep 4s
-    startx -- -nocursor 
+    if [[ -z \$SSH_CONNECTION ]]; then
+        echo -e \"\${GREEN}About to launch Garage-UI... \${RED}press Ctrl+C to exit to terminal.\${NC}\"
+        sleep 4s
+        startx -- -nocursor 
+    fi
+    " >> ~/.bashrc
+    printf "${GREEN}Done.${NC}\n"
 fi
-" >> ~/.bashrc
-printf "${GREEN}Done.${NC}\n"
 
 printf "${YELLOW}Scheduling Auto Updates...${NC}\n"
 sudo chmod 757 $GARAGE_UI_DIR/scripts/reboot.sh
