@@ -10,6 +10,7 @@ LOG_PATH="${GARAGE_UI_DIR}/logs/auto_start.log"
 
 printf "$dt -- in ${GARAGE_UI_DIR}\n\n" > $LOG_PATH
 
+cd $GARAGE_UI_DIR
 git fetch 
 
 UPSTREAM=${1:-'@{u}'}
@@ -20,6 +21,8 @@ printf "$dt -- Checking remote vs local...\n" >> $LOG_PATH
 printf "$dt -- " >> $LOG_PATH
 git status &>> $LOG_PATH
 printf "\n\n" >> $LOG_PATH
+
+nvm use
 
 if [ $LOCAL = $REMOTE ]; then
 	printf "$dt -- ${GREEN}Up-to-date${NC}\n" >> $LOG_PATH
@@ -44,4 +47,3 @@ matchbox-window-manager &
 
 printf "$dt --" >> $LOG_PATH
 npm run garage &>> $LOG_PATH
-
