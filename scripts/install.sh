@@ -23,9 +23,9 @@ export NVM_DIR="$HOME/.config/nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
-nvm install v18.13.0
+nvm install stable
 nvm use
-nvm alias default 18.13.0
+nvm alias default stable
 printf "${GREEN}Done.${NC}\n"
 
 printf "${YELLOW}Installing Dependencies...${NC}\n"

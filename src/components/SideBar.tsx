@@ -1,6 +1,8 @@
 import { Box, Button, SvgIcon, Typography } from "@mui/material";
 
-const SideBar = (props: any) => {
+import { SpecialDay } from "../specialDays";
+
+const SideBar = (props: { specialDay: SpecialDay | undefined }) => {
     const { VITE_RELAY_DIRECTION, VITE_RELAY_PIN } = import.meta.env;
 
     return (

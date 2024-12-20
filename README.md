@@ -6,18 +6,18 @@
 
 ## About Project
 
-After viewing the button on my family's garageAPI wall for enough years, I decided to finally do something about it. I 
+After viewing the button on my family's garage wall for enough years, I decided to finally do something about it. I
 imagined a world where there was a central database for important information about family endeavors, where one could go
 for quick information at a glance, but also for more detailed info.
 
 Thus, the Garage-Pi was born.
 
-A Raspberry Pi runs this repo as an Electron app out of our garage. It of course has garage door controls, but it also 
+A Raspberry Pi runs this repo as an Electron app out of our garage. It of course has garage door controls, but it also
 shows tide, weather, and surf data. The app is configured so that new data sources can be easily added at a later date.
 
 ## Installation
 
-Clone the repository and run the [install script](scripts/install.sh). This will install the dependencies, build the app, and change your Raspberry Pi to auto update itself and auto launch to Garage-UI. ⚠️ ***Make sure to run the script in the Garage-UI directory.***
+Clone the repository and run the [install script](scripts/install.sh). This will install the dependencies, build the app, and change your Raspberry Pi to auto update itself and auto launch to Garage-UI. ⚠️ **_Make sure to run the script in the Garage-UI directory._**
 
 ## Environment Variables
 
