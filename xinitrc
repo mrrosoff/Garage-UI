@@ -41,7 +41,7 @@ else
 	printf "${GREEN}Done.${NC}\n\n" >> $LOG_PATH
 fi
 
-$(npm bin)/electron-rebuild &>> $LOG_PATH
+npx electron-rebuild &>> $LOG_PATH
 printf "$dt -- ${GREEN}Success! Starting Garage-UI...${NC}\n" >> $LOG_PATH
 
 xset -dpms 
