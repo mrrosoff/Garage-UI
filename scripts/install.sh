@@ -23,9 +23,8 @@ export NVM_DIR="$HOME/.config/nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
-nvm install v18.13.0
+nvm install lts/*
 nvm use
-nvm alias default 18.13.0
 printf "${GREEN}Done.${NC}\n"
 
 printf "${YELLOW}Installing Dependencies...${NC}\n"
@@ -68,7 +67,7 @@ if ! grep -q "export GARAGE_UI_DIR" ~/.bashrc; then
     if [[ -z \$SSH_CONNECTION ]]; then
         echo -e \"\${GREEN}About to launch Garage-UI... \${RED}press Ctrl+C to exit to terminal.\${NC}\"
         sleep 4s
-        startx -- -nocursor 
+        startx -- -nocursor | tee ${GARAGE_UI_DIR}/logs/application.log
     fi
     " >> ~/.bashrc
     printf "${GREEN}Done.${NC}\n"
@@ -76,7 +75,7 @@ fi
 
 printf "${YELLOW}Scheduling Auto Updates...${NC}\n"
 sudo chmod 757 $GARAGE_UI_DIR/scripts/reboot.sh
-sudo printf  "# m h dom mon dow command\n0 2 * * 0 $GARAGE_UI_DIR/scripts/reboot.sh\n" >> temp_cron
+sudo printf  "# m h dom mon dow command\n0 4 * * 0 $GARAGE_UI_DIR/scripts/reboot.sh\n" >> temp_cron
 sudo crontab temp_cron
 rm temp_cron
 printf "${GREEN}Done.${NC}\n"

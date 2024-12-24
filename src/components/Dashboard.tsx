@@ -19,9 +19,7 @@ const DashBoard = () => {
     useEffect(() => {
         const getSpecialDay = async () => {
             const specialDay = specialDays.find((day) => DateTime.now().hasSame(day.date, "day"));
-            if (specialDay) {
-                setSpecialDay(specialDay);
-            }
+            setSpecialDay(specialDay);
         };
 
         const interval = setInterval(getSpecialDay, VITE_TIME_INTERVAL);

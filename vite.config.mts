@@ -2,13 +2,11 @@ import { defineConfig } from "vite";
 
 import react from "@vitejs/plugin-react";
 import electron from "vite-plugin-electron";
-import renderer from "vite-plugin-electron-renderer";
 
 // https://vitejs.dev/config/
 export default defineConfig({
     build: {
         target: "esnext"
-
     },
     plugins: [
         electron({
@@ -22,10 +20,7 @@ export default defineConfig({
                 }
             }
         }),
-        react(),
-        renderer({
-            nodeIntegration: true
-        })
+        react()
     ],
     server: {
         port: 3000,
