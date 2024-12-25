@@ -42,3 +42,8 @@ VITE_SURF_SPOT_TWO_NAME="15th Street"
 VITE_SURF_SPOT_THREE_ID="5842041f4e65fad6a77088a0"
 VITE_SURF_SPOT_THREE_NAME="Beacons"
 ```
+
+## Upgrades
+
+Electron stops working on my Pi 3B on v27, not sure why that is but its probably because of the RAM or something.
+Im sure there is a way to debug it but its not worth it for continuing Chromium updates.
