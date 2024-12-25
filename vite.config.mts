@@ -5,9 +5,6 @@ import electron from "vite-plugin-electron";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-    build: {
-        target: "esnext"
-    },
     plugins: [
         electron({
             entry: ["electron/main.ts", "electron/preload.ts"],

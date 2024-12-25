@@ -30,18 +30,21 @@ nvm use
 if [ $LOCAL = $REMOTE ]; then
 	printf "$dt -- ${GREEN}Up-to-date${NC}\n" >> $LOG_PATH
 else
-	printf "$dt -- ${RED}Need to pull and npm install${NC}\n" >> $LOG_PATH
+	printf "$dt -- ${RED}Need to rebuild dependencies${NC}\n" >> $LOG_PATH
 
 	printf "$dt -- Pulling...\n" >> $LOG_PATH
 	git pull -f &>> $LOG_PATH
 	printf "${GREEN}Done.${NC}\n\n" >> $LOG_PATH
 
-	printf "$dt -- Installing dependecies...\n" >> $LOG_PATH
+	printf "$dt -- Installing Dependecies...\n" >> $LOG_PATH
 	npm install &>> $LOG_PATH
+	printf "${GREEN}Done.${NC}\n\n" >> $LOG_PATH
+
+	printf "$dt -- Rebuilding Electron...\n" >> $LOG_PATH
+	npx electron-rebuild &>> $LOG_PATH
 	printf "${GREEN}Done.${NC}\n\n" >> $LOG_PATH
 fi
 
-$(npm bin)/electron-rebuild &>> $LOG_PATH
 printf "$dt -- ${GREEN}Success! Starting Garage-UI...${NC}\n" >> $LOG_PATH
 
 xset -dpms 

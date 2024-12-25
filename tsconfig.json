@@ -1,19 +1,12 @@
 {
     "compilerOptions": {
-        "target": "ESNext",
         "lib": ["DOM", "ESNext"],
-        "skipLibCheck": true,
-        "esModuleInterop": false,
-        "allowSyntheticDefaultImports": true,
-        "strict": true,
-        "forceConsistentCasingInFileNames": true,
-        "module": "ESNext",
-        "moduleResolution": "NodeNext",
-        "resolveJsonModule": true,
         "isolatedModules": true,
+        "resolveJsonModule": true,
         "noEmit": true,
         "jsx": "react-jsx"
     },
-    "include": ["src"],
-    "references": [{ "path": "./tsconfig.node.json" }]
+    "references": [{ "path": "./tsconfig.node.json" }],
+    "extends": "@tsconfig/node22/tsconfig.json",
+    "$schema": "https://json.schemastore.org/tsconfig"
 }
