@@ -67,7 +67,7 @@ if ! grep -q "export GARAGE_UI_DIR" ~/.bashrc; then
     if [[ -z \$SSH_CONNECTION ]]; then
         echo -e \"\${GREEN}About to launch Garage-UI... \${RED}press Ctrl+C to exit to terminal.\${NC}\"
         sleep 4s
-        startx -- -nocursor | tee ${GARAGE_UI_DIR}/logs/application.log
+        startx -- -nocursor
     fi
     " >> ~/.bashrc
     printf "${GREEN}Done.${NC}\n"
