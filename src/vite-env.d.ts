@@ -10,7 +10,6 @@ interface ImportMetaEnv {
     readonly VITE_NOAA_STATION: number;
     readonly VITE_TIME_INTERVAL: number;
     readonly VITE_OPEN_WEATHER_MAP_ID: string;
-    readonly VITE_OPEN_UV_API_TOKEN: string;
     readonly VITE_SURF_SPOT_ONE_ID: string;
     readonly VITE_SURF_SPOT_ONE_NAME: string;
     readonly VITE_SURF_SPOT_TWO_ID: string;
@@ -19,6 +18,7 @@ interface ImportMetaEnv {
     readonly VITE_SURF_SPOT_THREE_NAME: string;
     readonly VITE_RELAY_DIRECTION: RelayWiring;
     readonly VITE_RELAY_PIN: number;
+    readonly VITE_SHOW_GARAGE_BUTTON: boolean;
 }
 
 interface ImportMeta {

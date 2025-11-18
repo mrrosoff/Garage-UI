@@ -11,8 +11,8 @@ import WeatherCard from "./Cards/WeatherCard";
 import SurfCard from "./Cards/SurfCard";
 import SideBar from "./SideBar";
 
-const DashBoard = () => {
-    const { VITE_TIME_INTERVAL } = import.meta.env;
+const Dashboard = () => {
+    const { VITE_TIME_INTERVAL, VITE_SHOW_GARAGE_BUTTON } = import.meta.env;
 
     const [specialDay, setSpecialDay] = useState<SpecialDay>();
 
@@ -27,14 +27,16 @@ const DashBoard = () => {
     }, []);
 
     return (
-        <Box height={"100%"} p={3}>
+        <Box height={"100%"} p={1}>
             <Box height={"100%"} display={"flex"} flexDirection={"row"}>
-                <Box width={"33.33%"} height={"100%"} paddingRight={3}>
-                    <Paper elevation={2} sx={{ width: "100%", height: "100%", p: 3 }}>
-                        <SideBar specialDay={specialDay} />
-                    </Paper>
-                </Box>
-                <Box width={"66.66%"} height={"100%"}>
+                {VITE_SHOW_GARAGE_BUTTON && (
+                    <Box width={"33.33%"} height={"100%"} paddingRight={3}>
+                        <Paper elevation={2} sx={{ width: "100%", height: "100%", p: 3 }}>
+                            <SideBar specialDay={specialDay} />
+                        </Paper>
+                    </Box>
+                )}
+                <Box width={VITE_SHOW_GARAGE_BUTTON ? "66.66%" : "100%"} height={"100%"}>
                     <Paper elevation={2} sx={{ width: "100%", height: "100%", p: 3 }}>
                         <Box
                             width={"100%"}
@@ -61,4 +63,4 @@ const DashBoard = () => {
     );
 };
 
-export default DashBoard;
+export default Dashboard;

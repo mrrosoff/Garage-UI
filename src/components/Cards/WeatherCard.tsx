@@ -8,7 +8,8 @@ import { DateTime } from "luxon";
 import callExternalAPIOnInterval from "../../hooks/callExternalAPIOnInterval";
 
 const WeatherCard = () => {
-    const { VITE_ZIP_CODE, VITE_TIME_INTERVAL, VITE_OPEN_WEATHER_MAP_ID } = import.meta.env;
+    const { VITE_ZIP_CODE, VITE_TIME_INTERVAL, VITE_OPEN_WEATHER_MAP_ID, VITE_SHOW_GARAGE_BUTTON } =
+        import.meta.env;
 
     const openWeatherMapAPI = "https://api.openweathermap.org/data/2.5/weather";
     const weatherData: any | undefined = callExternalAPIOnInterval(
@@ -26,14 +27,14 @@ const WeatherCard = () => {
                 borderStyle: "solid",
                 borderColor: grey[300],
                 borderRadius: 1,
-                width: 240,
+                width: VITE_SHOW_GARAGE_BUTTON ? 240 : 300,
                 height: 200
             }}
             display={"flex"}
             flexDirection={"column"}
         >
-            <Grid item container justifyContent={"space-between"}>
-                <Grid item>
+            <Grid container justifyContent={"space-between"}>
+                <Grid>
                     <Typography style={{ fontSize: 32, fontWeight: 500 }}>Weather</Typography>
                 </Grid>
             </Grid>
@@ -52,7 +53,7 @@ const WeatherCard = () => {
 const WeatherDetails = (props: any) => {
     return (
         <Grid container direction={"column"} spacing={2}>
-            <Grid item>
+            <Grid>
                 <Box display={"flex"} alignItems={"center"}>
                     <Box display={"flex"} flexDirection={"column"}>
                         <Typography style={{ fontSize: 28, fontWeight: 500 }}>
@@ -70,7 +71,7 @@ const WeatherDetails = (props: any) => {
                     </Box>
                 </Box>
             </Grid>
-            <Grid item>
+            <Grid>
                 <OtherDetails {...props} />
             </Grid>
         </Grid>
@@ -92,13 +93,13 @@ const LoadingWeatherData = (): JSX.Element => {
 const OtherDetails = (props: any): JSX.Element => {
     return (
         <Grid container spacing={1}>
-            <Grid item>
+            <Grid>
                 <UVIndex />
             </Grid>
-            <Grid item>
+            <Grid>
                 <Humidity humidity={props.weatherData.main.humidity} />
             </Grid>
-            <Grid item>
+            <Grid>
                 <Wind
                     windDirection={props.weatherData.wind.deg}
                     windSpeed={props.weatherData.wind.speed}

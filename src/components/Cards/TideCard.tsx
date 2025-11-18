@@ -101,11 +101,11 @@ const TideCard = () => {
             display={"flex"}
             flexDirection={"column"}
         >
-            <Grid item container justifyContent={"space-between"}>
-                <Grid item>
+            <Grid container justifyContent={"space-between"}>
+                <Grid>
                     <Typography style={{ fontSize: 32, fontWeight: 500 }}>Tide</Typography>
                 </Grid>
-                <Grid item>
+                <Grid>
                     {graphData && (
                         <TideTimes graphData={graphData} tideActualData={tideActualData?.data} />
                     )}
@@ -157,13 +157,13 @@ const TideTimes = (props: { graphData: ReformatttedTideData[]; tideActualData: T
 
     return (
         <Grid container spacing={2} justifyContent={"center"} alignItems={"center"}>
-            <Grid item>
+            <Grid>
                 <TideTime
                     tide={nextTideIsLow ? "low" : "high"}
                     data={nextTideIsLow ? lowTide : highTide}
                 />
             </Grid>
-            <Grid item>
+            <Grid>
                 <TideTime
                     tide={nextTideIsLow ? "high" : "low"}
                     data={nextTideIsLow ? highTide : lowTide}

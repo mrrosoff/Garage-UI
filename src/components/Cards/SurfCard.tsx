@@ -68,13 +68,13 @@ const SurfCard = () => {
             display={"flex"}
             flexDirection={"column"}
         >
-            <Grid item container justifyContent={"space-between"}>
-                <Grid item>
+            <Grid container justifyContent={"space-between"}>
+                <Grid>
                     <Typography style={{ fontSize: 32, fontWeight: 500 }}>Surf</Typography>
                 </Grid>
-                <Grid item>
+                <Grid>
                     <Grid container spacing={2} justifyContent={"center"}>
-                        <Grid item>
+                        <Grid>
                             <WaterTemperature />
                         </Grid>
                     </Grid>

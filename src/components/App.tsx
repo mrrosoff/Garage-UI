@@ -10,7 +10,7 @@ import {
 import { DateTime } from "luxon";
 
 import callExternalAPIOnInterval from "../hooks/callExternalAPIOnInterval";
-import DashBoard from "./Dashboard";
+import Dashboard from "./Dashboard";
 
 const App = () => {
     const { VITE_TIME_INTERVAL, VITE_LATITUDE, VITE_LONGITUDE } = import.meta.env;
@@ -45,7 +45,7 @@ const App = () => {
         <StyledEngineProvider injectFirst>
             <ThemeProvider theme={theme}>
                 <CssBaseline />
-                <DashBoard />
+                <Dashboard />
             </ThemeProvider>
         </StyledEngineProvider>
     );
