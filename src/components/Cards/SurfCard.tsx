@@ -62,6 +62,8 @@ const SurfCard = () => {
         return () => clearInterval(interval);
     }, []);
 
+    const loadedSurfData = surfData.filter((data) => data?.id);
+
     return (
         <Box
             pt={2}
@@ -90,7 +92,11 @@ const SurfCard = () => {
                 </Grid>
             </Grid>
             <Box pt={1} flexGrow={1}>
-                {surfData.length > 0 ? <SurfGraph surfData={surfData} /> : <LoadingSurfData />}
+                {loadedSurfData.length > 0 ? (
+                    <SurfGraph surfData={surfData} />
+                ) : (
+                    <LoadingSurfData />
+                )}
             </Box>
         </Box>
     );
