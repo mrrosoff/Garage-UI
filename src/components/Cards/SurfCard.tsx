@@ -25,10 +25,12 @@ const SurfCard = () => {
         VITE_SURF_SPOT_TWO_ID,
         VITE_SURF_SPOT_TWO_NAME,
         VITE_SURF_SPOT_THREE_ID,
-        VITE_SURF_SPOT_THREE_NAME
+        VITE_SURF_SPOT_THREE_NAME,
+        VITE_SURF_SPOT_FOUR_ID,
+        VITE_SURF_SPOT_FOUR_NAME
     } = import.meta.env;
 
-    const [surfData, setSurfData] = useState<any>([]);
+    const [surfData, setSurfData] = useState<[]>(new Array(4));
     const surfAPI = "https://services.surfline.com/kbyg/spots/forecasts";
 
     useEffect(() => {
@@ -46,6 +48,13 @@ const SurfCard = () => {
             setSurfDataWithSplice(beachOne, VITE_SURF_SPOT_ONE_NAME, 0, setSurfData);
             setSurfDataWithSplice(beachTwo, VITE_SURF_SPOT_TWO_NAME, 1, setSurfData);
             setSurfDataWithSplice(beachThree, VITE_SURF_SPOT_THREE_NAME, 2, setSurfData);
+
+            if (VITE_SURF_SPOT_FOUR_ID) {
+                const beachFour = await axios.get(
+                    `${surfAPI}/wave?spotId=${VITE_SURF_SPOT_FOUR_ID}&days=1&intervalHours=1&maxHeights=true`
+                );
+                setSurfDataWithSplice(beachFour, VITE_SURF_SPOT_FOUR_NAME, 3, setSurfData);
+            }
         };
 
         getSurfFromAPI();
@@ -102,11 +111,7 @@ const SurfGraph = (props: any) => {
     const theme = useTheme();
     return (
         <ResponsiveContainer width={"99%"} height={"100%"}>
-            <BarChart
-                data={props.surfData.sort((a: any, b: any) =>
-                    a.id > b.id ? 1 : a.id < b.id ? -1 : 0
-                )}
-            >
+            <BarChart data={props.surfData}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <YAxis
                     dataKey="waveHeight"
@@ -167,19 +172,15 @@ const WaterTemperature = () => {
     );
 };
 
-const setSurfDataWithSplice = (r: any, location: string, id: number, setSurfData: Function) => {
+const setSurfDataWithSplice = (r: any, location: string, index: number, setSurfData: Function) => {
     setSurfData((surfData: any) => {
-        const isItem = surfData.some((item: any) => item.name === location);
-        surfData.splice(
-            isItem ? surfData.findIndex((item: any) => item.name === location) : 0,
-            isItem ? 1 : 0,
-            {
-                id: id,
-                name: location,
-                waveHeight: calculateTodaysAverage(r.data.data.wave)
-            }
-        );
-        return surfData;
+        const data = [...surfData];
+        data[index] = {
+            id: index,
+            name: location,
+            waveHeight: calculateTodaysAverage(r.data.data.wave)
+        };
+        return data;
     });
 };
 
