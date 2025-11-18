@@ -88,7 +88,7 @@ const TideCard = () => {
 
     return (
         <Box
-            pt={2}
+            pt={1}
             pl={2}
             pr={2}
             sx={{
@@ -103,7 +103,7 @@ const TideCard = () => {
         >
             <Grid container justifyContent={"space-between"}>
                 <Grid>
-                    <Typography style={{ fontSize: 32, fontWeight: 500 }}>Tide</Typography>
+                    <Typography style={{ fontSize: 30, fontWeight: 500 }}>Tide</Typography>
                 </Grid>
                 <Grid>
                     {graphData && (
@@ -111,7 +111,7 @@ const TideCard = () => {
                     )}
                 </Grid>
             </Grid>
-            <Box pt={2} flexGrow={1}>
+            <Box pt={1} flexGrow={1}>
                 {graphMinHeight && graphMaxHeight && graphData ? (
                     <TideGraph
                         graphData={graphData}

@@ -19,7 +19,7 @@ const WeatherCard = () => {
 
     return (
         <Box
-            pt={2}
+            pt={1}
             pl={2}
             pr={2}
             sx={{
@@ -27,7 +27,7 @@ const WeatherCard = () => {
                 borderStyle: "solid",
                 borderColor: grey[300],
                 borderRadius: 1,
-                width: VITE_SHOW_GARAGE_BUTTON ? 240 : 300,
+                width: 240,
                 height: 200
             }}
             display={"flex"}
@@ -52,7 +52,7 @@ const WeatherCard = () => {
 
 const WeatherDetails = (props: any) => {
     return (
-        <Grid container direction={"column"} spacing={2}>
+        <Grid container direction={"column"} spacing={3}>
             <Grid>
                 <Box display={"flex"} alignItems={"center"}>
                     <Box display={"flex"} flexDirection={"column"}>
@@ -117,15 +117,15 @@ const UVIndex = (): JSX.Element => {
     uvIndexData = Array.isArray(uvIndexData) ? uvIndexData : [];
     const currentHour = DateTime.now().toFormat("hh a");
 
-    const uvIndex =
-        uvIndexData?.find((data: { DATE_TIME: string }) => data.DATE_TIME.includes(currentHour))
-            ?.UV_VALUE || "-";
+    const uvIndex = uvIndexData?.find((data: { DATE_TIME: string }) =>
+        data.DATE_TIME.includes(currentHour)
+    )?.UV_VALUE;
 
     return (
         <Box display={"flex"} alignItems={"center"}>
             <WbSunny style={{ fontSize: 18, fill: theme.palette.primary.main }} />
             <Box pl={1}>
-                <Typography style={{ fontSize: 16, fontWeight: 400 }}>{uvIndex}</Typography>
+                <Typography style={{ fontSize: 16, fontWeight: 400 }}>{uvIndex ?? "-"}</Typography>
             </Box>
         </Box>
     );

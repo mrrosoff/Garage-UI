@@ -30,7 +30,9 @@ const SurfCard = () => {
         VITE_SURF_SPOT_FOUR_NAME
     } = import.meta.env;
 
-    const [surfData, setSurfData] = useState<[]>(new Array(4));
+    const numberOfBeaches = VITE_SURF_SPOT_FOUR_ID ? 4 : 3;
+
+    const [surfData, setSurfData] = useState<any[]>(new Array(numberOfBeaches));
     const surfAPI = "https://services.surfline.com/kbyg/spots/forecasts";
 
     useEffect(() => {
@@ -62,11 +64,14 @@ const SurfCard = () => {
         return () => clearInterval(interval);
     }, []);
 
-    const loadedSurfData = surfData.filter((data) => data?.id);
+    console.log(
+        "Surf Data:",
+        surfData.filter((data) => data?.name)
+    );
 
     return (
         <Box
-            pt={2}
+            pt={1}
             pl={2}
             pr={2}
             sx={{
@@ -92,7 +97,7 @@ const SurfCard = () => {
                 </Grid>
             </Grid>
             <Box pt={1} flexGrow={1}>
-                {loadedSurfData.length > 0 ? (
+                {surfData.filter((data) => data?.name).length === numberOfBeaches ? (
                     <SurfGraph surfData={surfData} />
                 ) : (
                     <LoadingSurfData />

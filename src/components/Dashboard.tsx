@@ -27,17 +27,17 @@ const Dashboard = () => {
     }, []);
 
     return (
-        <Box height={"100%"} p={1}>
+        <Box height={"100%"}>
             <Box height={"100%"} display={"flex"} flexDirection={"row"}>
                 {VITE_SHOW_GARAGE_BUTTON && (
                     <Box width={"33.33%"} height={"100%"} paddingRight={3}>
-                        <Paper elevation={2} sx={{ width: "100%", height: "100%", p: 3 }}>
+                        <Paper elevation={2} sx={{ width: "100%", height: "100%", p: 2 }}>
                             <SideBar specialDay={specialDay} />
                         </Paper>
                     </Box>
                 )}
                 <Box width={VITE_SHOW_GARAGE_BUTTON ? "66.66%" : "100%"} height={"100%"}>
-                    <Paper elevation={2} sx={{ width: "100%", height: "100%", p: 3 }}>
+                    <Paper elevation={2} sx={{ width: "100%", height: "100%", p: 2 }}>
                         <Box
                             width={"100%"}
                             height={"100%"}
@@ -48,11 +48,11 @@ const Dashboard = () => {
                                 <Box>
                                     <WeatherCard />
                                 </Box>
-                                <Box pl={3} flexGrow={1}>
+                                <Box pl={2} flexGrow={1}>
                                     <SurfCard />
                                 </Box>
                             </Box>
-                            <Box pt={3} flexGrow={1}>
+                            <Box pt={2} flexGrow={1}>
                                 <TideCard />
                             </Box>
                         </Box>
