@@ -19,6 +19,7 @@ interface ImportMetaEnv {
     readonly VITE_RELAY_DIRECTION: RelayWiring;
     readonly VITE_RELAY_PIN: number;
     readonly VITE_SHOW_GARAGE_BUTTON: boolean;
+    readonly VITE_FLIP_DISPLAY: boolean;
 }
 
 interface ImportMeta {

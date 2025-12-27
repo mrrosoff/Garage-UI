@@ -12,7 +12,7 @@ import SurfCard from "./Cards/SurfCard";
 import SideBar from "./SideBar";
 
 const Dashboard = () => {
-    const { VITE_TIME_INTERVAL, VITE_SHOW_GARAGE_BUTTON } = import.meta.env;
+    const { VITE_TIME_INTERVAL, VITE_SHOW_GARAGE_BUTTON, VITE_FLIP_DISPLAY } = import.meta.env;
 
     const [specialDay, setSpecialDay] = useState<SpecialDay>();
 
@@ -27,7 +27,7 @@ const Dashboard = () => {
     }, []);
 
     return (
-        <Box height={"100%"}>
+        <Box height={"100%"} sx={{ transform: VITE_FLIP_DISPLAY ? "rotate(180deg)" : undefined }}>
             <Box height={"100%"} display={"flex"} flexDirection={"row"}>
                 {VITE_SHOW_GARAGE_BUTTON && (
                     <Box width={"33.33%"} height={"100%"} paddingRight={3}>
