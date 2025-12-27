@@ -27,7 +27,14 @@ const Dashboard = () => {
     }, []);
 
     return (
-        <Box height={"100%"} sx={{ transform: VITE_FLIP_DISPLAY ? "rotate(180deg)" : undefined }}>
+        <Box
+            height={"100%"}
+            sx={{
+                transform: VITE_FLIP_DISPLAY ? "rotate(180deg) translateZ(0)" : undefined,
+                backfaceVisibility: VITE_FLIP_DISPLAY ? "hidden" : undefined,
+                willChange: VITE_FLIP_DISPLAY ? "transform" : undefined
+            }}
+        >
             <Box height={"100%"} display={"flex"} flexDirection={"row"}>
                 {VITE_SHOW_GARAGE_BUTTON && (
                     <Box width={"33.33%"} height={"100%"} paddingRight={3}>

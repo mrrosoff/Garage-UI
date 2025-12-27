@@ -3,7 +3,7 @@ import path from "path";
 import { Gpio } from "onoff";
 import { RelayWiring } from "../src/vite-env";
 
-let mainWindow;
+let mainWindow: BrowserWindow | undefined;
 
 const garageSwitch = (
     _event: any,
@@ -50,8 +50,8 @@ function createWindow() {
     }
 
     mainWindow.loadURL(indexPath);
-    mainWindow.once("ready-to-show", () => mainWindow.show());
-    mainWindow.on("closed", () => (mainWindow = null));
+    mainWindow.once("ready-to-show", () => mainWindow?.show());
+    mainWindow.on("closed", () => (mainWindow = undefined));
 }
 
 app.on("ready", () => {
@@ -60,7 +60,10 @@ app.on("ready", () => {
 });
 // For sunrise and sunset times API. No SSL Certificate error.
 app.commandLine.appendSwitch("ignore-certificate-errors");
+app.commandLine.appendSwitch("disable-gpu-rasterization");
+app.commandLine.appendSwitch("disable-zero-copy");
+
 app.on("window-all-closed", () => app.quit());
 app.on("activate", () => {
-    if (mainWindow === null) createWindow();
+    if (!mainWindow) createWindow();
 });

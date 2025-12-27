@@ -1,9 +1,11 @@
 {
     "compilerOptions": {
-        "lib": ["DOM", "ESNext"],
+        "module": "Preserve",
+        "moduleResolution": "Bundler",
         "isolatedModules": true,
         "resolveJsonModule": true,
         "noEmit": true,
+        "lib": ["DOM", "ESNext"],
         "jsx": "react-jsx"
     },
     "references": [{ "path": "./tsconfig.node.json" }],
