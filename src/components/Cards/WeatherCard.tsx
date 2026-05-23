@@ -27,15 +27,15 @@ const WeatherCard = () => {
                 borderStyle: "solid",
                 borderColor: grey[300],
                 borderRadius: 1,
-                width: 240,
-                height: 200
+                width: 280,
+                height: 240
             }}
             display={"flex"}
             flexDirection={"column"}
         >
             <Grid container justifyContent={"space-between"}>
                 <Grid>
-                    <Typography style={{ fontSize: 32, fontWeight: 500 }}>Weather</Typography>
+                    <Typography style={{ fontSize: 42, fontWeight: 500 }}>Weather</Typography>
                 </Grid>
             </Grid>
 
@@ -56,17 +56,17 @@ const WeatherDetails = (props: any) => {
             <Grid>
                 <Box display={"flex"} alignItems={"center"}>
                     <Box display={"flex"} flexDirection={"column"}>
-                        <Typography style={{ fontSize: 28, fontWeight: 500 }}>
+                        <Typography style={{ fontSize: 36, fontWeight: 500 }}>
                             {Math.floor(props.weatherData.main.temp) + " °F"}
                         </Typography>
-                        <Typography style={{ fontSize: 18 }}>
-                            {DateTime.now().toLocaleString(DateTime.TIME_SIMPLE)}
+                        <Typography style={{ fontSize: 22 }}>
+                            {DateTime.now().toFormat("h:mm a")}
                         </Typography>
                     </Box>
                     <Box pl={4}>
                         <i
                             className={`wi wi-owm-${props.weatherData.weather[0].id}`}
-                            style={{ fontSize: 50 }}
+                            style={{ fontSize: 64 }}
                         />
                     </Box>
                 </Box>
@@ -123,9 +123,9 @@ const UVIndex = (): JSX.Element => {
 
     return (
         <Box display={"flex"} alignItems={"center"}>
-            <WbSunny style={{ fontSize: 18, fill: theme.palette.primary.main }} />
+            <WbSunny style={{ fontSize: 24, fill: theme.palette.primary.main }} />
             <Box pl={1}>
-                <Typography style={{ fontSize: 16, fontWeight: 400 }}>{uvIndex ?? "-"}</Typography>
+                <Typography style={{ fontSize: 20, fontWeight: 400 }}>{uvIndex ?? "-"}</Typography>
             </Box>
         </Box>
     );
@@ -135,9 +135,9 @@ const Humidity = (props: { humidity: number }): JSX.Element => {
     const theme = useTheme();
     return (
         <Box display={"flex"} alignItems={"center"}>
-            <OpacityIcon style={{ fontSize: 18, fill: theme.palette.primary.main }} />
+            <OpacityIcon style={{ fontSize: 24, fill: theme.palette.primary.main }} />
             <Box pl={1}>
-                <Typography style={{ fontSize: 16, fontWeight: 400 }}>
+                <Typography style={{ fontSize: 20, fontWeight: 400 }}>
                     {props.humidity + "%"}
                 </Typography>
             </Box>
@@ -145,16 +145,19 @@ const Humidity = (props: { humidity: number }): JSX.Element => {
     );
 };
 
+const HOUSE_FACING_DEG = 285;
+
 const Wind = (props: { windDirection: number; windSpeed: number }): JSX.Element => {
     const theme = useTheme();
+    const adjustedDirection = (props.windDirection - HOUSE_FACING_DEG + 360) % 360;
     return (
         <Box display={"flex"} alignItems={"center"}>
             <i
-                className={`wi wi-wind from-${props.windDirection}-deg`}
-                style={{ fontSize: 22, color: theme.palette.primary.main }}
+                className={`wi wi-wind from-${Math.round(adjustedDirection)}-deg`}
+                style={{ fontSize: 24, color: theme.palette.primary.main }}
             />
             <Box pl={1}>
-                <Typography style={{ fontSize: 16, fontWeight: 400 }}>
+                <Typography style={{ fontSize: 20, fontWeight: 400 }}>
                     {Math.floor(props.windSpeed) + " mph"}
                 </Typography>
             </Box>

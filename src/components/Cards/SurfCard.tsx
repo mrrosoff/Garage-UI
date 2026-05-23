@@ -79,14 +79,14 @@ const SurfCard = () => {
                 borderStyle: "solid",
                 borderColor: grey[300],
                 borderRadius: 1,
-                height: 200
+                height: 240
             }}
             display={"flex"}
             flexDirection={"column"}
         >
             <Grid container justifyContent={"space-between"}>
                 <Grid>
-                    <Typography style={{ fontSize: 32, fontWeight: 500 }}>Surf</Typography>
+                    <Typography style={{ fontSize: 42, fontWeight: 500 }}>Surf</Typography>
                 </Grid>
                 <Grid>
                     <Grid container spacing={2} justifyContent={"center"}>
@@ -120,6 +120,7 @@ const LoadingSurfData = () => {
 
 const SurfGraph = (props: any) => {
     const theme = useTheme();
+    const [hasAnimated, setHasAnimated] = useState(false);
     return (
         <ResponsiveContainer width={"99%"} height={"100%"}>
             <BarChart data={props.surfData}>
@@ -134,8 +135,14 @@ const SurfGraph = (props: any) => {
                     ]}
                     hide
                 />
-                <XAxis dataKey="name" />
-                <Bar dataKey="waveHeight" fill={theme.palette.primary.main} minPointSize={5}>
+                <XAxis dataKey="name" tick={{ fontSize: 18 }} />
+                <Bar
+                    dataKey="waveHeight"
+                    fill={theme.palette.primary.main}
+                    minPointSize={5}
+                    isAnimationActive={!hasAnimated}
+                    onAnimationEnd={() => setHasAnimated(true)}
+                >
                     <LabelList dataKey="waveHeight" content={renderCustomizedLabel} />
                 </Bar>
             </BarChart>
@@ -151,7 +158,7 @@ const renderCustomizedLabel = (props: any) => {
     const isDecimal = waveHeight % 1 !== 0;
     return (
         <text
-            style={{ fontWeight: 600 }}
+            style={{ fontWeight: 600, fontSize: 18 }}
             x={x + width / 2}
             y={y - radius}
             fill={theme.palette.mode === "dark" ? "#FFFFFF" : "#000000"}
@@ -175,8 +182,8 @@ const WaterTemperature = () => {
     if (!waterTemperature?.data) return null;
     return (
         <Box display={"flex"} justifyContent={"center"} alignItems={"center"}>
-            <DeviceThermostat sx={{ fontSize: 20 }} />
-            <Typography sx={{ pl: 1, fontSize: 20, fontWeight: 500 }}>
+            <DeviceThermostat sx={{ fontSize: 28 }} />
+            <Typography sx={{ pl: 1, fontSize: 28, fontWeight: 500 }}>
                 {parseInt(waterTemperature?.data[0].v) + "°F"}
             </Typography>
         </Box>

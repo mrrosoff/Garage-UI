@@ -103,7 +103,7 @@ const TideCard = () => {
         >
             <Grid container justifyContent={"space-between"}>
                 <Grid>
-                    <Typography style={{ fontSize: 30, fontWeight: 500 }}>Tide</Typography>
+                    <Typography style={{ fontSize: 42, fontWeight: 500 }}>Tide</Typography>
                 </Grid>
                 <Grid>
                     {graphData && (
@@ -178,9 +178,9 @@ const TideTime = (props: any) => {
     const Icon = props.tide === "low" ? ArrowDownwardIcon : ArrowUpwardIcon;
     return (
         <Box display={"flex"} justifyContent={"center"} alignItems={"center"}>
-            <Icon sx={{ fontSize: 20 }} />
-            <Typography sx={{ pl: 1, fontSize: 20, fontWeight: 500 }}>
-                {DateTime.fromMillis(props.data).toLocaleString(DateTime.TIME_SIMPLE)}
+            <Icon sx={{ fontSize: 28 }} />
+            <Typography sx={{ pl: 1, fontSize: 28, fontWeight: 500 }}>
+                {DateTime.fromMillis(props.data).toFormat("h:mm a")}
             </Typography>
         </Box>
     );
@@ -193,6 +193,7 @@ const TideGraph = (props: {
     showTideActualData: boolean;
 }) => {
     const theme = useTheme();
+    const [hasAnimated, setHasAnimated] = useState(false);
     return (
         <ResponsiveContainer width={"100%"} height={"100%"}>
             <LineChart data={props.graphData} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
@@ -203,9 +204,10 @@ const TideGraph = (props: {
                     interval="preserveStartEnd"
                     minTickGap={40}
                     tickFormatter={(tickItem) =>
-                        DateTime.fromMillis(tickItem).toLocaleString(DateTime.TIME_SIMPLE)
+                        DateTime.fromMillis(tickItem).toFormat("h:mm a")
                     }
                     domain={["dataMin", "dataMax"]}
+                    tick={{ fontSize: 16 }}
                 />
                 <YAxis hide scale={"linear"} domain={[props.minHeight, props.maxHeight]} />
                 <CartesianGrid strokeDasharray="4 4" horizontalPoints={[0]} />
@@ -217,6 +219,8 @@ const TideGraph = (props: {
                     stroke={theme.palette.primary.main}
                     dot={false}
                     strokeWidth={6}
+                    isAnimationActive={!hasAnimated}
+                    onAnimationEnd={() => setHasAnimated(true)}
                 />
                 {props.showTideActualData && (
                     <Line
@@ -226,6 +230,7 @@ const TideGraph = (props: {
                         stroke={theme.palette.secondary.main}
                         dot={false}
                         strokeWidth={5}
+                        isAnimationActive={!hasAnimated}
                     />
                 )}
             </LineChart>
