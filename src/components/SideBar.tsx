@@ -5,9 +5,15 @@ import { SpecialDay } from "../specialDays";
 
 const SideBar = (props: { specialDay: SpecialDay | undefined }) => {
     return (
-        <Box display={"flex"} flexDirection={"column"} style={{ height: "100%", width: "100%" }}>
+        <Box
+            style={{ height: "100%", width: "100%" }}
+            sx={{ display: "flex", flexDirection: "column" }}
+        >
             {props.specialDay && (
-                <Box display={"flex"} justifyContent={"center"} style={{ width: "100%" }} mb={2}>
+                <Box
+                    style={{ width: "100%" }}
+                    sx={{ display: "flex", justifyContent: "center", mb: 2 }}
+                >
                     <Typography sx={{ fontSize: 30, mr: 2 }}>{props.specialDay.emoji}</Typography>
                     <Typography style={{ fontWeight: 500, fontSize: 30, textAlign: "center" }}>
                         {props.specialDay.text}

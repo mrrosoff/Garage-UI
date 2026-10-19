@@ -114,7 +114,7 @@ const TideTimes = (props: { graphData: ReformattedTideData[]; tideActualData?: T
     if (nextTideIsLow === null) return null;
 
     return (
-        <Grid container spacing={2} justifyContent={"center"} alignItems={"center"}>
+        <Grid container spacing={2} sx={{ justifyContent: "center", alignItems: "center" }}>
             <Grid>
                 <TideTime
                     tide={nextTideIsLow ? "low" : "high"}
@@ -135,7 +135,7 @@ const TideTime = (props: { tide: "low" | "high"; data: number | null }) => {
     if (!props.data) return null;
     const Icon = props.tide === "low" ? ArrowDownwardIcon : ArrowUpwardIcon;
     return (
-        <Box display={"flex"} justifyContent={"center"} alignItems={"center"}>
+        <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
             <Icon sx={{ fontSize: 28 }} />
             <Typography sx={{ pl: 1, fontSize: 28, fontWeight: 500 }}>
                 {DateTime.fromMillis(props.data).toFormat("h:mm a")}

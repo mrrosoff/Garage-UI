@@ -8,31 +8,71 @@ NC='\033[0m'
 printf "${YELLOW}About to install Garage-UI (Make sure to run ONLY on a Raspberry Pi)${NC}\n"
 read -p "Continue? (Y/N): " confirm && [[ $confirm == [yY] || $confirm == [yY][eE][sS] ]] || exit 1
 
+if [ "$EUID" -eq 0 ]; then
+    printf "${RED}ERROR: Run this as your normal user, not with sudo. Exiting...${NC}\n"
+    exit 1
+fi
+
 if [ $(pwd | sed 's#.*/##') != "Garage-UI" ]; then
     printf "${RED}ERROR: Not in Garage-UI directory. Exiting...${NC}\n"
     exit 1
 fi
 
+if [ ! -f .env ]; then
+    printf "${RED}ERROR: Missing .env file. See the Environment Variables section of README.md. Exiting...${NC}\n"
+    exit 1
+fi
+
+set -e
+
 mkdir -p logs
 GARAGE_UI_DIR=$PWD
 
-printf "${YELLOW}Installing Node...${NC}\n"
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
-
-source "$GARAGE_UI_DIR/scripts/load-nvm.sh"
-
-nvm install lts/*
-nvm use
-printf "${GREEN}Done.${NC}\n"
+# Package names differ between Debian releases (e.g. libgtk-3-0 became libgtk-3-0t64 in trixie)
+first_available_package() {
+    for pkg in "$@"; do
+        if apt-cache show "$pkg" &>/dev/null; then
+            echo "$pkg"
+            return
+        fi
+    done
+}
 
 printf "${YELLOW}Installing Dependencies...${NC}\n"
+export DEBIAN_FRONTEND=noninteractive
+echo "ttf-mscorefonts-installer msttcorefonts/accept-mscorefonts-eula select true" | sudo debconf-set-selections
 sudo apt-get update -y
-sudo apt-get upgrade -y
-sudo apt-get install -y matchbox xorg ttf-mscorefonts-installer fonts-noto-color-emoji xwit sqlite3 libnss3
+sudo -E apt-get upgrade -y
+sudo -E apt-get install -y git curl matchbox-window-manager xorg xwit x11-xserver-utils \
+    ttf-mscorefonts-installer fonts-noto-color-emoji libnss3 libgbm1 \
+    $(first_available_package libgtk-3-0t64 libgtk-3-0) \
+    $(first_available_package libasound2t64 libasound2)
 sudo apt-get autoremove -y
 printf "${GREEN}Done.${NC}\n"
 
+printf "${YELLOW}Installing Node...${NC}\n"
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.8/install.sh | bash
+
+set +e # nvm's scripts don't run cleanly under set -e
+source "$GARAGE_UI_DIR/scripts/load-nvm.sh"
+nvm install
+nvm use
+set -e
+printf "${GREEN}Done.${NC}\n"
+
+printf "${YELLOW}Installing Garage-UI Packages...${NC}\n"
+npm ci
+npx electron-rebuild
+printf "${GREEN}Done.${NC}\n"
+
 printf "${YELLOW}Installing Auto Start Script...${NC}\n"
+# Boot to the console and log in automatically, so ~/.bashrc can launch the app with startx
+if command -v raspi-config &>/dev/null; then
+    sudo raspi-config nonint do_boot_behaviour B2
+else
+    printf "${YELLOW}raspi-config not found. Set up console autologin yourself.${NC}\n"
+fi
+
 # startx runs ~/.xinitrc, which hands off to the repo's xinitrc so updates to it take effect
 printf "#!/bin/bash\nexport GARAGE_UI_DIR=\"${GARAGE_UI_DIR}\"\nexec bash \"${GARAGE_UI_DIR}/xinitrc\"\n" > ~/.xinitrc
 chmod 755 ~/.xinitrc

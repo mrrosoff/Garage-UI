@@ -12,76 +12,60 @@ import {
 } from "recharts";
 import DeviceThermostat from "@mui/icons-material/DeviceThermostat";
 
-import axios from "axios";
-
 import config from "../../config";
 import useExternalAPIOnInterval from "../../hooks/useExternalAPIOnInterval";
+import { getSurfConditions, SurfConditions } from "../../surfConditions";
 import Card, { LoadingBar } from "./Card";
 
 interface SurfSpotData {
-    id: number;
     name: string;
-    waveHeight: number;
+    maxHeight: number;
+    label: string;
 }
 
-const surfAPI = "https://services.surfline.com/kbyg/spots/forecasts";
+const toSpotData = (conditions: SurfConditions, name: string): SurfSpotData => ({
+    name,
+    maxHeight: conditions.maxHeight,
+    label:
+        conditions.minHeight === conditions.maxHeight
+            ? `${conditions.maxHeight} ft`
+            : `${conditions.minHeight}-${conditions.maxHeight} ft`
+});
 
 const SurfCard = () => {
     const { timeInterval, surfSpots } = config;
 
-    const [surfData, setSurfData] = useState<(SurfSpotData | undefined)[]>([]);
+    const [surfData, setSurfData] = useState<SurfSpotData[]>([]);
 
     useEffect(() => {
-        const getSurfFromAPI = async () => {
-            const results = await Promise.allSettled(
-                surfSpots.map((spot) =>
-                    axios.get(
-                        `${surfAPI}/wave?spotId=${spot.id}&days=1&intervalHours=1&maxHeights=true`
-                    )
+        // Cheap to call often: it only hits the API when a scheduled refresh is due
+        const updateSurfData = async () => {
+            const conditions = await getSurfConditions();
+            setSurfData(
+                conditions.flatMap((spot, index) =>
+                    spot ? [toSpotData(spot, surfSpots[index].name)] : []
                 )
-            );
-
-            // Keep the last good value for any spot whose request failed
-            setSurfData((previousData) =>
-                results.map((result, index) => {
-                    if (result.status === "rejected") {
-                        console.error(
-                            `Failed to fetch surf for ${surfSpots[index].name}:`,
-                            result.reason
-                        );
-                        return previousData[index];
-                    }
-                    const waveHeight = calculateTodaysAverage(result.value.data?.data?.wave);
-                    if (waveHeight === undefined) return previousData[index];
-                    return { id: index, name: surfSpots[index].name, waveHeight };
-                })
             );
         };
 
-        getSurfFromAPI();
-        const interval = setInterval(getSurfFromAPI, timeInterval);
+        updateSurfData();
+        const interval = setInterval(updateSurfData, timeInterval);
         return () => clearInterval(interval);
     }, [timeInterval, surfSpots]);
-
-    const loadedSurfData = surfData.filter((data): data is SurfSpotData => !!data);
 
     return (
         <Card
             title={"Surf"}
             height={240}
             action={
-                <Grid container spacing={2} justifyContent={"center"}>
+                <Grid container spacing={2} sx={{ justifyContent: "center" }}>
                     <Grid>
                         <WaterTemperature />
                     </Grid>
                 </Grid>
             }
         >
-            {surfSpots.length > 0 && loadedSurfData.length === surfSpots.length ? (
-                <SurfGraph surfData={loadedSurfData} />
-            ) : (
-                <LoadingBar />
-            )}
+            {surfData.length > 0 ? <SurfGraph surfData={surfData} /> : <LoadingBar />}
         </Card>
     );
 };
@@ -95,23 +79,20 @@ const SurfGraph = (props: { surfData: SurfSpotData[] }) => {
             <BarChart data={props.surfData}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <YAxis
-                    dataKey="waveHeight"
-                    domain={[
-                        0,
-                        Math.floor(Math.max(...props.surfData.map((item) => item.waveHeight))) + 3
-                    ]}
+                    dataKey="maxHeight"
+                    domain={[0, Math.max(...props.surfData.map((item) => item.maxHeight)) + 3]}
                     hide
                 />
                 <XAxis dataKey="name" tick={{ fontSize: 18 }} />
                 <Bar
-                    dataKey="waveHeight"
+                    dataKey="maxHeight"
                     fill={theme.palette.primary.main}
                     minPointSize={5}
                     isAnimationActive={!hasAnimated}
                     onAnimationEnd={() => setHasAnimated(true)}
                 >
                     <LabelList
-                        dataKey="waveHeight"
+                        dataKey="label"
                         content={(labelProps: any) => renderCustomizedLabel(labelProps, labelColor)}
                     />
                 </Bar>
@@ -123,8 +104,6 @@ const SurfGraph = (props: { surfData: SurfSpotData[] }) => {
 const renderCustomizedLabel = (props: any, color: string) => {
     const { x, y, width, value } = props;
     const radius = 10;
-    const waveHeight = Math.round(value * 2) / 2;
-    const isDecimal = waveHeight % 1 !== 0;
     return (
         <text
             style={{ fontWeight: 600, fontSize: 18 }}
@@ -134,7 +113,7 @@ const renderCustomizedLabel = (props: any, color: string) => {
             textAnchor="middle"
             dominantBaseline="middle"
         >
-            {waveHeight.toFixed(isDecimal ? 1 : 0) + " ft"}
+            {value}
         </text>
     );
 };
@@ -148,18 +127,13 @@ const WaterTemperature = () => {
 
     if (!waterTemperature?.data) return null;
     return (
-        <Box display={"flex"} justifyContent={"center"} alignItems={"center"}>
+        <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
             <DeviceThermostat sx={{ fontSize: 28 }} />
             <Typography sx={{ pl: 1, fontSize: 28, fontWeight: 500 }}>
                 {parseInt(waterTemperature.data[0].v) + "°F"}
             </Typography>
         </Box>
     );
-};
-
-const calculateTodaysAverage = (data?: { surf: { max: number } }[]) => {
-    if (!data?.length) return undefined;
-    return data.reduce((sum, item) => sum + item.surf.max, 0) / data.length;
 };
 
 export default SurfCard;

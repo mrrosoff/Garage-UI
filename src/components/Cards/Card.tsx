@@ -11,10 +11,12 @@ const Card = (props: {
     children: ReactNode;
 }) => (
     <Box
-        pt={1}
-        pl={2}
-        pr={2}
         sx={{
+            pt: 1,
+            pl: 2,
+            pr: 2,
+            display: "flex",
+            flexDirection: "column",
             borderWidth: 2,
             borderStyle: "solid",
             borderColor: grey[300],
@@ -22,18 +24,14 @@ const Card = (props: {
             width: props.width,
             height: props.height
         }}
-        display={"flex"}
-        flexDirection={"column"}
     >
-        <Grid container justifyContent={"space-between"}>
+        <Grid container sx={{ justifyContent: "space-between" }}>
             <Grid>
                 <Typography style={{ fontSize: 42, fontWeight: 500 }}>{props.title}</Typography>
             </Grid>
             {props.action && <Grid>{props.action}</Grid>}
         </Grid>
-        <Box pt={1} flexGrow={1}>
-            {props.children}
-        </Box>
+        <Box sx={{ pt: 1, flexGrow: 1 }}>{props.children}</Box>
     </Box>
 );
 

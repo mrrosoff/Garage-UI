@@ -1,4 +1,4 @@
-import { Box, Grid, Typography, useTheme } from "@mui/material";
+import { Box, Grid, Stack, Typography, useTheme } from "@mui/material";
 import OpacityIcon from "@mui/icons-material/Opacity";
 import WbSunny from "@mui/icons-material/WbSunny";
 
@@ -24,10 +24,10 @@ const WeatherCard = () => {
 
 const WeatherDetails = (props: any) => {
     return (
-        <Grid container direction={"column"} spacing={3}>
-            <Grid>
-                <Box display={"flex"} alignItems={"center"}>
-                    <Box display={"flex"} flexDirection={"column"}>
+        <Stack spacing={3}>
+            <Box>
+                <Box sx={{ display: "flex", alignItems: "center" }}>
+                    <Box sx={{ display: "flex", flexDirection: "column" }}>
                         <Typography style={{ fontSize: 36, fontWeight: 500 }}>
                             {Math.floor(props.weatherData.main.temp) + " °F"}
                         </Typography>
@@ -35,18 +35,18 @@ const WeatherDetails = (props: any) => {
                             {DateTime.now().toFormat("h:mm a")}
                         </Typography>
                     </Box>
-                    <Box pl={4}>
+                    <Box sx={{ pl: 4 }}>
                         <i
                             className={`wi wi-owm-${props.weatherData.weather[0].id}`}
                             style={{ fontSize: 64 }}
                         />
                     </Box>
                 </Box>
-            </Grid>
-            <Grid>
+            </Box>
+            <Box>
                 <OtherDetails {...props} />
-            </Grid>
-        </Grid>
+            </Box>
+        </Stack>
     );
 };
 
@@ -81,9 +81,9 @@ const UVIndex = () => {
     )?.UV_VALUE;
 
     return (
-        <Box display={"flex"} alignItems={"center"}>
+        <Box sx={{ display: "flex", alignItems: "center" }}>
             <WbSunny style={{ fontSize: 24, fill: theme.palette.primary.main }} />
-            <Box pl={1}>
+            <Box sx={{ pl: 1 }}>
                 <Typography style={{ fontSize: 20, fontWeight: 400 }}>{uvIndex ?? "-"}</Typography>
             </Box>
         </Box>
@@ -93,9 +93,9 @@ const UVIndex = () => {
 const Humidity = (props: { humidity: number }) => {
     const theme = useTheme();
     return (
-        <Box display={"flex"} alignItems={"center"}>
+        <Box sx={{ display: "flex", alignItems: "center" }}>
             <OpacityIcon style={{ fontSize: 24, fill: theme.palette.primary.main }} />
-            <Box pl={1}>
+            <Box sx={{ pl: 1 }}>
                 <Typography style={{ fontSize: 20, fontWeight: 400 }}>
                     {props.humidity + "%"}
                 </Typography>
@@ -110,12 +110,12 @@ const Wind = (props: { windDirection: number; windSpeed: number }) => {
     const theme = useTheme();
     const adjustedDirection = (props.windDirection - HOUSE_FACING_DEG + 360) % 360;
     return (
-        <Box display={"flex"} alignItems={"center"}>
+        <Box sx={{ display: "flex", alignItems: "center" }}>
             <i
                 className={`wi wi-wind from-${Math.round(adjustedDirection)}-deg`}
                 style={{ fontSize: 24, color: theme.palette.primary.main }}
             />
-            <Box pl={1}>
+            <Box sx={{ pl: 1 }}>
                 <Typography style={{ fontSize: 20, fontWeight: 400 }}>
                     {Math.floor(props.windSpeed) + " mph"}
                 </Typography>

@@ -17,6 +17,8 @@ interface ImportMetaEnv {
     readonly VITE_SURF_SPOT_THREE_NAME?: string;
     readonly VITE_SURF_SPOT_FOUR_ID?: string;
     readonly VITE_SURF_SPOT_FOUR_NAME?: string;
+    readonly VITE_PARSE_API_KEY?: string;
+    readonly VITE_SURF_REFRESH_HOURS?: string;
     readonly VITE_RELAY_DIRECTION?: string;
     readonly VITE_RELAY_PIN?: string;
     readonly VITE_SHOW_GARAGE_BUTTON?: string;
