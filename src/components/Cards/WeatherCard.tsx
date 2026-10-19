@@ -23,6 +23,9 @@ const WeatherCard = () => {
 };
 
 const WeatherDetails = (props: any) => {
+    const weather = props.weatherData.weather[0];
+    // OpenWeatherMap icon codes end in "n" at night, e.g. "01n" for a clear night
+    const timeOfDay = weather.icon?.endsWith("n") ? "night" : "day";
     return (
         <Stack spacing={3}>
             <Box>
@@ -37,7 +40,7 @@ const WeatherDetails = (props: any) => {
                     </Box>
                     <Box sx={{ pl: 4 }}>
                         <i
-                            className={`wi wi-owm-${props.weatherData.weather[0].id}`}
+                            className={`wi wi-owm-${timeOfDay}-${weather.id}`}
                             style={{ fontSize: 64 }}
                         />
                     </Box>
@@ -71,20 +74,17 @@ const OtherDetails = (props: any) => {
 
 const UVIndex = () => {
     const theme = useTheme();
-    const uvAPIURL = `https://data.epa.gov/efservice/getEnvirofactsUVHOURLY/ZIP/${config.zipCode}/JSON`;
+    const uvAPIURL = `https://api.open-meteo.com/v1/forecast?latitude=${config.latitude}&longitude=${config.longitude}&current=uv_index`;
     const uvIndexData = useExternalAPIOnInterval(config.timeInterval, uvAPIURL);
-    const currentHour = DateTime.now().toFormat("hh a");
-
-    // The API returns an { error } object instead of an array when it has no data for the zip code
-    const uvIndex = (Array.isArray(uvIndexData) ? uvIndexData : []).find(
-        (data: { DATE_TIME: string }) => data.DATE_TIME.includes(currentHour)
-    )?.UV_VALUE;
+    const uvIndex = uvIndexData?.current?.uv_index;
 
     return (
         <Box sx={{ display: "flex", alignItems: "center" }}>
             <WbSunny style={{ fontSize: 24, fill: theme.palette.primary.main }} />
             <Box sx={{ pl: 1 }}>
-                <Typography style={{ fontSize: 20, fontWeight: 400 }}>{uvIndex ?? "-"}</Typography>
+                <Typography style={{ fontSize: 20, fontWeight: 400 }}>
+                    {typeof uvIndex === "number" ? Math.round(uvIndex) : "-"}
+                </Typography>
             </Box>
         </Box>
     );
