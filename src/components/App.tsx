@@ -9,18 +9,14 @@ import {
 
 import { DateTime } from "luxon";
 
-import callExternalAPIOnInterval from "../hooks/callExternalAPIOnInterval";
+import config from "../config";
+import useExternalAPIOnInterval from "../hooks/useExternalAPIOnInterval";
 import Dashboard from "./Dashboard";
 
 const App = () => {
-    const { VITE_TIME_INTERVAL, VITE_LATITUDE, VITE_LONGITUDE } = import.meta.env;
-    if (!VITE_TIME_INTERVAL) {
-        throw new Error("Missing .env File. Please Refer to README.md");
-    }
-
-    const sunData: any | undefined = callExternalAPIOnInterval(
-        VITE_TIME_INTERVAL,
-        `https://api.sunrise-sunset.org/json?lat=${VITE_LATITUDE}&lng=${VITE_LONGITUDE}&formatted=0`
+    const sunData = useExternalAPIOnInterval(
+        config.timeInterval,
+        `https://api.sunrise-sunset.org/json?lat=${config.latitude}&lng=${config.longitude}&formatted=0`
     );
 
     let mode: PaletteMode = "light";

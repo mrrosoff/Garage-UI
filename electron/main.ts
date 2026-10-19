@@ -26,7 +26,7 @@ const garageSwitch = (
         flipSwitch();
         return true;
     } catch (err) {
-        console.log("Unsupported Platform Or Unknown Error Occured");
+        console.log("Unsupported Platform Or Unknown Error Occurred", err);
         return false;
     }
 };
@@ -58,8 +58,6 @@ app.on("ready", () => {
     ipcMain.handle("garageSwitch", garageSwitch);
     createWindow();
 });
-// For sunrise and sunset times API. No SSL Certificate error.
-app.commandLine.appendSwitch("ignore-certificate-errors");
 app.commandLine.appendSwitch("disable-gpu-rasterization");
 app.commandLine.appendSwitch("disable-zero-copy");
 

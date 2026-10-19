@@ -2,9 +2,8 @@ import { useEffect, useState } from "react";
 
 import { Box, Paper } from "@mui/material";
 
-import { DateTime } from "luxon";
-
-import specialDays, { SpecialDay } from "../specialDays";
+import config from "../config";
+import { getSpecialDay } from "../specialDays";
 
 import TideCard from "./Cards/TideCard";
 import WeatherCard from "./Cards/WeatherCard";
@@ -12,38 +11,33 @@ import SurfCard from "./Cards/SurfCard";
 import SideBar from "./SideBar";
 
 const Dashboard = () => {
-    const { VITE_TIME_INTERVAL, VITE_SHOW_GARAGE_BUTTON, VITE_FLIP_DISPLAY } = import.meta.env;
+    const { timeInterval, showGarageButton, flipDisplay } = config;
 
-    const [specialDay, setSpecialDay] = useState<SpecialDay>();
+    const [specialDay, setSpecialDay] = useState(getSpecialDay);
 
     useEffect(() => {
-        const getSpecialDay = async () => {
-            const specialDay = specialDays.find((day) => DateTime.now().hasSame(day.date, "day"));
-            setSpecialDay(specialDay);
-        };
-
-        const interval = setInterval(getSpecialDay, VITE_TIME_INTERVAL);
+        const interval = setInterval(() => setSpecialDay(getSpecialDay()), timeInterval);
         return () => clearInterval(interval);
-    }, []);
+    }, [timeInterval]);
 
     return (
         <Box
             height={"100%"}
             sx={{
-                transform: VITE_FLIP_DISPLAY ? "rotate(180deg) translateZ(0)" : undefined,
-                backfaceVisibility: VITE_FLIP_DISPLAY ? "hidden" : undefined,
-                willChange: VITE_FLIP_DISPLAY ? "transform" : undefined
+                transform: flipDisplay ? "rotate(180deg) translateZ(0)" : undefined,
+                backfaceVisibility: flipDisplay ? "hidden" : undefined,
+                willChange: flipDisplay ? "transform" : undefined
             }}
         >
             <Box height={"100%"} display={"flex"} flexDirection={"row"}>
-                {VITE_SHOW_GARAGE_BUTTON && (
+                {showGarageButton && (
                     <Box width={"33.33%"} height={"100%"} paddingRight={3}>
                         <Paper elevation={2} sx={{ width: "100%", height: "100%", p: 2 }}>
                             <SideBar specialDay={specialDay} />
                         </Paper>
                     </Box>
                 )}
-                <Box width={VITE_SHOW_GARAGE_BUTTON ? "66.66%" : "100%"} height={"100%"}>
+                <Box width={showGarageButton ? "66.66%" : "100%"} height={"100%"}>
                     <Paper elevation={2} sx={{ width: "100%", height: "100%", p: 2 }}>
                         <Box
                             width={"100%"}

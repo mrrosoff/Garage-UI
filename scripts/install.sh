@@ -13,15 +13,13 @@ if [ $(pwd | sed 's#.*/##') != "Garage-UI" ]; then
     exit 1
 fi
 
-mkdir logs
+mkdir -p logs
 GARAGE_UI_DIR=$PWD
 
 printf "${YELLOW}Installing Node...${NC}\n"
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
 
-export NVM_DIR="$HOME/.config/nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+source "$GARAGE_UI_DIR/scripts/load-nvm.sh"
 
 nvm install lts/*
 nvm use
@@ -30,30 +28,14 @@ printf "${GREEN}Done.${NC}\n"
 printf "${YELLOW}Installing Dependencies...${NC}\n"
 sudo apt-get update -y
 sudo apt-get upgrade -y
-sudo apt-get install -y matchbox xorg ttf-mscorefonts-installer xwit sqlite3 libnss3
+sudo apt-get install -y matchbox xorg ttf-mscorefonts-installer fonts-noto-color-emoji xwit sqlite3 libnss3
 sudo apt-get autoremove -y
 printf "${GREEN}Done.${NC}\n"
 
-printf "${YELLOW}Setting Up Emojis...${NC}\n"
-mkdir emj_temp
-cd emj_temp
-wget https://fontsdata.com/zipdown-segoeuiemoji-132714.htm 
-wget https://noto-website.storage.googleapis.com/pkgs/NotoColorEmoji-unhinted.zip
-mv zipdown-segoeuiemoji-132714.htm segoeuiemoji.zip
-unzip segoeuiemoji.zip
-unzip NotoColorEmoji-unhinted.zip
-mkdir $HOME/.fonts &>/dev/null
-mv seguiemj.ttf "$HOME/.fonts/Segoe UI.ttf"
-mv NotoColorEmoji.ttf "$HOME/.fonts/Noto Color Emoji.ttf"
-fc-cache -f -v &>/dev/null
-cd ..
-rm -rf emj_temp
-printf "${GREEN}Done.${NC}\n"
-
 printf "${YELLOW}Installing Auto Start Script...${NC}\n"
-sudo chmod 757 /etc/X11/xinit/xinitrc
-sed -i "2 i cd $GARAGE_UI_DIR" xinitrc
-cat xinitrc > /etc/X11/xinit/xinitrc
+# startx runs ~/.xinitrc, which hands off to the repo's xinitrc so updates to it take effect
+printf "#!/bin/bash\nexport GARAGE_UI_DIR=\"${GARAGE_UI_DIR}\"\nexec bash \"${GARAGE_UI_DIR}/xinitrc\"\n" > ~/.xinitrc
+chmod 755 ~/.xinitrc
 
 # Check if not already appended
 if ! grep -q "export GARAGE_UI_DIR" ~/.bashrc; then
@@ -74,8 +56,8 @@ if ! grep -q "export GARAGE_UI_DIR" ~/.bashrc; then
 fi
 
 printf "${YELLOW}Scheduling Auto Updates...${NC}\n"
-sudo chmod 757 $GARAGE_UI_DIR/scripts/reboot.sh
-sudo printf  "# m h dom mon dow command\n0 4 * * 0 $GARAGE_UI_DIR/scripts/reboot.sh\n" >> temp_cron
+chmod 755 $GARAGE_UI_DIR/scripts/reboot.sh
+printf "# m h dom mon dow command\n0 4 * * 0 GARAGE_UI_DIR=\"$GARAGE_UI_DIR\" $GARAGE_UI_DIR/scripts/reboot.sh\n" > temp_cron
 sudo crontab temp_cron
 rm temp_cron
 printf "${GREEN}Done.${NC}\n"

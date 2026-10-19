@@ -5,13 +5,16 @@ GREEN='\033[0;32m'
 YELLOW='\033[0;33m'
 NC='\033[0m'
 
+GARAGE_UI_DIR="${GARAGE_UI_DIR:-$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)}"
+
 dt="${YELLOW}$(date '+%m/%d/%Y %H:%M:%S')${NC}";
 LOG_PATH="${GARAGE_UI_DIR}/logs/auto_start.log"
 
+mkdir -p "${GARAGE_UI_DIR}/logs"
 printf "$dt -- in ${GARAGE_UI_DIR}\n\n" > $LOG_PATH
 
-cd $GARAGE_UI_DIR
-git fetch 
+cd "$GARAGE_UI_DIR"
+git fetch
 
 UPSTREAM=${1:-'@{u}'}
 LOCAL=$(git rev-parse @)
@@ -22,12 +25,12 @@ printf "$dt -- " >> $LOG_PATH
 git status &>> $LOG_PATH
 printf "\n\n" >> $LOG_PATH
 
-export NVM_DIR="$HOME/.config/nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+source "$GARAGE_UI_DIR/scripts/load-nvm.sh"
 nvm use
 
-if [ $LOCAL = $REMOTE ]; then
+NEEDS_INSTALL=false
+
+if [ "$LOCAL" = "$REMOTE" ]; then
 	printf "$dt -- ${GREEN}Up-to-date${NC}\n" >> $LOG_PATH
 else
 	printf "$dt -- ${RED}Need to rebuild dependencies${NC}\n" >> $LOG_PATH
@@ -35,9 +38,17 @@ else
 	printf "$dt -- Pulling...\n" >> $LOG_PATH
 	git pull -f &>> $LOG_PATH
 	printf "${GREEN}Done.${NC}\n\n" >> $LOG_PATH
+	NEEDS_INSTALL=true
+fi
 
-	printf "$dt -- Installing Dependecies...\n" >> $LOG_PATH
-	npm install &>> $LOG_PATH
+# Fresh installs have no node_modules yet
+if [ ! -d node_modules ]; then
+	NEEDS_INSTALL=true
+fi
+
+if [ "$NEEDS_INSTALL" = true ]; then
+	printf "$dt -- Installing Dependencies...\n" >> $LOG_PATH
+	npm ci &>> $LOG_PATH
 	printf "${GREEN}Done.${NC}\n\n" >> $LOG_PATH
 
 	printf "$dt -- Rebuilding Electron...\n" >> $LOG_PATH
@@ -47,9 +58,9 @@ fi
 
 printf "$dt -- ${GREEN}Success! Starting Garage-UI...${NC}\n" >> $LOG_PATH
 
-xset -dpms 
-xset s off 
-matchbox-window-manager & 
+xset -dpms
+xset s off
+matchbox-window-manager &
 
 printf "$dt --" >> $LOG_PATH
 npm run garage &>> $LOG_PATH

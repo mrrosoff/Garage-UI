@@ -1,52 +1,24 @@
-import { Box, Grid, LinearProgress, Typography, useTheme } from "@mui/material";
+import { Box, Grid, Typography, useTheme } from "@mui/material";
 import OpacityIcon from "@mui/icons-material/Opacity";
 import WbSunny from "@mui/icons-material/WbSunny";
-import { grey } from "@mui/material/colors";
 
 import { DateTime } from "luxon";
 
-import callExternalAPIOnInterval from "../../hooks/callExternalAPIOnInterval";
+import config from "../../config";
+import useExternalAPIOnInterval from "../../hooks/useExternalAPIOnInterval";
+import Card, { LoadingBar } from "./Card";
 
 const WeatherCard = () => {
-    const { VITE_ZIP_CODE, VITE_TIME_INTERVAL, VITE_OPEN_WEATHER_MAP_ID, VITE_SHOW_GARAGE_BUTTON } =
-        import.meta.env;
-
     const openWeatherMapAPI = "https://api.openweathermap.org/data/2.5/weather";
-    const weatherData: any | undefined = callExternalAPIOnInterval(
-        VITE_TIME_INTERVAL,
-        `${openWeatherMapAPI}?zip=${VITE_ZIP_CODE}&units=imperial&appid=${VITE_OPEN_WEATHER_MAP_ID}`
+    const weatherData = useExternalAPIOnInterval(
+        config.timeInterval,
+        `${openWeatherMapAPI}?zip=${config.zipCode}&units=imperial&appid=${config.openWeatherMapId}`
     );
 
     return (
-        <Box
-            pt={1}
-            pl={2}
-            pr={2}
-            sx={{
-                borderWidth: 2,
-                borderStyle: "solid",
-                borderColor: grey[300],
-                borderRadius: 1,
-                width: 280,
-                height: 240
-            }}
-            display={"flex"}
-            flexDirection={"column"}
-        >
-            <Grid container justifyContent={"space-between"}>
-                <Grid>
-                    <Typography style={{ fontSize: 42, fontWeight: 500 }}>Weather</Typography>
-                </Grid>
-            </Grid>
-
-            <Box pt={1} flexGrow={1}>
-                {weatherData ? (
-                    <WeatherDetails weatherData={weatherData} />
-                ) : (
-                    <LoadingWeatherData />
-                )}
-            </Box>
-        </Box>
+        <Card title={"Weather"} width={280} height={240}>
+            {weatherData ? <WeatherDetails weatherData={weatherData} /> : <LoadingBar />}
+        </Card>
     );
 };
 
@@ -78,19 +50,7 @@ const WeatherDetails = (props: any) => {
     );
 };
 
-const LoadingWeatherData = (): JSX.Element => {
-    const theme = useTheme();
-    return (
-        <Box sx={{ width: "100%", height: "100%", display: "flex", flexDirection: "column", p: 2 }}>
-            <Box sx={{ flexGrow: 1 }} />
-            <Box>
-                <LinearProgress sx={{ height: theme.spacing(1) }} />
-            </Box>
-        </Box>
-    );
-};
-
-const OtherDetails = (props: any): JSX.Element => {
+const OtherDetails = (props: any) => {
     return (
         <Grid container spacing={1}>
             <Grid>
@@ -109,16 +69,15 @@ const OtherDetails = (props: any): JSX.Element => {
     );
 };
 
-const UVIndex = (): JSX.Element => {
+const UVIndex = () => {
     const theme = useTheme();
-    const { VITE_ZIP_CODE, VITE_TIME_INTERVAL } = import.meta.env;
-    const uvAPIURL = `https://data.epa.gov/efservice/getEnvirofactsUVHOURLY/ZIP/${VITE_ZIP_CODE}/JSON`;
-    let uvIndexData: any | undefined = callExternalAPIOnInterval(VITE_TIME_INTERVAL, uvAPIURL);
-    uvIndexData = Array.isArray(uvIndexData) ? uvIndexData : [];
+    const uvAPIURL = `https://data.epa.gov/efservice/getEnvirofactsUVHOURLY/ZIP/${config.zipCode}/JSON`;
+    const uvIndexData = useExternalAPIOnInterval(config.timeInterval, uvAPIURL);
     const currentHour = DateTime.now().toFormat("hh a");
 
-    const uvIndex = uvIndexData?.find((data: { DATE_TIME: string }) =>
-        data.DATE_TIME.includes(currentHour)
+    // The API returns an { error } object instead of an array when it has no data for the zip code
+    const uvIndex = (Array.isArray(uvIndexData) ? uvIndexData : []).find(
+        (data: { DATE_TIME: string }) => data.DATE_TIME.includes(currentHour)
     )?.UV_VALUE;
 
     return (
@@ -131,7 +90,7 @@ const UVIndex = (): JSX.Element => {
     );
 };
 
-const Humidity = (props: { humidity: number }): JSX.Element => {
+const Humidity = (props: { humidity: number }) => {
     const theme = useTheme();
     return (
         <Box display={"flex"} alignItems={"center"}>
@@ -147,7 +106,7 @@ const Humidity = (props: { humidity: number }): JSX.Element => {
 
 const HOUSE_FACING_DEG = 285;
 
-const Wind = (props: { windDirection: number; windSpeed: number }): JSX.Element => {
+const Wind = (props: { windDirection: number; windSpeed: number }) => {
     const theme = useTheme();
     const adjustedDirection = (props.windDirection - HOUSE_FACING_DEG + 360) % 360;
     return (

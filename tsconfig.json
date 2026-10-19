@@ -8,6 +8,7 @@
         "lib": ["DOM", "ESNext"],
         "jsx": "react-jsx"
     },
+    "include": ["src", "electron"],
     "references": [{ "path": "./tsconfig.node.json" }],
     "extends": "@tsconfig/node22/tsconfig.json",
     "$schema": "https://json.schemastore.org/tsconfig"

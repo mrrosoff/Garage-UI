@@ -45,7 +45,12 @@ VITE_SURF_SPOT_FOUR_ID="5842041f4e65fad6a77088a0"
 VITE_SURF_SPOT_FOUR_NAME="Beacons"
 
 VITE_SHOW_GARAGE_BUTTON=true
+VITE_RELAY_DIRECTION="forward" # or "backward", depending on how the relay is wired
+VITE_RELAY_PIN=4
+VITE_FLIP_DISPLAY=false # set to true if the screen is mounted upside down
 ```
+
+`VITE_SURF_SPOT_FOUR_*` is optional. Booleans accept `true`, `1`, or `yes`; anything else counts as false.
 
 ## Upgrades
 

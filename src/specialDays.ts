@@ -1,26 +1,27 @@
 import { DateTime } from "luxon";
 
 export interface SpecialDay {
-    emoji: string;
+    month: number;
+    day: number;
     text: string;
-    date: DateTime;
+    emoji: string;
 }
 
-const formatString = "MM-dd";
-
 const specialDays: SpecialDay[] = [
-    { date: DateTime.fromFormat("01-01", formatString), text: "Happy New Year", emoji: "🎉" },
-    { date: DateTime.fromFormat("02-14", formatString), text: "Happy Valentines Day", emoji: "💖" },
-    { date: DateTime.fromFormat("05-16", formatString), text: "Happy Birthday Max", emoji: "🎉" },
-    { date: DateTime.fromFormat("05-24", formatString), text: "Happy Birthday Jaden", emoji: "🎉" },
-    { date: DateTime.fromFormat("07-04", formatString), text: "Happy Forth Of July", emoji: "🇺🇸" },
-    {
-        date: DateTime.fromFormat("07-19", formatString),
-        text: "Happy Birthday Mother",
-        emoji: "🎉"
-    },
-    { date: DateTime.fromFormat("10-31", formatString), text: "Happy Halloween", emoji: "🎃" },
-    { date: DateTime.fromFormat("12-17", formatString), text: "Happy Birthday Jack", emoji: "🎉" }
+    { month: 1, day: 1, text: "Happy New Year", emoji: "🎉" },
+    { month: 2, day: 14, text: "Happy Valentine's Day", emoji: "💖" },
+    { month: 5, day: 16, text: "Happy Birthday Max", emoji: "🎉" },
+    { month: 5, day: 24, text: "Happy Birthday Jaden", emoji: "🎉" },
+    { month: 7, day: 4, text: "Happy Fourth Of July", emoji: "🇺🇸" },
+    { month: 7, day: 19, text: "Happy Birthday Mother", emoji: "🎉" },
+    { month: 10, day: 31, text: "Happy Halloween", emoji: "🎃" },
+    { month: 12, day: 17, text: "Happy Birthday Jack", emoji: "🎉" }
 ];
+
+// Compare month and day only, so dates keep matching after the year rolls over without a restart
+export const getSpecialDay = (date = DateTime.now()) =>
+    specialDays.find(
+        (specialDay) => specialDay.month === date.month && specialDay.day === date.day
+    );
 
 export default specialDays;
