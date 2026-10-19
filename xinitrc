@@ -28,8 +28,6 @@ printf "\n\n" >> $LOG_PATH
 source "$GARAGE_UI_DIR/scripts/load-nvm.sh"
 nvm use
 
-NEEDS_INSTALL=false
-
 if [ "$LOCAL" = "$REMOTE" ]; then
 	printf "$dt -- ${GREEN}Up-to-date${NC}\n" >> $LOG_PATH
 else
@@ -40,22 +38,20 @@ else
 	printf "$dt -- Pulling...\n" >> $LOG_PATH
 	git reset --hard "$UPSTREAM" &>> $LOG_PATH
 	printf "${GREEN}Done.${NC}\n\n" >> $LOG_PATH
-	NEEDS_INSTALL=true
 fi
 
-# Fresh installs have no node_modules yet
-if [ ! -d node_modules ]; then
-	NEEDS_INSTALL=true
-fi
-
-if [ "$NEEDS_INSTALL" = true ]; then
+# Reinstall unless the last successful install used this exact lockfile. This also covers
+# fresh installs and an install that was interrupted (e.g. by a power cut) partway through.
+INSTALL_MARKER="node_modules/.installed-lockfile"
+LOCKFILE_HASH=$(sha256sum package-lock.json | cut -d" " -f1)
+if [ "$(cat "$INSTALL_MARKER" 2>/dev/null)" != "$LOCKFILE_HASH" ]; then
 	printf "$dt -- Installing Dependencies...\n" >> $LOG_PATH
-	npm ci &>> $LOG_PATH
-	printf "${GREEN}Done.${NC}\n\n" >> $LOG_PATH
-
-	printf "$dt -- Rebuilding Electron...\n" >> $LOG_PATH
-	npx electron-rebuild &>> $LOG_PATH
-	printf "${GREEN}Done.${NC}\n\n" >> $LOG_PATH
+	if npm ci &>> $LOG_PATH && npx electron-rebuild &>> $LOG_PATH; then
+		echo "$LOCKFILE_HASH" > "$INSTALL_MARKER"
+		printf "${GREEN}Done.${NC}\n\n" >> $LOG_PATH
+	else
+		printf "$dt -- ${RED}Install failed, will retry next boot${NC}\n\n" >> $LOG_PATH
+	fi
 fi
 
 printf "$dt -- ${GREEN}Success! Starting Garage-UI...${NC}\n" >> $LOG_PATH

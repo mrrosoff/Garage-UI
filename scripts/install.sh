@@ -31,7 +31,7 @@ GARAGE_UI_DIR=$PWD
 # Package names differ between Debian releases (e.g. libgtk-3-0 became libgtk-3-0t64 in trixie)
 first_available_package() {
     for pkg in "$@"; do
-        if apt-cache show "$pkg" &>/dev/null; then
+        if apt-cache policy "$pkg" 2>/dev/null | grep -q "Candidate: [^(]"; then
             echo "$pkg"
             return
         fi
@@ -43,8 +43,11 @@ export DEBIAN_FRONTEND=noninteractive
 echo "ttf-mscorefonts-installer msttcorefonts/accept-mscorefonts-eula select true" | sudo debconf-set-selections
 sudo apt-get update -y
 sudo -E apt-get upgrade -y
-sudo -E apt-get install -y git curl matchbox-window-manager xorg xwit x11-xserver-utils \
-    ttf-mscorefonts-installer fonts-noto-color-emoji libnss3 libgbm1 \
+# python3 and build-essential compile the GPIO library's native module
+sudo -E apt-get install -y git curl python3 build-essential \
+    matchbox-window-manager xorg xwit x11-xserver-utils \
+    fonts-noto-color-emoji libnss3 libgbm1 \
+    $(first_available_package ttf-mscorefonts-installer) \
     $(first_available_package libgtk-3-0t64 libgtk-3-0) \
     $(first_available_package libasound2t64 libasound2)
 sudo apt-get autoremove -y
@@ -63,6 +66,8 @@ printf "${GREEN}Done.${NC}\n"
 printf "${YELLOW}Installing Garage-UI Packages...${NC}\n"
 npm ci
 npx electron-rebuild
+# Tells xinitrc these dependencies are installed, so the first boot doesn't reinstall them
+sha256sum package-lock.json | cut -d" " -f1 > node_modules/.installed-lockfile
 printf "${GREEN}Done.${NC}\n"
 
 printf "${YELLOW}Installing Auto Start Script...${NC}\n"
