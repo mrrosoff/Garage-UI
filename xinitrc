@@ -35,8 +35,10 @@ if [ "$LOCAL" = "$REMOTE" ]; then
 else
 	printf "$dt -- ${RED}Need to rebuild dependencies${NC}\n" >> $LOG_PATH
 
+	# Match the remote exactly, so local edits or rewritten history can't block updates.
+	# Ignored files like .env, logs, and node_modules are left alone.
 	printf "$dt -- Pulling...\n" >> $LOG_PATH
-	git pull -f &>> $LOG_PATH
+	git reset --hard "$UPSTREAM" &>> $LOG_PATH
 	printf "${GREEN}Done.${NC}\n\n" >> $LOG_PATH
 	NEEDS_INSTALL=true
 fi
