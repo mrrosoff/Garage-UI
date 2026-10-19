@@ -26,7 +26,8 @@ git status &>> $LOG_PATH
 printf "\n\n" >> $LOG_PATH
 
 source "$GARAGE_UI_DIR/scripts/load-nvm.sh"
-nvm use
+# Installs the newest Node in the .nvmrc LTS line if it's missing, then switches to it
+nvm install &>> $LOG_PATH
 
 if [ "$LOCAL" = "$REMOTE" ]; then
 	printf "$dt -- ${GREEN}Up-to-date${NC}\n" >> $LOG_PATH
